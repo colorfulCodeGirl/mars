@@ -7,6 +7,7 @@ const StyledButton = styled.button`
   background-color: #fe6c3d;
   color: #ffffff;
   border-radius: 0.4rem;
+  text-transform: uppercase;
   &:disabled {
     background-color: #515050;
   }

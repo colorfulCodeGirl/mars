@@ -5,19 +5,30 @@ const StyledFieldset = styled.div`
   border: none;
   display: flex;
   justify-content: center;
+  min-width: 200px;
+  position: relative;
+  min-height: 3rem;
+  @media (min-height: 800px) {
+    margin: 1rem 0;
+  }
 `;
 
 const StyledLegend = styled.legend`
   opacity: 0;
   width: 1px;
+  position: absolute;
+  left: -100%;
 `;
 
 const Wrapper = styled.div`
-  margin: 0.5rem 0.9rem;
+  margin-right: 3rem;
+  position: relative;
 `;
 
 const StyledInput = styled.input`
   opacity: 0;
+  position: absolute;
+  left: -100%;
 
   + label {
     position: relative;

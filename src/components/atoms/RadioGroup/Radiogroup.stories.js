@@ -1,6 +1,6 @@
 import React from "react";
 import { addDecorator } from "@storybook/react";
-import Input from "./Input";
+import RadioGroup from "./RadioGroup";
 import { GlobalStyles } from "../../../App";
 
 addDecorator(s => (
@@ -11,8 +11,10 @@ addDecorator(s => (
 ));
 
 export default {
-  title: "Input",
-  component: Input
+  title: "RadioGroup",
+  component: RadioGroup
 };
 
-export const Regular = () => <Input type="text" placeholder="CAMERA" />;
+const options = ["SOL", "Earth Date"];
+
+export const Regular = () => <RadioGroup options={options} category="mode" />;

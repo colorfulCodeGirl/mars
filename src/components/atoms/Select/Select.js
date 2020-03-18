@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import arrow from "../../../assets/Dropdown.svg";
 
@@ -28,8 +29,8 @@ const StyledSelect = styled.select`
   }
 `;
 
-const Select = ({ options, defaultValue }) => (
-  <StyledSelect>
+const Select = ({ options, defaultValue, changeHandler }) => (
+  <StyledSelect onChange={changeHandler}>
     <option hidden>{defaultValue}</option>
     {options.map(option => (
       <option key={option} value={option}>
@@ -40,3 +41,9 @@ const Select = ({ options, defaultValue }) => (
 );
 
 export default Select;
+
+Select.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  defaultValue: PropTypes.string.isRequired,
+  changeHandler: PropTypes.func.isRequired
+};

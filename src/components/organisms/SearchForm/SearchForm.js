@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useReducer } from "react";
 import styled from "styled-components";
 
 import RadioGroup from "../../atoms/RadioGroup/RadioGroup";
@@ -56,16 +56,87 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const SearchFrom = () => (
-  <StyledForm>
-    <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
-    <RadioGroup options={["SOL", "Earth day"]} />
-    <Input type="text" placeholder="SOL" pattern="[1-100]" />
-    <Select options={["rover 1", "rover 2", "rover 3"]} defaultValue="rover" />
-    <Select options={["camera 1", "camera 2"]} defaultValue="camera" />
-    <StyledButton marginTop>SEARCH</StyledButton>
-    <StyledButton>See Latest</StyledButton>
-  </StyledForm>
-);
+const initialState = {
+  rover: "",
+  sol: "",
+  solError: false,
+  day: "",
+  dayError: false
+};
+
+const reducer = (state, action) => {
+  const { type, value } = action;
+  switch (type) {
+    case "rover":
+      action.setSolDates(value);
+      return {
+        ...state,
+        rover: value
+      };
+    case "sol":
+      const error = +value >= 0 && +value <= +action.maxSol ? false : true;
+      console.log(error);
+      return {
+        ...state,
+        sol: value,
+        solError: error
+      };
+    case "day":
+      return {
+        ...state,
+        day: value
+      };
+    default:
+      return state;
+  }
+};
+
+const SearchFrom = () => {
+  const rovers = ["Curiosity", "Opportunity", "Spirit"];
+  const [maxSol, setMaxSol] = useState("max");
+  const [dates, setDates] = useState({
+    startDate: "",
+    endDate: ""
+  });
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const setSolDates = async rover => {
+    const apiKey = process.env.REACT_APP_API_CODE;
+    const response = await fetch(
+      `https://api.nasa.gov/mars-photos/api/v1/manifests/${rover}?api_key=${apiKey}`
+    );
+    const data = await response.json();
+    const { photo_manifest: roverData } = data;
+    const {
+      max_sol: maxSol,
+      landing_date: startDate,
+      max_date: endDate
+    } = roverData;
+    console.log(maxSol, startDate, endDate);
+    setMaxSol(maxSol);
+    setDates({ startDate, endDate });
+  };
+
+  return (
+    <StyledForm>
+      <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
+      <Select
+        options={rovers}
+        defaultValue="Choose rover"
+        changeHandler={({ target: { value } }) =>
+          dispatch({ type: "rover", setSolDates, value })
+        }
+      />
+      <RadioGroup options={["SOL", "Earth day"]} />
+      <Input
+        type="text"
+        placeholder={`SOL from 0 to ${maxSol}`}
+        changeHandler={e => dispatch({ type: "sol", maxSol, e })}
+      />
+      <StyledButton marginTop>SEARCH</StyledButton>
+      <StyledButton>See Latest</StyledButton>
+    </StyledForm>
+  );
+};
 
 export default SearchFrom;

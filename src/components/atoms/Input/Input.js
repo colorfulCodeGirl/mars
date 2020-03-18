@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const StyledInput = styled.input`
   border: none;
@@ -18,6 +19,13 @@ const StyledInput = styled.input`
   }
 `;
 
-const Input = props => <StyledInput {...props} />;
+const Input = ({ changeHandler, value, ...props }) => (
+  <StyledInput value={value} onChange={changeHandler} {...props} />
+);
 
 export default Input;
+
+Input.propTypes = {
+  changeHandler: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired
+};

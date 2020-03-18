@@ -29,7 +29,7 @@ const StyledForm = styled.form`
     max-width: 550px;
     min-height: 55vh;
   }
-  @media (orientation: landscape) {
+  @media (orientation: landscape) and (min-aspect-ratio: 21/9) {
     width: 30vw;
     min-height: 70vh;
   }
@@ -51,7 +51,7 @@ const StyledHeading = styled.h1`
 const StyledButton = styled(Button)`
   justify-self: flex-end;
   margin-top: 2rem;
-  @media (min-width: 400px) {
+  @media (min-width: 375px) {
     margin-top: ${({ marginTop }) => (marginTop ? "auto" : "2rem")};
   }
 `;

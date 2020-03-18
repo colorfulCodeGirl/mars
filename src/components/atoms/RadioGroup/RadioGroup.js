@@ -5,11 +5,12 @@ const StyledFieldset = styled.div`
   border: none;
   display: flex;
   justify-content: center;
+  align-items: center;
   min-width: 200px;
   position: relative;
   min-height: 3rem;
-  @media (min-height: 800px) {
-    margin: 1rem 0;
+  @media (min-height: 700px) {
+    margin-top: 2rem;
   }
 `;
 

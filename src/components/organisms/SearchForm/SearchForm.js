@@ -101,6 +101,7 @@ const SearchFrom = () => {
   });
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSearchAllowed, allowSearch] = useState(false);
+  const [isSol, switchSolDate] = useState(true);
 
   const setSolDates = async rover => {
     const apiKey = process.env.REACT_APP_API_CODE;
@@ -118,6 +119,17 @@ const SearchFrom = () => {
     setDates({ startDate, endDate });
   };
 
+  const changeDateInput = ({ target: { value } }) => {
+    const type = isSol ? "sol" : "day";
+    const validationData = isSol ? maxSol : dates;
+    dispatch({ type, validationData, value, allowSearch });
+  };
+
+  const radioChangeHandler = ({ target: { value } }) => {
+    const newValue = value === "sol" ? true : false;
+    switchSolDate(newValue);
+  };
+
   return (
     <StyledForm>
       <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
@@ -130,17 +142,27 @@ const SearchFrom = () => {
       />
       {state.rover && (
         <>
-          <RadioGroup options={["SOL", "Earth day"]} />
+          <RadioGroup
+            options={["SOL", "Earth day"]}
+            changeHandler={radioChangeHandler}
+            checkedIndex={isSol ? 0 : 1}
+          />
           <Input
             type="text"
-            placeholder={`SOL from 0 to ${maxSol}`}
-            changeHandler={({ target: { value } }) =>
-              dispatch({ type: "sol", maxSol, value, allowSearch })
+            placeholder={
+              isSol
+                ? `SOL from 0 to ${maxSol}`
+                : `Date from ${dates.startDate} to ${dates.endDate}`
             }
+            changeHandler={e => changeDateInput(e)}
           />
           <ErrorTooltip
             isError={state.solError}
-            message={`SOL should be a number from 0 to ${maxSol}`}
+            message={
+              isSol
+                ? `SOL should be a number from 0 to ${maxSol}`
+                : `Date should be from ${dates.startDate} to ${dates.endDate}`
+            }
           />
         </>
       )}

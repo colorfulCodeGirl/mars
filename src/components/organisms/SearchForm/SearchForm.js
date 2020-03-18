@@ -5,6 +5,7 @@ import RadioGroup from "../../atoms/RadioGroup/RadioGroup";
 import Button from "../../atoms/Button/Button";
 import Select from "../../atoms/Select/Select";
 import Input from "../../atoms/Input/Input";
+import ErrorTooltip from "../../atoms/ErrorTooltip/ErrorTooltip";
 
 const StyledForm = styled.form`
   width: 80vw;
@@ -74,8 +75,9 @@ const reducer = (state, action) => {
         rover: value
       };
     case "sol":
-      const error = +value >= 0 && +value <= +action.maxSol ? false : true;
-      console.log(error);
+      const error =
+        Number(value) >= 0 && +value <= +action.maxSol ? false : true;
+      console.log(value);
       return {
         ...state,
         sol: value,
@@ -131,7 +133,13 @@ const SearchFrom = () => {
       <Input
         type="text"
         placeholder={`SOL from 0 to ${maxSol}`}
-        changeHandler={e => dispatch({ type: "sol", maxSol, e })}
+        changeHandler={({ target: { value } }) =>
+          dispatch({ type: "sol", maxSol, value })
+        }
+      />
+      <ErrorTooltip
+        isError={state.solError}
+        message={`SOL should be a number from 0 to ${maxSol}`}
       />
       <StyledButton marginTop>SEARCH</StyledButton>
       <StyledButton>See Latest</StyledButton>

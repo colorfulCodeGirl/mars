@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const StyledButton = styled.button`
   border: none;
@@ -13,10 +14,16 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ children, clickHandler, ...props }) => (
-  <StyledButton onClick={clickHandler} {...props}>
+const Button = ({ children, clickHandler, isDisabled = false, ...props }) => (
+  <StyledButton onClick={clickHandler} disabled={isDisabled} {...props}>
     {children}
   </StyledButton>
 );
 
 export default Button;
+
+Button.propTypes = {
+  children: PropTypes.string.isRequired,
+  clickHandler: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool
+};

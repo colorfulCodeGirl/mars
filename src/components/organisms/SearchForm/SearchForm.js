@@ -75,9 +75,8 @@ const reducer = (state, action) => {
         rover: value
       };
     case "sol":
-      const error =
-        Number(value) >= 0 && +value <= +action.maxSol ? false : true;
-      console.log(value);
+      const error = +value >= 0 && +value <= +action.maxSol ? false : true;
+      action.allowSearch(!error);
       return {
         ...state,
         sol: value,
@@ -101,6 +100,7 @@ const SearchFrom = () => {
     endDate: ""
   });
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [isSearchAllowed, allowSearch] = useState(false);
 
   const setSolDates = async rover => {
     const apiKey = process.env.REACT_APP_API_CODE;
@@ -114,7 +114,6 @@ const SearchFrom = () => {
       landing_date: startDate,
       max_date: endDate
     } = roverData;
-    console.log(maxSol, startDate, endDate);
     setMaxSol(maxSol);
     setDates({ startDate, endDate });
   };
@@ -129,19 +128,25 @@ const SearchFrom = () => {
           dispatch({ type: "rover", setSolDates, value })
         }
       />
-      <RadioGroup options={["SOL", "Earth day"]} />
-      <Input
-        type="text"
-        placeholder={`SOL from 0 to ${maxSol}`}
-        changeHandler={({ target: { value } }) =>
-          dispatch({ type: "sol", maxSol, value })
-        }
-      />
-      <ErrorTooltip
-        isError={state.solError}
-        message={`SOL should be a number from 0 to ${maxSol}`}
-      />
-      <StyledButton marginTop>SEARCH</StyledButton>
+      {state.rover && (
+        <>
+          <RadioGroup options={["SOL", "Earth day"]} />
+          <Input
+            type="text"
+            placeholder={`SOL from 0 to ${maxSol}`}
+            changeHandler={({ target: { value } }) =>
+              dispatch({ type: "sol", maxSol, value, allowSearch })
+            }
+          />
+          <ErrorTooltip
+            isError={state.solError}
+            message={`SOL should be a number from 0 to ${maxSol}`}
+          />
+        </>
+      )}
+      <StyledButton marginTop isDisabled={!isSearchAllowed}>
+        SEARCH
+      </StyledButton>
       <StyledButton>See Latest</StyledButton>
     </StyledForm>
   );

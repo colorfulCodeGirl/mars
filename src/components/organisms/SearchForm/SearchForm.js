@@ -61,8 +61,16 @@ const initialState = {
   rover: "",
   sol: "",
   solError: false,
-  day: "",
-  dayError: false
+  date: "",
+  dateError: false
+};
+
+const validateDate = (valData, value) => {
+  const { startDate, endDate } = valData;
+  const start = Date.parse(startDate);
+  const end = Date.parse(endDate);
+  const date = Date.parse(value);
+  return date >= start && date <= end && value.length === 10;
 };
 
 const reducer = (state, action) => {
@@ -75,17 +83,23 @@ const reducer = (state, action) => {
         rover: value
       };
     case "sol":
-      const error = +value >= 0 && +value <= +action.maxSol ? false : true;
-      action.allowSearch(!error);
+      const solError = +value >= 0 && +value <= +action.maxSol ? false : true;
+      action.allowSearch(!solError);
       return {
         ...state,
         sol: value,
-        solError: error
+        solError
       };
-    case "day":
+    case "date":
+      const valueLength = value.length;
+      const formattedDate =
+        valueLength === 4 || valueLength === 7 ? `${value}-` : value;
+      const dateError = !validateDate(action.validationData, formattedDate);
+      action.allowSearch(!dateError);
       return {
         ...state,
-        day: value
+        date: formattedDate,
+        dateError
       };
     default:
       return state;
@@ -120,7 +134,7 @@ const SearchFrom = () => {
   };
 
   const changeDateInput = ({ target: { value } }) => {
-    const type = isSol ? "sol" : "day";
+    const type = isSol ? "sol" : "date";
     const validationData = isSol ? maxSol : dates;
     dispatch({ type, validationData, value, allowSearch });
   };
@@ -143,7 +157,7 @@ const SearchFrom = () => {
       {state.rover && (
         <>
           <RadioGroup
-            options={["SOL", "Earth day"]}
+            options={["SOL", "Earth date"]}
             changeHandler={radioChangeHandler}
             checkedIndex={isSol ? 0 : 1}
           />
@@ -155,9 +169,10 @@ const SearchFrom = () => {
                 : `Date from ${dates.startDate} to ${dates.endDate}`
             }
             changeHandler={e => changeDateInput(e)}
+            value={isSol ? state.sol : state.date}
           />
           <ErrorTooltip
-            isError={state.solError}
+            isError={isSol ? state.solError : state.dateError}
             message={
               isSol
                 ? `SOL should be a number from 0 to ${maxSol}`

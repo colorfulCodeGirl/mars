@@ -14,8 +14,8 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ children, clickHandler, isDisabled = false, ...props }) => (
-  <StyledButton onClick={clickHandler} disabled={isDisabled} {...props}>
+const Button = ({ children, submitHandler, isDisabled = false, ...props }) => (
+  <StyledButton onClick={submitHandler} disabled={isDisabled} {...props}>
     {children}
   </StyledButton>
 );
@@ -24,6 +24,6 @@ export default Button;
 
 Button.propTypes = {
   children: PropTypes.string.isRequired,
-  clickHandler: PropTypes.func.isRequired,
+  submitHandler: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool
 };

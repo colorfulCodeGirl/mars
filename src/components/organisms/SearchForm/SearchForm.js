@@ -60,9 +60,8 @@ const StyledButton = styled(Button)`
 const initialState = {
   rover: "",
   sol: "",
-  solError: false,
   date: "",
-  dateError: false
+  error: false
 };
 
 const validateDate = (valData, value) => {
@@ -83,12 +82,15 @@ const reducer = (state, action) => {
         rover: value
       };
     case "sol":
-      const solError = +value >= 0 && +value <= +action.maxSol ? false : true;
+      const solError =
+        +value >= 0 && +value <= +action.validationData && value.length !== 0
+          ? false
+          : true;
       action.allowSearch(!solError);
       return {
         ...state,
         sol: value,
-        solError
+        error: solError
       };
     case "date":
       const valueLength = value.length;
@@ -103,7 +105,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         date: formattedDate,
-        dateError
+        error: dateError
       };
     default:
       return state;
@@ -112,14 +114,14 @@ const reducer = (state, action) => {
 
 const SearchFrom = () => {
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [isSearchAllowed, allowSearch] = useState(false);
+  const [isSol, switchSolDate] = useState(true);
   const [maxSol, setMaxSol] = useState("max");
   const [dates, setDates] = useState({
     startDate: "",
     endDate: ""
   });
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [isSearchAllowed, allowSearch] = useState(false);
-  const [isSol, switchSolDate] = useState(true);
 
   const setSolDates = async rover => {
     const apiKey = process.env.REACT_APP_API_CODE;
@@ -146,6 +148,21 @@ const SearchFrom = () => {
   const radioChangeHandler = ({ target: { value } }) => {
     const newValue = value === "sol" ? true : false;
     switchSolDate(newValue);
+  };
+
+  const fetchData = async (newest = null, e) => {
+    e.preventDefault();
+    const apiKey = process.env.REACT_APP_API_CODE;
+    const { rover, sol, date } = state;
+    const src = newest
+      ? `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/latest_photos?api_key=${apiKey}`
+      : sol
+      ? `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&api_key=${apiKey}`
+      : `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?earth_date=${date}&api_key=${apiKey}`;
+    console.log(src);
+    const response = await fetch(src);
+    const photos = await response.json();
+    console.log(photos);
   };
 
   return (
@@ -176,7 +193,7 @@ const SearchFrom = () => {
             value={isSol ? state.sol : state.date}
           />
           <ErrorTooltip
-            isError={isSol ? state.solError : state.dateError}
+            isError={state.error}
             message={
               isSol
                 ? `SOL should be a number from 0 to ${maxSol}`
@@ -185,10 +202,21 @@ const SearchFrom = () => {
           />
         </>
       )}
-      <StyledButton marginTop isDisabled={!isSearchAllowed}>
+      <StyledButton
+        marginTop
+        isDisabled={!isSearchAllowed}
+        type="submit"
+        submitHandler={e => fetchData(null, e)}
+      >
         SEARCH
       </StyledButton>
-      <StyledButton>See Latest</StyledButton>
+      <StyledButton
+        type="submit"
+        isDisabled={!state.rover}
+        submitHandler={e => fetchData(true, e)}
+      >
+        See Latest
+      </StyledButton>
     </StyledForm>
   );
 };

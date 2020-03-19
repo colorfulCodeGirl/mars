@@ -159,8 +159,8 @@ const SearchFrom = () => {
       : sol
       ? `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&api_key=${apiKey}`
       : `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?earth_date=${date}&api_key=${apiKey}`;
-    console.log(src);
     const response = await fetch(src);
+    console.log(response);
     const photos = await response.json();
     console.log(photos);
   };

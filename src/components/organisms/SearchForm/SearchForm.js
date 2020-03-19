@@ -92,8 +92,12 @@ const reducer = (state, action) => {
       };
     case "date":
       const valueLength = value.length;
+      const prevDateLength = state.date.length;
       const formattedDate =
-        valueLength === 4 || valueLength === 7 ? `${value}-` : value;
+        (valueLength === 4 && prevDateLength === 3) ||
+        (valueLength === 7 && prevDateLength === 6)
+          ? `${value}-`
+          : value;
       const dateError = !validateDate(action.validationData, formattedDate);
       action.allowSearch(!dateError);
       return {

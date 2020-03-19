@@ -22,6 +22,16 @@ export const GlobalStyles = createGlobalStyle`
   margin: 0;
   font-size: 1.6rem;
 }
+
+.sr-only {
+  clip: rect(0 0 0 0); 
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap; 
+  width: 1px;
+}
 `;
 
 const AppWrapper = styled.div`

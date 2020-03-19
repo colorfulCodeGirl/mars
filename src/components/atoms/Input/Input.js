@@ -19,13 +19,26 @@ const StyledInput = styled.input`
   }
 `;
 
-const Input = ({ changeHandler, value, ...props }) => (
-  <StyledInput value={value} onChange={changeHandler} {...props} />
+const Input = ({ changeHandler, label, name, value, ...props }) => (
+  <>
+    <label className="sr-only" htmlFor={name}>
+      {label}
+    </label>
+    <StyledInput
+      id={name}
+      name={name}
+      value={value}
+      onChange={changeHandler}
+      {...props}
+    />
+  </>
 );
 
 export default Input;
 
 Input.propTypes = {
   changeHandler: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired
 };

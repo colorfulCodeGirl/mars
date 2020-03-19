@@ -5,19 +5,31 @@ const StyledFieldset = styled.div`
   border: none;
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-width: 200px;
+  position: relative;
+  min-height: 3rem;
+  @media (min-height: 700px) {
+    margin-top: 2rem;
+  }
 `;
 
 const StyledLegend = styled.legend`
   opacity: 0;
   width: 1px;
+  position: absolute;
+  left: -100%;
 `;
 
 const Wrapper = styled.div`
-  margin: 0.5rem 0.9rem;
+  margin-right: 3rem;
+  position: relative;
 `;
 
 const StyledInput = styled.input`
   opacity: 0;
+  position: absolute;
+  left: -100%;
 
   + label {
     position: relative;
@@ -73,17 +85,18 @@ const StyledInput = styled.input`
   }
 `;
 
-const RadioGroup = ({ options, category, checkedId = 0 }) => (
+const RadioGroup = ({ options, category, changeHandler, checkedIndex = 0 }) => (
   <StyledFieldset>
     <StyledLegend>Pick mode</StyledLegend>
     {options.map((option, index) => (
       <Wrapper key={option}>
         <StyledInput
           id={option}
-          value={option}
+          value={option.toLowerCase()}
           type="radio"
           name={category}
-          checked={checkedId === index}
+          checked={checkedIndex === index}
+          onChange={e => changeHandler(e)}
         />
         <label htmlFor={option}>{option}</label>
       </Wrapper>

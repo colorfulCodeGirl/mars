@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import styled, { createGlobalStyle } from "styled-components";
 import background from "./assets/background.png";
+import SearchForm from "./components/organisms/SearchForm/SearchForm";
 
 export const GlobalStyles = createGlobalStyle`
 @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap");
@@ -25,8 +26,12 @@ export const GlobalStyles = createGlobalStyle`
 
 const AppWrapper = styled.div`
   background-image: url(${background});
+  background-position-x: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
   height: 100vh;
   position: relative;
+  display: grid;
 `;
 
 const Credentials = styled.p`
@@ -46,6 +51,7 @@ function App() {
     <>
       <GlobalStyles />
       <AppWrapper>
+        <SearchForm />
         <Credentials>
           Image by{" "}
           <a href="https://pixabay.com/users/WikiImages-1897/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=67522">

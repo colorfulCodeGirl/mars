@@ -117,10 +117,10 @@ const SearchFrom = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSearchAllowed, allowSearch] = useState(false);
   const [isSol, switchSolDate] = useState(true);
-  const [maxSol, setMaxSol] = useState("max");
   const [dates, setDates] = useState({
     startDate: "",
-    endDate: ""
+    endDate: "",
+    maxSol: "max"
   });
 
   const setSolDates = async rover => {
@@ -135,13 +135,12 @@ const SearchFrom = () => {
       landing_date: startDate,
       max_date: endDate
     } = roverData;
-    setMaxSol(maxSol);
-    setDates({ startDate, endDate });
+    setDates({ startDate, endDate, maxSol });
   };
 
   const changeDateInput = ({ target: { value } }) => {
     const type = isSol ? "sol" : "date";
-    const validationData = isSol ? maxSol : dates;
+    const validationData = isSol ? dates.maxSol : dates;
     dispatch({ type, validationData, value, allowSearch });
   };
 
@@ -187,7 +186,7 @@ const SearchFrom = () => {
             name={isSol ? "sol" : "Earth days"}
             placeholder={
               isSol
-                ? `SOL from 0 to ${maxSol}`
+                ? `SOL from 0 to ${dates.maxSol}`
                 : `Date from ${dates.startDate} to ${dates.endDate}`
             }
             changeHandler={e => changeDateInput(e)}
@@ -197,7 +196,7 @@ const SearchFrom = () => {
             isError={state.error}
             message={
               isSol
-                ? `SOL should be a number from 0 to ${maxSol}`
+                ? `SOL should be a number from 0 to ${dates.maxSol}`
                 : `Date should be from ${dates.startDate} to ${dates.endDate}`
             }
           />

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const StyledFieldset = styled.div`
   border: none;
@@ -105,3 +106,10 @@ const RadioGroup = ({ options, category, changeHandler, checkedIndex = 0 }) => (
 );
 
 export default RadioGroup;
+
+RadioGroup.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  category: PropTypes.string,
+  changeHandler: PropTypes.func.isRequired,
+  checkedIndex: PropTypes.number
+};

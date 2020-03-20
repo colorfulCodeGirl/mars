@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import ErrorTooltip from "./ErrorTooltip";
+import ErrorTooltip from "../atoms/ErrorTooltip/ErrorTooltip";
 
 describe("Error massage", () => {
   it("to be displayed", () => {

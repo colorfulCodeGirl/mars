@@ -1,6 +1,6 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import RadioGroup from "./RadioGroup";
+import { render } from "@testing-library/react";
+import RadioGroup from "../atoms/RadioGroup/RadioGroup";
 
 describe("Radio group component", () => {
   it("to render properly", () => {

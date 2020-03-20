@@ -14,3 +14,14 @@ export const validateDate = (valData, value) => {
   const date = Date.parse(value);
   return date >= start && date <= end && value.length === 10;
 };
+
+export const formateDate = (value, prevValue) => {
+  const valueLength = value.length;
+  const prevDateLength = prevValue.length;
+  const formattedDate =
+    (valueLength === 4 && prevDateLength === 3) ||
+    (valueLength === 7 && prevDateLength === 6)
+      ? `${value}-`
+      : value;
+  return formattedDate;
+};

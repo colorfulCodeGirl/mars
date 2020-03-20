@@ -6,7 +6,7 @@ import Button from "../../atoms/Button/Button";
 import Select from "../../atoms/Select/Select";
 import Input from "../../atoms/Input/Input";
 import ErrorTooltip from "../../atoms/ErrorTooltip/ErrorTooltip";
-import { fetchData, validateDate } from "../../../helpers";
+import { fetchData, validateDate, formateDate } from "../../../helpers";
 
 const StyledForm = styled.form`
   width: 80vw;
@@ -58,13 +58,6 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const initialState = {
-  rover: "",
-  sol: "",
-  date: "",
-  error: false
-};
-
 const setSolDates = async (rover, setter) => {
   const urlParams = `manifests/${rover}?`;
   const data = await fetchData(urlParams);
@@ -75,6 +68,13 @@ const setSolDates = async (rover, setter) => {
     max_date: endDate
   } = roverData;
   setter({ startDate, endDate, maxSol });
+};
+
+const initialState = {
+  rover: "",
+  sol: "",
+  date: "",
+  error: false
 };
 
 const reducer = (state, action) => {
@@ -98,13 +98,7 @@ const reducer = (state, action) => {
         error: solError
       };
     case "date":
-      const valueLength = value.length;
-      const prevDateLength = state.date.length;
-      const formattedDate =
-        (valueLength === 4 && prevDateLength === 3) ||
-        (valueLength === 7 && prevDateLength === 6)
-          ? `${value}-`
-          : value;
+      const formattedDate = formateDate(value, state.date);
       const dateError = !validateDate(action.validationData, formattedDate);
       action.allowSearch(!dateError);
       return {

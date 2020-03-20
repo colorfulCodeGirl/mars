@@ -6,7 +6,7 @@ import Button from "../../atoms/Button/Button";
 import Select from "../../atoms/Select/Select";
 import Input from "../../atoms/Input/Input";
 import ErrorTooltip from "../../atoms/ErrorTooltip/ErrorTooltip";
-import { fetchData } from "../../../helpers";
+import { fetchData, validateDate } from "../../../helpers";
 
 const StyledForm = styled.form`
   width: 80vw;
@@ -75,14 +75,6 @@ const setSolDates = async (rover, setter) => {
     max_date: endDate
   } = roverData;
   setter({ startDate, endDate, maxSol });
-};
-
-const validateDate = (valData, value) => {
-  const { startDate, endDate } = valData;
-  const start = Date.parse(startDate);
-  const end = Date.parse(endDate);
-  const date = Date.parse(value);
-  return date >= start && date <= end && value.length === 10;
 };
 
 const reducer = (state, action) => {

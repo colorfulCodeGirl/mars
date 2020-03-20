@@ -29,15 +29,20 @@ const StyledSelect = styled.select`
   }
 `;
 
-const Select = ({ options, defaultValue, changeHandler }) => (
-  <StyledSelect onChange={changeHandler}>
-    <option hidden>{defaultValue}</option>
-    {options.map(option => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ))}
-  </StyledSelect>
+const Select = ({ options, defaultValue, changeHandler, name }) => (
+  <>
+    <label htmlFor={name} className="sr-only">
+      {defaultValue}
+    </label>
+    <StyledSelect id={name} name={name} onChange={changeHandler}>
+      <option hidden>{defaultValue}</option>
+      {options.map(option => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </StyledSelect>
+  </>
 );
 
 export default Select;
@@ -45,5 +50,6 @@ export default Select;
 Select.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   defaultValue: PropTypes.string.isRequired,
-  changeHandler: PropTypes.func.isRequired
+  changeHandler: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired
 };

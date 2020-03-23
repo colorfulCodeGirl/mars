@@ -4,34 +4,36 @@ import SearchForm from "../organisms/SearchForm/SearchForm";
 
 describe("Search form component", () => {
   it("renders heading", () => {
-    const { getByText } = render(<SearchForm />);
+    const { getByText } = render(<SearchForm arePhotosShown={false} />);
     expect(getByText(/explore/i)).toBeInTheDocument();
   });
 
   it("renders select element for rovers", () => {
-    const { getByLabelText } = render(<SearchForm />);
+    const { getByLabelText } = render(<SearchForm arePhotosShown={false} />);
     expect(getByLabelText(/choose/i)).toBeInTheDocument();
   });
   it("renders search button", () => {
-    const { getByText } = render(<SearchForm />);
+    const { getByText } = render(<SearchForm arePhotosShown={false} />);
     const button = getByText(/search/i);
     expect(button).toBeInTheDocument();
     expect(getRoles(button).button).toBeTruthy();
   });
   it("renders 'see latest' button", () => {
-    const { getByText } = render(<SearchForm />);
+    const { getByText } = render(<SearchForm arePhotosShown={false} />);
     const button = getByText(/see latest/i);
     expect(button).toBeInTheDocument();
     expect(getRoles(button).button).toBeTruthy();
   });
 
   it("renders buttons disabled on start", () => {
-    const { getByText } = render(<SearchForm />);
+    const { getByText } = render(<SearchForm arePhotosShown={false} />);
     expect(getByText(/search/i)).toBeDisabled();
     expect(getByText(/see latest/i)).toBeDisabled();
   });
   it("enables see latest button when rover is picked", () => {
-    const { getByText, getByLabelText } = render(<SearchForm />);
+    const { getByText, getByLabelText } = render(
+      <SearchForm arePhotosShown={false} />
+    );
     const select = getByLabelText(/choose rover/i);
     const button = getByText(/see latest/i);
     expect(button).toBeDisabled();
@@ -39,7 +41,9 @@ describe("Search form component", () => {
     expect(button).toBeEnabled();
   });
   it("doesn't enables search button when only rover is picked", () => {
-    const { getByText, getByLabelText } = render(<SearchForm />);
+    const { getByText, getByLabelText } = render(
+      <SearchForm arePhotosShown={false} />
+    );
     const select = getByLabelText(/choose rover/i);
     const button = getByText(/search/i);
     expect(button).toBeDisabled();
@@ -48,7 +52,7 @@ describe("Search form component", () => {
   });
   it("renders radio group component when rover is picked", () => {
     const { getAllByRole, getByLabelText, getAllByLabelText } = render(
-      <SearchForm />
+      <SearchForm arePhotosShown={false} />
     );
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
@@ -60,7 +64,9 @@ describe("Search form component", () => {
     expect(earthDayRadio).toBeInTheDocument();
   });
   it("renders input element for sol/earth days when rover is picked", () => {
-    const { getByLabelText, getByPlaceholderText } = render(<SearchForm />);
+    const { getByLabelText, getByPlaceholderText } = render(
+      <SearchForm arePhotosShown={false} />
+    );
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
     const selectDay = getByPlaceholderText(/SOL from 0 to/i);
@@ -68,7 +74,7 @@ describe("Search form component", () => {
   });
   it("changes date input element from sol to Earth days when radio group is changed", () => {
     const { getByLabelText, getByPlaceholderText, getAllByRole } = render(
-      <SearchForm />
+      <SearchForm arePhotosShown={false} />
     );
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
@@ -85,7 +91,7 @@ describe("Search form component", () => {
       getByPlaceholderText,
       getAllByRole,
       getByText
-    } = render(<SearchForm />);
+    } = render(<SearchForm arePhotosShown={false} />);
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
     const radioBtns = getAllByRole(/radio/i);
@@ -122,7 +128,7 @@ describe("Search form component", () => {
   });
   it("enables search button when form is field", () => {
     const { getByLabelText, getByPlaceholderText, getByText } = render(
-      <SearchForm />
+      <SearchForm arePhotosShown={false} />
     );
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
@@ -139,5 +145,23 @@ describe("Search form component", () => {
     fireEvent.change(inputSol, { target: { value: "k" } });
 
     expect(button).toBeDisabled();
+  });
+
+  it("changes styles when photos are shown", () => {
+    const { getByTestId, rerender } = render(
+      <SearchForm arePhotosShown={true} />
+    );
+    const form = getByTestId("form");
+    expect(form).toHaveStyle(`
+      justify-self: start;
+      align-self: stretch;
+      max-height: 100vh;
+      `);
+
+    rerender(<SearchForm arePhotosShown={false} />);
+    expect(form).toHaveStyle(`
+    justify-self: center;
+    align-self: center;
+    `);
   });
 });

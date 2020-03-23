@@ -1,5 +1,6 @@
 import React, { useState, useReducer } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import PropTypes from "prop-types";
 
 import RadioGroup from "../../atoms/RadioGroup/RadioGroup";
 import Button from "../../atoms/Button/Button";
@@ -35,6 +36,13 @@ const StyledForm = styled.form`
     width: 30vw;
     min-height: 70vh;
   }
+  ${({ displayLeft }) =>
+    displayLeft &&
+    css`
+      justify-self: start;
+      align-self: stretch;
+      max-height: 100vh;
+    `}
 `;
 
 const StyledHeading = styled.h1`
@@ -123,7 +131,7 @@ const fetchPhotos = async (newest = null, e, state) => {
   console.log(photos);
 };
 
-const SearchFrom = () => {
+const SearchFrom = ({ arePhotosShown }) => {
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSearchAllowed, allowSearch] = useState(false);
@@ -146,7 +154,7 @@ const SearchFrom = () => {
   };
 
   return (
-    <StyledForm>
+    <StyledForm data-testid="form" displayLeft={arePhotosShown}>
       <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
       <Select
         options={rovers}
@@ -205,3 +213,7 @@ const SearchFrom = () => {
 };
 
 export default SearchFrom;
+
+SearchFrom.propTypes = {
+  arePhotosShown: PropTypes.bool.isRequired
+};

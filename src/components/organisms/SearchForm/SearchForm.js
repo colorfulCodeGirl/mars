@@ -150,6 +150,7 @@ const SearchFrom = () => {
       <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
       <Select
         options={rovers}
+        name="rovers"
         defaultValue="Choose rover"
         changeHandler={({ target: { value } }) =>
           dispatch({ type: "rover", setDates, value })

@@ -79,4 +79,65 @@ describe("Search form component", () => {
     const input = getByPlaceholderText(/Date from/i);
     expect(input).toBeInTheDocument();
   });
+  it("shows error when sol/day is incorrect", () => {
+    const {
+      getByLabelText,
+      getByPlaceholderText,
+      getAllByRole,
+      getByText
+    } = render(<SearchForm />);
+    const select = getByLabelText(/choose rover/i);
+    fireEvent.change(select, { target: { value: "opportunity" } });
+    const radioBtns = getAllByRole(/radio/i);
+    const inputSol = getByPlaceholderText(/SOL from 0 to/i);
+
+    fireEvent.change(inputSol, { target: { value: "k" } });
+    const errorSOL = getByText(/SOL should be a number from 0/i);
+    expect(errorSOL).toBeInTheDocument();
+
+    fireEvent.change(inputSol, { target: { value: "-1" } });
+    expect(errorSOL).toBeInTheDocument();
+
+    fireEvent.change(inputSol, { target: { value: "10000000" } });
+    expect(errorSOL).toBeInTheDocument();
+
+    fireEvent.click(radioBtns[1]);
+    const inputDate = getByPlaceholderText(/Date from/i);
+
+    fireEvent.change(inputDate, { target: { value: "20k1-02" } });
+    const errorDate = getByText(/Date should be from/i);
+    expect(errorDate).toBeInTheDocument();
+
+    fireEvent.change(inputDate, { target: { value: "20,1-02-0." } });
+    expect(errorDate).toBeInTheDocument();
+
+    fireEvent.change(inputDate, { target: { value: "2012-02-006" } });
+    expect(errorDate).toBeInTheDocument();
+
+    fireEvent.change(inputDate, { target: { value: "1200-06-03" } });
+    expect(errorDate).toBeInTheDocument();
+
+    fireEvent.change(inputDate, { target: { value: "2050-06-03" } });
+    expect(errorDate).toBeInTheDocument();
+  });
+  it("enables search button when form is field", () => {
+    const { getByLabelText, getByPlaceholderText, getByText } = render(
+      <SearchForm />
+    );
+    const select = getByLabelText(/choose rover/i);
+    fireEvent.change(select, { target: { value: "opportunity" } });
+
+    const button = getByText(/search/i);
+    expect(button).toBeDisabled();
+
+    const inputSol = getByPlaceholderText(/SOL from 0 to/i);
+    fireEvent.change(inputSol, { target: { value: "0" } });
+
+    //wait for validation data from API
+    setTimeout(() => expect(button).toBeEnabled(), 3000);
+
+    fireEvent.change(inputSol, { target: { value: "k" } });
+
+    expect(button).toBeDisabled();
+  });
 });

@@ -6,6 +6,7 @@ import Button from "../../atoms/Button/Button";
 import Select from "../../atoms/Select/Select";
 import Input from "../../atoms/Input/Input";
 import ErrorTooltip from "../../atoms/ErrorTooltip/ErrorTooltip";
+import { fetchData, validateDate, formateDate } from "../../../helpers";
 
 const StyledForm = styled.form`
   width: 80vw;
@@ -57,6 +58,18 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const setSolDates = async (rover, setter) => {
+  const urlParams = `manifests/${rover}?`;
+  const data = await fetchData(urlParams);
+  const { photo_manifest: roverData } = data;
+  const {
+    max_sol: maxSol,
+    landing_date: startDate,
+    max_date: endDate
+  } = roverData;
+  setter({ startDate, endDate, maxSol });
+};
+
 const initialState = {
   rover: "",
   sol: "",
@@ -64,19 +77,11 @@ const initialState = {
   error: false
 };
 
-const validateDate = (valData, value) => {
-  const { startDate, endDate } = valData;
-  const start = Date.parse(startDate);
-  const end = Date.parse(endDate);
-  const date = Date.parse(value);
-  return date >= start && date <= end && value.length === 10;
-};
-
 const reducer = (state, action) => {
   const { type, value } = action;
   switch (type) {
     case "rover":
-      action.setSolDates(value);
+      setSolDates(value, action.setDates);
       return {
         ...state,
         rover: value
@@ -93,13 +98,7 @@ const reducer = (state, action) => {
         error: solError
       };
     case "date":
-      const valueLength = value.length;
-      const prevDateLength = state.date.length;
-      const formattedDate =
-        (valueLength === 4 && prevDateLength === 3) ||
-        (valueLength === 7 && prevDateLength === 6)
-          ? `${value}-`
-          : value;
+      const formattedDate = formateDate(value, state.date);
       const dateError = !validateDate(action.validationData, formattedDate);
       action.allowSearch(!dateError);
       return {
@@ -112,36 +111,32 @@ const reducer = (state, action) => {
   }
 };
 
+const fetchPhotos = async (newest = null, e, state) => {
+  e.preventDefault();
+  const { rover, sol, date } = state;
+  const urlParams = newest
+    ? `rovers/${rover}/latest_photos?`
+    : sol
+    ? `rovers/${rover}/photos?sol=${sol}`
+    : `rovers/${rover}/photos?earth_date=${date}`;
+  const photos = await fetchData(urlParams);
+  console.log(photos);
+};
+
 const SearchFrom = () => {
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSearchAllowed, allowSearch] = useState(false);
   const [isSol, switchSolDate] = useState(true);
-  const [maxSol, setMaxSol] = useState("max");
   const [dates, setDates] = useState({
     startDate: "",
-    endDate: ""
+    endDate: "",
+    maxSol: "max"
   });
-
-  const setSolDates = async rover => {
-    const apiKey = process.env.REACT_APP_API_CODE;
-    const response = await fetch(
-      `https://api.nasa.gov/mars-photos/api/v1/manifests/${rover}?api_key=${apiKey}`
-    );
-    const data = await response.json();
-    const { photo_manifest: roverData } = data;
-    const {
-      max_sol: maxSol,
-      landing_date: startDate,
-      max_date: endDate
-    } = roverData;
-    setMaxSol(maxSol);
-    setDates({ startDate, endDate });
-  };
 
   const changeDateInput = ({ target: { value } }) => {
     const type = isSol ? "sol" : "date";
-    const validationData = isSol ? maxSol : dates;
+    const validationData = isSol ? dates.maxSol : dates;
     dispatch({ type, validationData, value, allowSearch });
   };
 
@@ -150,28 +145,15 @@ const SearchFrom = () => {
     switchSolDate(newValue);
   };
 
-  const fetchData = async (newest = null, e) => {
-    e.preventDefault();
-    const apiKey = process.env.REACT_APP_API_CODE;
-    const { rover, sol, date } = state;
-    const src = newest
-      ? `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/latest_photos?api_key=${apiKey}`
-      : sol
-      ? `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&api_key=${apiKey}`
-      : `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?earth_date=${date}&api_key=${apiKey}`;
-    const response = await fetch(src);
-    const photos = await response.json();
-    console.log(photos);
-  };
-
   return (
     <StyledForm>
       <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
       <Select
         options={rovers}
+        name="rovers"
         defaultValue="Choose rover"
         changeHandler={({ target: { value } }) =>
-          dispatch({ type: "rover", setSolDates, value })
+          dispatch({ type: "rover", setDates, value })
         }
       />
       {state.rover && (
@@ -187,7 +169,7 @@ const SearchFrom = () => {
             name={isSol ? "sol" : "Earth days"}
             placeholder={
               isSol
-                ? `SOL from 0 to ${maxSol}`
+                ? `SOL from 0 to ${dates.maxSol}`
                 : `Date from ${dates.startDate} to ${dates.endDate}`
             }
             changeHandler={e => changeDateInput(e)}
@@ -197,7 +179,7 @@ const SearchFrom = () => {
             isError={state.error}
             message={
               isSol
-                ? `SOL should be a number from 0 to ${maxSol}`
+                ? `SOL should be a number from 0 to ${dates.maxSol}`
                 : `Date should be from ${dates.startDate} to ${dates.endDate}`
             }
           />
@@ -207,14 +189,14 @@ const SearchFrom = () => {
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        submitHandler={e => fetchData(null, e)}
+        submitHandler={e => fetchPhotos(null, e, state)}
       >
         SEARCH
       </StyledButton>
       <StyledButton
         type="submit"
         isDisabled={!state.rover}
-        submitHandler={e => fetchData(true, e)}
+        submitHandler={e => fetchPhotos(true, e, state)}
       >
         See Latest
       </StyledButton>

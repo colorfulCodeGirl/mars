@@ -4,7 +4,9 @@ import styled, { createGlobalStyle, css } from "styled-components";
 import background from "./assets/background.png";
 import SearchForm from "./components/organisms/SearchForm";
 import Gallery from "./components/organisms/Gallery";
+import Button from "./components/atoms/Button/Button";
 import { fetchData } from "./helpers";
+import menuIcon from "./assets/menu.png";
 
 export const GlobalStyles = createGlobalStyle`
 @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap");
@@ -44,12 +46,23 @@ const AppWrapper = styled.div`
   height: 100vh;
   position: relative;
   display: grid;
-
   ${({ arePhotosShown }) =>
     arePhotosShown &&
     css`
-      grid-template-columns: 1fr 3fr;
+      align-content: start;
+      justify-items: end;
+      button {
+        margin: 1rem;
+      }
     `}
+
+  @media (min-width: 600px) {
+    ${({ arePhotosShown }) =>
+      arePhotosShown &&
+      css`
+        grid-template-columns: 1fr 3fr;
+      `}
+  }
 `;
 
 const Credentials = styled.p`
@@ -67,6 +80,9 @@ const Credentials = styled.p`
 function App() {
   const [arePhotosShown, setPhotosStatus] = useState(false);
   const [photos, setPhotos] = useState([]);
+
+  const isMobile = window.innerWidth < 600;
+  const isFormShown = !arePhotosShown || (arePhotosShown && !isMobile);
 
   const fetchPhotos = async (newest = null, e, state) => {
     e.preventDefault();
@@ -87,10 +103,17 @@ function App() {
     <>
       <GlobalStyles />
       <AppWrapper arePhotosShown={arePhotosShown}>
-        <SearchForm
-          arePhotosShown={arePhotosShown}
-          handleSearch={fetchPhotos}
-        />
+        {isFormShown && (
+          <SearchForm
+            arePhotosShown={arePhotosShown}
+            handleSearch={fetchPhotos}
+          />
+        )}
+        {!isFormShown && (
+          <Button onClick={() => {}} isGrey={true} icon={menuIcon}>
+            CHANGE SEARCH PARAMS
+          </Button>
+        )}
         <Gallery photos={photos} />
         <Credentials>
           Image by{" "}

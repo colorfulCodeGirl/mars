@@ -7,6 +7,7 @@ import Gallery from "./components/organisms/Gallery";
 import Button from "./components/atoms/Button/Button";
 import { fetchData } from "./helpers";
 import menuIcon from "./assets/menu.png";
+import ModalOverlay from "./components/molecules/ModalOverlay";
 
 export const GlobalStyles = createGlobalStyle`
 @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap");
@@ -80,6 +81,7 @@ const Credentials = styled.p`
 function App() {
   const [arePhotosShown, setPhotosStatus] = useState(false);
   const [photos, setPhotos] = useState([]);
+  const [isModalSearchShown, setModalSearchVisibility] = useState(false);
 
   const isMobile = window.innerWidth < 600;
   const isFormShown = !arePhotosShown || (arePhotosShown && !isMobile);
@@ -110,9 +112,18 @@ function App() {
           />
         )}
         {!isFormShown && (
-          <Button onClick={() => {}} isGrey={true} icon={menuIcon}>
+          <Button
+            onClick={() => setModalSearchVisibility(true)}
+            isGrey={true}
+            icon={menuIcon}
+          >
             CHANGE SEARCH PARAMS
           </Button>
+        )}
+        {isModalSearchShown && (
+          <ModalOverlay closeHandler={() => setModalSearchVisibility(false)}>
+            <SearchForm arePhotosShown={false} handleSearch={fetchPhotos} />
+          </ModalOverlay>
         )}
         <Gallery photos={photos} />
         <Credentials>

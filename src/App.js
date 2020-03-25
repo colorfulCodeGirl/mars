@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./App.css";
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, css } from "styled-components";
 import background from "./assets/background.png";
-import SearchForm from "./components/organisms/SearchForm/SearchForm";
+import SearchForm from "./components/organisms/SearchForm";
+import Gallery from "./components/organisms/Gallery";
 import { fetchData } from "./helpers";
 
 export const GlobalStyles = createGlobalStyle`
@@ -43,6 +44,12 @@ const AppWrapper = styled.div`
   height: 100vh;
   position: relative;
   display: grid;
+
+  ${({ arePhotosShown }) =>
+    arePhotosShown &&
+    css`
+      grid-template-columns: 1fr 3fr;
+    `}
 `;
 
 const Credentials = styled.p`
@@ -59,6 +66,7 @@ const Credentials = styled.p`
 
 function App() {
   const [arePhotosShown, setPhotosStatus] = useState(false);
+  const [photos, setPhotos] = useState([]);
 
   const fetchPhotos = async (newest = null, e, state) => {
     e.preventDefault();
@@ -69,18 +77,21 @@ function App() {
       : sol
       ? `rovers/${rover}/photos?sol=${sol}`
       : `rovers/${rover}/photos?earth_date=${date}`;
-    const photos = await fetchData(urlParams);
-    console.log(photos);
+    const response = await fetchData(urlParams);
+    const newPhotos = response.latest_photos || response.photos;
+    console.log(newPhotos);
+    setPhotos(newPhotos);
   };
 
   return (
     <>
       <GlobalStyles />
-      <AppWrapper>
+      <AppWrapper arePhotosShown={arePhotosShown}>
         <SearchForm
           arePhotosShown={arePhotosShown}
           handleSearch={fetchPhotos}
         />
+        <Gallery photos={photos} />
         <Credentials>
           Image by{" "}
           <a href="https://pixabay.com/users/WikiImages-1897/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=67522">

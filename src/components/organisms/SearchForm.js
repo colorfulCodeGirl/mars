@@ -2,12 +2,12 @@ import React, { useState, useReducer } from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
-import RadioGroup from "../../atoms/RadioGroup/RadioGroup";
-import Button from "../../atoms/Button/Button";
-import Select from "../../atoms/Select/Select";
-import Input from "../../atoms/Input/Input";
-import ErrorTooltip from "../../atoms/ErrorTooltip/ErrorTooltip";
-import { fetchData, validateDate, formateDate } from "../../../helpers";
+import RadioGroup from "../atoms/RadioGroup/RadioGroup";
+import Button from "../atoms/Button/Button";
+import Select from "../atoms/Select/Select";
+import Input from "../atoms/Input/Input";
+import ErrorTooltip from "../atoms/ErrorTooltip/ErrorTooltip";
+import { fetchData, validateDate, formateDate } from "../../helpers";
 
 const StyledForm = styled.form`
   width: 80vw;
@@ -42,6 +42,7 @@ const StyledForm = styled.form`
       justify-self: start;
       align-self: stretch;
       max-height: 100vh;
+      max-width: 350px;
     `}
 `;
 

@@ -97,7 +97,9 @@ function App() {
       : `rovers/${rover}/photos?earth_date=${date}`;
     const response = await fetchData(urlParams);
     const newPhotos = response.latest_photos || response.photos;
-    console.log(newPhotos);
+    if (isMobile) {
+      setModalSearchVisibility(false);
+    }
     setPhotos(newPhotos);
   };
 
@@ -122,7 +124,11 @@ function App() {
         )}
         {isModalSearchShown && (
           <ModalOverlay closeHandler={() => setModalSearchVisibility(false)}>
-            <SearchForm arePhotosShown={false} handleSearch={fetchPhotos} />
+            <SearchForm
+              isTransparent={false}
+              arePhotosShown={false}
+              handleSearch={fetchPhotos}
+            />
           </ModalOverlay>
         )}
         <Gallery photos={photos} />

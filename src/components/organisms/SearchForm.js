@@ -44,6 +44,11 @@ const StyledForm = styled.form`
       max-height: 100vh;
       max-width: 350px;
     `}
+  ${({ isTransparent }) =>
+    !isTransparent &&
+    css`
+      background-color: #ffffff;
+    `}
 `;
 
 const StyledHeading = styled.h1`
@@ -120,7 +125,7 @@ const reducer = (state, action) => {
   }
 };
 
-const SearchFrom = ({ arePhotosShown, handleSearch }) => {
+const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSearchAllowed, allowSearch] = useState(false);
@@ -143,7 +148,11 @@ const SearchFrom = ({ arePhotosShown, handleSearch }) => {
   };
 
   return (
-    <StyledForm data-testid="form" displayLeft={arePhotosShown}>
+    <StyledForm
+      data-testid="form"
+      displayLeft={arePhotosShown}
+      isTransparent={isTransparent}
+    >
       <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
       <Select
         options={rovers}
@@ -205,5 +214,6 @@ export default SearchFrom;
 
 SearchFrom.propTypes = {
   arePhotosShown: PropTypes.bool.isRequired,
-  handleSearch: PropTypes.func.isRequired
+  handleSearch: PropTypes.func.isRequired,
+  isTransparent: PropTypes.bool
 };

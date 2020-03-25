@@ -119,19 +119,7 @@ const reducer = (state, action) => {
   }
 };
 
-const fetchPhotos = async (newest = null, e, state) => {
-  e.preventDefault();
-  const { rover, sol, date } = state;
-  const urlParams = newest
-    ? `rovers/${rover}/latest_photos?`
-    : sol
-    ? `rovers/${rover}/photos?sol=${sol}`
-    : `rovers/${rover}/photos?earth_date=${date}`;
-  const photos = await fetchData(urlParams);
-  console.log(photos);
-};
-
-const SearchFrom = ({ arePhotosShown }) => {
+const SearchFrom = ({ arePhotosShown, handleSearch }) => {
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSearchAllowed, allowSearch] = useState(false);
@@ -197,14 +185,14 @@ const SearchFrom = ({ arePhotosShown }) => {
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        submitHandler={e => fetchPhotos(null, e, state)}
+        submitHandler={e => handleSearch(null, e, state)}
       >
         SEARCH
       </StyledButton>
       <StyledButton
         type="submit"
         isDisabled={!state.rover}
-        submitHandler={e => fetchPhotos(true, e, state)}
+        submitHandler={e => handleSearch(true, e, state)}
       >
         See Latest
       </StyledButton>
@@ -215,5 +203,6 @@ const SearchFrom = ({ arePhotosShown }) => {
 export default SearchFrom;
 
 SearchFrom.propTypes = {
-  arePhotosShown: PropTypes.bool.isRequired
+  arePhotosShown: PropTypes.bool.isRequired,
+  handleSearch: PropTypes.func.isRequired
 };

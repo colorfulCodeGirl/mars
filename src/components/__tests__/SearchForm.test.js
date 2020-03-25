@@ -4,35 +4,45 @@ import SearchForm from "../organisms/SearchForm/SearchForm";
 
 describe("Search form component", () => {
   it("renders heading", () => {
-    const { getByText } = render(<SearchForm arePhotosShown={false} />);
+    const { getByText } = render(
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
+    );
     expect(getByText(/explore/i)).toBeInTheDocument();
   });
 
   it("renders select element for rovers", () => {
-    const { getByLabelText } = render(<SearchForm arePhotosShown={false} />);
+    const { getByLabelText } = render(
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
+    );
     expect(getByLabelText(/choose/i)).toBeInTheDocument();
   });
   it("renders search button", () => {
-    const { getByText } = render(<SearchForm arePhotosShown={false} />);
+    const { getByText } = render(
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
+    );
     const button = getByText(/search/i);
     expect(button).toBeInTheDocument();
     expect(getRoles(button).button).toBeTruthy();
   });
   it("renders 'see latest' button", () => {
-    const { getByText } = render(<SearchForm arePhotosShown={false} />);
+    const { getByText } = render(
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
+    );
     const button = getByText(/see latest/i);
     expect(button).toBeInTheDocument();
     expect(getRoles(button).button).toBeTruthy();
   });
 
   it("renders buttons disabled on start", () => {
-    const { getByText } = render(<SearchForm arePhotosShown={false} />);
+    const { getByText } = render(
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
+    );
     expect(getByText(/search/i)).toBeDisabled();
     expect(getByText(/see latest/i)).toBeDisabled();
   });
   it("enables see latest button when rover is picked", () => {
     const { getByText, getByLabelText } = render(
-      <SearchForm arePhotosShown={false} />
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
     );
     const select = getByLabelText(/choose rover/i);
     const button = getByText(/see latest/i);
@@ -42,7 +52,7 @@ describe("Search form component", () => {
   });
   it("doesn't enables search button when only rover is picked", () => {
     const { getByText, getByLabelText } = render(
-      <SearchForm arePhotosShown={false} />
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
     );
     const select = getByLabelText(/choose rover/i);
     const button = getByText(/search/i);
@@ -52,7 +62,7 @@ describe("Search form component", () => {
   });
   it("renders radio group component when rover is picked", () => {
     const { getAllByRole, getByLabelText, getAllByLabelText } = render(
-      <SearchForm arePhotosShown={false} />
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
     );
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
@@ -65,7 +75,7 @@ describe("Search form component", () => {
   });
   it("renders input element for sol/earth days when rover is picked", () => {
     const { getByLabelText, getByPlaceholderText } = render(
-      <SearchForm arePhotosShown={false} />
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
     );
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
@@ -74,7 +84,7 @@ describe("Search form component", () => {
   });
   it("changes date input element from sol to Earth days when radio group is changed", () => {
     const { getByLabelText, getByPlaceholderText, getAllByRole } = render(
-      <SearchForm arePhotosShown={false} />
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
     );
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
@@ -91,7 +101,7 @@ describe("Search form component", () => {
       getByPlaceholderText,
       getAllByRole,
       getByText
-    } = render(<SearchForm arePhotosShown={false} />);
+    } = render(<SearchForm arePhotosShown={false} handleSearch={() => {}} />);
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
     const radioBtns = getAllByRole(/radio/i);
@@ -128,7 +138,7 @@ describe("Search form component", () => {
   });
   it("enables search button when form is field", () => {
     const { getByLabelText, getByPlaceholderText, getByText } = render(
-      <SearchForm arePhotosShown={false} />
+      <SearchForm arePhotosShown={false} handleSearch={() => {}} />
     );
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
@@ -149,7 +159,7 @@ describe("Search form component", () => {
 
   it("changes styles when photos are shown", () => {
     const { getByTestId, rerender } = render(
-      <SearchForm arePhotosShown={true} />
+      <SearchForm arePhotosShown={true} handleSearch={() => {}} />
     );
     const form = getByTestId("form");
     expect(form).toHaveStyle(`
@@ -158,10 +168,29 @@ describe("Search form component", () => {
       max-height: 100vh;
       `);
 
-    rerender(<SearchForm arePhotosShown={false} />);
+    rerender(<SearchForm arePhotosShown={false} handleSearch={() => {}} />);
     expect(form).toHaveStyle(`
     justify-self: center;
     align-self: center;
     `);
+  });
+  it("handles search function", () => {
+    const onSearch = jest.fn();
+    const { getByLabelText, getByPlaceholderText, getByText } = render(
+      <SearchForm arePhotosShown={false} handleSearch={onSearch} />
+    );
+    const select = getByLabelText(/choose rover/i);
+    fireEvent.change(select, { target: { value: "opportunity" } });
+
+    const inputSol = getByPlaceholderText(/SOL from 0 to/i);
+    fireEvent.change(inputSol, { target: { value: "0" } });
+
+    const button = getByText(/search/i);
+
+    //wait for validation data from API
+    setTimeout(() => {
+      fireEvent.click(button);
+      expect(onSearch).toBeCalledTimes(1);
+    }, 3000);
   });
 });

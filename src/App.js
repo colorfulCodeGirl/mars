@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import styled, { createGlobalStyle } from "styled-components";
 import background from "./assets/background.png";
 import SearchForm from "./components/organisms/SearchForm/SearchForm";
+import { fetchData } from "./helpers";
 
 export const GlobalStyles = createGlobalStyle`
 @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap");
@@ -57,11 +58,29 @@ const Credentials = styled.p`
 `;
 
 function App() {
+  const [arePhotosShown, setPhotosStatus] = useState(false);
+
+  const fetchPhotos = async (newest = null, e, state) => {
+    e.preventDefault();
+    setPhotosStatus(true);
+    const { rover, sol, date } = state;
+    const urlParams = newest
+      ? `rovers/${rover}/latest_photos?`
+      : sol
+      ? `rovers/${rover}/photos?sol=${sol}`
+      : `rovers/${rover}/photos?earth_date=${date}`;
+    const photos = await fetchData(urlParams);
+    console.log(photos);
+  };
+
   return (
     <>
       <GlobalStyles />
       <AppWrapper>
-        <SearchForm arePhotosShown={true} />
+        <SearchForm
+          arePhotosShown={arePhotosShown}
+          handleSearch={fetchPhotos}
+        />
         <Credentials>
           Image by{" "}
           <a href="https://pixabay.com/users/WikiImages-1897/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=67522">

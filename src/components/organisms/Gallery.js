@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 const StyledGallery = styled.div`
   width: 100%;
@@ -26,7 +28,11 @@ const Gallery = ({ photos }) => {
       alt={`Mars by rover ${photo.rover.name}`}
     />
   ));
-  return <StyledGallery>{imgElems}</StyledGallery>;
+  return (
+    <PerfectScrollbar>
+      <StyledGallery>{imgElems}</StyledGallery>;
+    </PerfectScrollbar>
+  );
 };
 
 export default Gallery;

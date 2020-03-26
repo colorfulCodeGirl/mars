@@ -61,7 +61,7 @@ const AppWrapper = styled.div`
     ${({ arePhotosShown }) =>
       arePhotosShown &&
       css`
-        grid-template-columns: 1fr 3fr;
+        grid-template-columns: auto 3fr;
       `}
   }
 `;

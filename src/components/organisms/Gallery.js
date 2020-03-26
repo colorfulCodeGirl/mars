@@ -18,7 +18,8 @@ const StyledGallery = styled.div`
 `;
 
 const Gallery = ({ photos }) => {
-  const imgElems = photos.map(photo => (
+  const shownElements = photos.slice(0, 15);
+  const imgElems = shownElements.map(photo => (
     <img
       src={photo.img_src}
       key={photo.id}

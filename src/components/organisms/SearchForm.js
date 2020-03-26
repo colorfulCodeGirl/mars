@@ -41,7 +41,7 @@ const StyledForm = styled.form`
     css`
       justify-self: start;
       align-self: stretch;
-      max-height: 100vh;
+      height: 100vh;
       max-width: 350px;
     `}
   ${({ isTransparent }) =>

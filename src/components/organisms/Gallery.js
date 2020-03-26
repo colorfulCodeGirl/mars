@@ -5,28 +5,13 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
-const StyledGallery = styled.div`
-  width: 100%;
-  padding: 1rem;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, auto);
-  align-content: start;
-  img {
-    width: 100%;
-  }
-  @media (min-width: 600px) {
-    grid-template-columns: repeat(3, auto);
-  }
-`;
-
 const StyledImg = styled.img`
   width: 100%;
   border-radius: 0.3rem;
 `;
 
 const StyledResponsiveMasonry = styled(ResponsiveMasonry)`
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
 `;
 

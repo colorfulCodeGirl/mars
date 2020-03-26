@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import styled, { createGlobalStyle, css } from "styled-components";
 import background from "./assets/background.png";
@@ -57,7 +57,7 @@ const AppWrapper = styled.div`
       }
     `}
 
-  @media (min-width: 600px) {
+  @media (min-width: 780px) {
     ${({ arePhotosShown }) =>
       arePhotosShown &&
       css`
@@ -82,9 +82,29 @@ function App() {
   const [arePhotosShown, setPhotosStatus] = useState(false);
   const [photos, setPhotos] = useState([]);
   const [isModalSearchShown, setModalSearchVisibility] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const isMobile = window.innerWidth < 600;
+  const checkIfItIsMobile = () => window.innerWidth < 780;
   const isFormShown = !arePhotosShown || (arePhotosShown && !isMobile);
+
+  useEffect(() => {
+    setIsMobile(checkIfItIsMobile());
+
+    // timeoutId for debounce mechanism
+    let timeoutId = null;
+
+    const resizeListener = () => {
+      // prevent execution of previous setTimeout
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => setIsMobile(checkIfItIsMobile()), 150);
+    };
+
+    window.addEventListener("resize", resizeListener);
+
+    return () => {
+      window.removeEventListener("resize", resizeListener);
+    };
+  }, []);
 
   const fetchPhotos = async (newest = null, e, state) => {
     e.preventDefault();

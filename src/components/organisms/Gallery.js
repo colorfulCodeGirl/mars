@@ -42,7 +42,7 @@ const Gallery = ({ photos }) => {
   return (
     <PerfectScrollbar>
       <StyledResponsiveMasonry
-        columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3, 1100: 4 }}
+        columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
       >
         <Masonry gutter="0.3rem">{imgElems}</Masonry>
       </StyledResponsiveMasonry>

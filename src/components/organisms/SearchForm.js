@@ -56,6 +56,7 @@ const StyledHeading = styled.h1`
   font-size: 2rem;
   text-align: center;
   margin-bottom: 3rem;
+  color: #515050;
   @media (min-width: 600px) {
     font-size: 2.6rem;
   }

@@ -15,6 +15,10 @@ const StyledResponsiveMasonry = styled(ResponsiveMasonry)`
   margin: 0 auto;
 `;
 
+const StyledPerfectScrollbar = styled(PerfectScrollbar)`
+  width: 100%;
+`;
+
 const Gallery = ({ photos }) => {
   const shownElements = photos.slice(0, 15);
   const imgElems = shownElements.map(photo => (
@@ -25,13 +29,13 @@ const Gallery = ({ photos }) => {
     />
   ));
   return (
-    <PerfectScrollbar>
+    <StyledPerfectScrollbar>
       <StyledResponsiveMasonry
         columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
       >
         <Masonry gutter="0.3rem">{imgElems}</Masonry>
       </StyledResponsiveMasonry>
-    </PerfectScrollbar>
+    </StyledPerfectScrollbar>
   );
 };
 

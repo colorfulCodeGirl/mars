@@ -30,6 +30,7 @@ const Input = ({ changeHandler, label, name, value, ...props }) => (
       value={value}
       onChange={changeHandler}
       {...props}
+      autocomplete="false"
     />
   </>
 );

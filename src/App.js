@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, css } from "styled-components";
 import background from "./assets/background.png";
-import SearchForm from "./components/organisms/SearchForm/SearchForm";
+import SearchForm from "./components/organisms/SearchForm";
+import Gallery from "./components/organisms/Gallery";
+import Button from "./components/atoms/Button/Button";
+import { fetchData } from "./helpers";
+import menuIcon from "./assets/menu.png";
+import ModalOverlay from "./components/molecules/ModalOverlay";
 
 export const GlobalStyles = createGlobalStyle`
 @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap");
@@ -42,6 +47,23 @@ const AppWrapper = styled.div`
   height: 100vh;
   position: relative;
   display: grid;
+  ${({ arePhotosShown }) =>
+    arePhotosShown &&
+    css`
+      align-content: start;
+      justify-items: end;
+      button {
+        margin: 1rem;
+      }
+    `}
+
+  @media (min-width: 600px) {
+    ${({ arePhotosShown }) =>
+      arePhotosShown &&
+      css`
+        grid-template-columns: auto 3fr;
+      `}
+  }
 `;
 
 const Credentials = styled.p`
@@ -57,11 +79,59 @@ const Credentials = styled.p`
 `;
 
 function App() {
+  const [arePhotosShown, setPhotosStatus] = useState(false);
+  const [photos, setPhotos] = useState([]);
+  const [isModalSearchShown, setModalSearchVisibility] = useState(false);
+
+  const isMobile = window.innerWidth < 600;
+  const isFormShown = !arePhotosShown || (arePhotosShown && !isMobile);
+
+  const fetchPhotos = async (newest = null, e, state) => {
+    e.preventDefault();
+    setPhotosStatus(true);
+    const { rover, sol, date } = state;
+    const urlParams = newest
+      ? `rovers/${rover}/latest_photos?`
+      : sol
+      ? `rovers/${rover}/photos?sol=${sol}`
+      : `rovers/${rover}/photos?earth_date=${date}`;
+    const response = await fetchData(urlParams);
+    const newPhotos = response.latest_photos || response.photos;
+    if (isMobile) {
+      setModalSearchVisibility(false);
+    }
+    setPhotos(newPhotos);
+  };
+
   return (
     <>
       <GlobalStyles />
-      <AppWrapper>
-        <SearchForm />
+      <AppWrapper arePhotosShown={arePhotosShown}>
+        {isFormShown && (
+          <SearchForm
+            arePhotosShown={arePhotosShown}
+            handleSearch={fetchPhotos}
+          />
+        )}
+        {!isFormShown && (
+          <Button
+            onClick={() => setModalSearchVisibility(true)}
+            isGrey={true}
+            icon={menuIcon}
+          >
+            CHANGE SEARCH PARAMS
+          </Button>
+        )}
+        {isModalSearchShown && (
+          <ModalOverlay closeHandler={() => setModalSearchVisibility(false)}>
+            <SearchForm
+              isTransparent={false}
+              arePhotosShown={false}
+              handleSearch={fetchPhotos}
+            />
+          </ModalOverlay>
+        )}
+        <Gallery photos={photos} />
         <Credentials>
           Image by{" "}
           <a href="https://pixabay.com/users/WikiImages-1897/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=67522">

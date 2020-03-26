@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
 const StyledButton = styled.button`
@@ -12,10 +12,37 @@ const StyledButton = styled.button`
   &:disabled {
     background-color: #515050;
   }
+  ${({ icon }) =>
+    icon &&
+    css`
+      background-image: url(${icon});
+      background-position: 94% 47%;
+      background-repeat: no-repeat;
+      padding-right: 3.7rem;
+    `}
+  ${({ isGrey }) =>
+    isGrey &&
+    css`
+      background-color: rgba(255, 255, 255, 0.6);
+      color: #515050;
+    `}
 `;
 
-const Button = ({ children, submitHandler, isDisabled = false, ...props }) => (
-  <StyledButton onClick={submitHandler} disabled={isDisabled} {...props}>
+const Button = ({
+  children,
+  submitHandler,
+  isDisabled = false,
+  icon,
+  isGrey,
+  ...props
+}) => (
+  <StyledButton
+    onClick={submitHandler}
+    disabled={isDisabled}
+    icon={icon}
+    isGrey={isGrey}
+    {...props}
+  >
     {children}
   </StyledButton>
 );
@@ -25,5 +52,7 @@ export default Button;
 Button.propTypes = {
   children: PropTypes.string.isRequired,
   submitHandler: PropTypes.func.isRequired,
-  isDisabled: PropTypes.bool
+  isDisabled: PropTypes.bool,
+  icon: PropTypes.string,
+  isGrey: PropTypes.bool
 };

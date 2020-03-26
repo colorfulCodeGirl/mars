@@ -1,12 +1,13 @@
 import React, { useState, useReducer } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import PropTypes from "prop-types";
 
-import RadioGroup from "../../atoms/RadioGroup/RadioGroup";
-import Button from "../../atoms/Button/Button";
-import Select from "../../atoms/Select/Select";
-import Input from "../../atoms/Input/Input";
-import ErrorTooltip from "../../atoms/ErrorTooltip/ErrorTooltip";
-import { fetchData, validateDate, formateDate } from "../../../helpers";
+import RadioGroup from "../atoms/RadioGroup/RadioGroup";
+import Button from "../atoms/Button/Button";
+import Select from "../atoms/Select/Select";
+import Input from "../atoms/Input/Input";
+import ErrorTooltip from "../atoms/ErrorTooltip/ErrorTooltip";
+import { fetchData, validateDate, formateDate } from "../../helpers";
 
 const StyledForm = styled.form`
   width: 80vw;
@@ -35,6 +36,19 @@ const StyledForm = styled.form`
     width: 30vw;
     min-height: 70vh;
   }
+  ${({ displayLeft }) =>
+    displayLeft &&
+    css`
+      justify-self: start;
+      align-self: stretch;
+      height: 100vh;
+      width: 350px;
+    `}
+  ${({ isTransparent }) =>
+    !isTransparent &&
+    css`
+      background-color: #ffffff;
+    `}
 `;
 
 const StyledHeading = styled.h1`
@@ -111,19 +125,7 @@ const reducer = (state, action) => {
   }
 };
 
-const fetchPhotos = async (newest = null, e, state) => {
-  e.preventDefault();
-  const { rover, sol, date } = state;
-  const urlParams = newest
-    ? `rovers/${rover}/latest_photos?`
-    : sol
-    ? `rovers/${rover}/photos?sol=${sol}`
-    : `rovers/${rover}/photos?earth_date=${date}`;
-  const photos = await fetchData(urlParams);
-  console.log(photos);
-};
-
-const SearchFrom = () => {
+const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSearchAllowed, allowSearch] = useState(false);
@@ -146,7 +148,11 @@ const SearchFrom = () => {
   };
 
   return (
-    <StyledForm>
+    <StyledForm
+      data-testid="form"
+      displayLeft={arePhotosShown}
+      isTransparent={isTransparent}
+    >
       <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
       <Select
         options={rovers}
@@ -189,14 +195,14 @@ const SearchFrom = () => {
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        submitHandler={e => fetchPhotos(null, e, state)}
+        submitHandler={e => handleSearch(null, e, state)}
       >
         SEARCH
       </StyledButton>
       <StyledButton
         type="submit"
         isDisabled={!state.rover}
-        submitHandler={e => fetchPhotos(true, e, state)}
+        submitHandler={e => handleSearch(true, e, state)}
       >
         See Latest
       </StyledButton>
@@ -205,3 +211,9 @@ const SearchFrom = () => {
 };
 
 export default SearchFrom;
+
+SearchFrom.propTypes = {
+  arePhotosShown: PropTypes.bool.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  isTransparent: PropTypes.bool
+};

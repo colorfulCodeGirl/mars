@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import InfiniteScroll from "react-infinite-scroll-component";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import "./Gallery.css";
 
 const StyledImg = styled.img`
   width: 100%;
@@ -20,8 +22,25 @@ const StyledPerfectScrollbar = styled(PerfectScrollbar)`
 `;
 
 const Gallery = ({ photos }) => {
-  const shownElements = photos.slice(0, 15);
-  const imgElems = shownElements.map(photo => (
+  const [shownPhotos, setShownPhotos] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  const addNewPhotos = () => {
+    // setShownPhotos([]);
+    const length = shownPhotos.length;
+    const nextStartIndex = length === 0 ? 0 : length;
+    const hasMoreForNext =
+      photos.length >= nextStartIndex + 10 || photos.length === 0;
+    const nextEndIndex = hasMoreForNext ? nextStartIndex + 10 : photos.length;
+    const nextPhotos = photos.slice(nextStartIndex, nextEndIndex);
+    console.log({ photos, shownPhotos, hasMore, hasMoreForNext, nextPhotos });
+    setHasMore(hasMoreForNext);
+    setShownPhotos([...shownPhotos, ...nextPhotos]);
+  };
+
+  useEffect(addNewPhotos, [photos]);
+
+  const imgElems = shownPhotos.map(photo => (
     <StyledImg
       src={photo.img_src}
       key={photo.id}
@@ -29,13 +48,21 @@ const Gallery = ({ photos }) => {
     />
   ));
   return (
-    <StyledPerfectScrollbar>
-      <StyledResponsiveMasonry
-        columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
-      >
-        <Masonry gutter="0.3rem">{imgElems}</Masonry>
-      </StyledResponsiveMasonry>
-    </StyledPerfectScrollbar>
+    <InfiniteScroll
+      dataLength={shownPhotos.length}
+      next={addNewPhotos}
+      hasMore={hasMore}
+      loader={<h4>Loading...</h4>}
+      height="100%"
+    >
+      <StyledPerfectScrollbar>
+        <StyledResponsiveMasonry
+          columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
+        >
+          <Masonry gutter="0.3rem">{imgElems}</Masonry>
+        </StyledResponsiveMasonry>
+      </StyledPerfectScrollbar>
+    </InfiniteScroll>
   );
 };
 

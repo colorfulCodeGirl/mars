@@ -1,0 +1,13 @@
+.infinite-scroll-component {
+  overflow: hidden !important;
+}
+
+.infinite-scroll-component__outerdiv {
+  height: 87vh !important;
+}
+
+@media (min-width: 780px) {
+  .infinite-scroll-component__outerdiv {
+    height: 96.5vh !important;
+  }
+}

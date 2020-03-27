@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import Loader from "../../components/atoms/Loader/Loader";
+import { usePrevious } from "../../CustomHooks";
 
 const StyledImg = styled.img`
   width: 100%;
@@ -16,28 +16,34 @@ const StyledResponsiveMasonry = styled(ResponsiveMasonry)`
   margin: 0 auto;
 `;
 
-const StyledPerfectScrollbar = styled(PerfectScrollbar)`
-  width: 100%;
-`;
-
-const Gallery = ({ photos, isMobile }) => {
+const Gallery = ({ photosObj, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
+  const { hash } = photosObj;
+  const prevHash = usePrevious(hash);
+
   const addNewPhotos = () => {
-    // setShownPhotos([]);
+    const { photos: newPhotos } = photosObj;
+
     const length = shownPhotos.length;
     const nextStartIndex = length === 0 ? 0 : length;
     const hasMoreForNext =
-      photos.length >= nextStartIndex + 10 || photos.length === 0;
-    const nextEndIndex = hasMoreForNext ? nextStartIndex + 10 : photos.length;
-    const nextPhotos = photos.slice(nextStartIndex, nextEndIndex);
-    console.log({ photos, shownPhotos, hasMore, hasMoreForNext, nextPhotos });
+      newPhotos.length >= nextStartIndex + 10 || newPhotos.length === 0;
+    const nextEndIndex = hasMoreForNext
+      ? nextStartIndex + 10
+      : newPhotos.length;
+    const nextPhotos = newPhotos.slice(nextStartIndex, nextEndIndex);
+    const oldPhotos = prevHash === hash ? shownPhotos : [];
     setHasMore(hasMoreForNext);
-    setShownPhotos([...shownPhotos, ...nextPhotos]);
+    setShownPhotos([...oldPhotos, ...nextPhotos]);
   };
 
-  useEffect(addNewPhotos, [photos]);
+  useEffect(() => {
+    if (prevHash !== hash) {
+      addNewPhotos();
+    }
+  }, [hash]);
 
   const imgElems = shownPhotos.map(photo => (
     <StyledImg
@@ -51,16 +57,14 @@ const Gallery = ({ photos, isMobile }) => {
       dataLength={shownPhotos.length}
       next={addNewPhotos}
       hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
+      loader={<Loader />}
       height={isMobile ? "88vh" : "97vh"}
     >
-      <StyledPerfectScrollbar>
-        <StyledResponsiveMasonry
-          columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
-        >
-          <Masonry gutter="0.3rem">{imgElems}</Masonry>
-        </StyledResponsiveMasonry>
-      </StyledPerfectScrollbar>
+      <StyledResponsiveMasonry
+        columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
+      >
+        <Masonry gutter="0.3rem">{imgElems}</Masonry>
+      </StyledResponsiveMasonry>
     </InfiniteScroll>
   );
 };

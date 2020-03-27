@@ -8,6 +8,7 @@ import Button from "./components/atoms/Button/Button";
 import { fetchData } from "./helpers";
 import menuIcon from "./assets/menu.png";
 import ModalOverlay from "./components/molecules/ModalOverlay";
+import hash from "object-hash";
 
 export const GlobalStyles = createGlobalStyle`
 @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap");
@@ -80,7 +81,7 @@ const Credentials = styled.p`
 
 function App() {
   const [arePhotosShown, setPhotosStatus] = useState(false);
-  const [photos, setPhotos] = useState([]);
+  const [photosObj, setPhotos] = useState({ photos: [], hash: "" });
   const [isModalSearchShown, setModalSearchVisibility] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -108,7 +109,6 @@ function App() {
 
   const fetchPhotos = async (newest = null, e, state) => {
     e.preventDefault();
-    setPhotosStatus(true);
     const { rover, sol, date } = state;
     const urlParams = newest
       ? `rovers/${rover}/latest_photos?`
@@ -120,7 +120,8 @@ function App() {
     if (isMobile) {
       setModalSearchVisibility(false);
     }
-    setPhotos(newPhotos);
+    setPhotos({ photos: newPhotos, hash: hash(newPhotos) });
+    setPhotosStatus(true);
   };
 
   return (
@@ -151,7 +152,9 @@ function App() {
             />
           </ModalOverlay>
         )}
-        {arePhotosShown && <Gallery photos={photos} isMobile={isMobile} />}
+        {arePhotosShown && (
+          <Gallery photosObj={photosObj} isMobile={isMobile} />
+        )}
         <Credentials>
           Image by{" "}
           <a href="https://pixabay.com/users/WikiImages-1897/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=67522">

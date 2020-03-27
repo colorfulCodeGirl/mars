@@ -5,7 +5,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import "./Gallery.css";
 
 const StyledImg = styled.img`
   width: 100%;
@@ -21,7 +20,7 @@ const StyledPerfectScrollbar = styled(PerfectScrollbar)`
   width: 100%;
 `;
 
-const Gallery = ({ photos }) => {
+const Gallery = ({ photos, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
@@ -53,7 +52,7 @@ const Gallery = ({ photos }) => {
       next={addNewPhotos}
       hasMore={hasMore}
       loader={<h4>Loading...</h4>}
-      height="100%"
+      height={isMobile ? "88vh" : "97vh"}
     >
       <StyledPerfectScrollbar>
         <StyledResponsiveMasonry
@@ -75,5 +74,6 @@ Gallery.propTypes = {
       img_src: PropTypes.string.isRequired,
       rover: PropTypes.object
     })
-  )
+  ),
+  isMobile: PropTypes.bool
 };

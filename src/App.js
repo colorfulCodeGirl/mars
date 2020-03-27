@@ -151,7 +151,7 @@ function App() {
             />
           </ModalOverlay>
         )}
-        {arePhotosShown && <Gallery photos={photos} />}
+        {arePhotosShown && <Gallery photos={photos} isMobile={isMobile} />}
         <Credentials>
           Image by{" "}
           <a href="https://pixabay.com/users/WikiImages-1897/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=67522">

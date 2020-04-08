@@ -16,46 +16,49 @@ const StyledResponsiveMasonry = styled(ResponsiveMasonry)`
   margin: 0 auto;
 `;
 
-const Gallery = ({ photosObj, isMobile }) => {
+const chooseNextPhotos = (newPhotos, length) => {
+  const nextStartIndex = length === 0 ? 0 : length;
+  const hasMorePhotos =
+    newPhotos.length >= nextStartIndex + 10 || newPhotos.length === 0;
+  const nextEndIndex = hasMorePhotos ? nextStartIndex + 10 : newPhotos.length;
+  const nextPhotos = newPhotos.slice(nextStartIndex, nextEndIndex);
+  return { hasMorePhotos, nextPhotos };
+};
+
+const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
-  const { hash } = photosObj;
+  const length = shownPhotos.length;
   const prevHash = usePrevious(hash);
-
-  const addNewPhotos = () => {
-    const { photos: newPhotos } = photosObj;
-
-    const length = shownPhotos.length;
-    const nextStartIndex = length === 0 ? 0 : length;
-    const hasMoreForNext =
-      newPhotos.length >= nextStartIndex + 10 || newPhotos.length === 0;
-    const nextEndIndex = hasMoreForNext
-      ? nextStartIndex + 10
-      : newPhotos.length;
-    const nextPhotos = newPhotos.slice(nextStartIndex, nextEndIndex);
-    const oldPhotos = prevHash === hash ? shownPhotos : [];
-    setHasMore(hasMoreForNext);
-    setShownPhotos([...oldPhotos, ...nextPhotos]);
-  };
 
   useEffect(() => {
     if (prevHash !== hash) {
-      addNewPhotos();
+      const { hasMorePhotos, nextPhotos } = chooseNextPhotos(photos, length);
+      setShownPhotos([...nextPhotos]);
+      setHasMore(hasMorePhotos);
     }
-  }, [hash]);
+  }, [hash, prevHash, photos, length]);
 
-  const imgElems = shownPhotos.map(photo => (
+  const imgElems = shownPhotos.map((photo) => (
     <StyledImg
       src={photo.img_src}
       key={photo.id}
       alt={`Mars by rover ${photo.rover.name}`}
     />
   ));
+
+  const addPhotosOnScroll = () => {
+    const { hasMorePhotos, nextPhotos } = chooseNextPhotos(photos, length);
+    const oldPhotos = prevHash === hash ? shownPhotos : [];
+    setShownPhotos([...oldPhotos, ...nextPhotos]);
+    setHasMore(hasMorePhotos);
+  };
+
   return (
     <InfiniteScroll
       dataLength={shownPhotos.length}
-      next={addNewPhotos}
+      next={addPhotosOnScroll}
       hasMore={hasMore}
       loader={<Loader />}
       height={isMobile ? "88vh" : "97vh"}
@@ -76,8 +79,8 @@ Gallery.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       img_src: PropTypes.string.isRequired,
-      rover: PropTypes.object
+      rover: PropTypes.object,
     })
   ),
-  isMobile: PropTypes.bool
+  isMobile: PropTypes.bool,
 };

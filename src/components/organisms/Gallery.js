@@ -3,8 +3,9 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import Loader from "../../components/atoms/Loader/Loader";
 import { usePrevious } from "../../CustomHooks";
+import Loader from "../../components/atoms/Loader/Loader";
+import PhotoModal from "../molecules/PhotoModal";
 
 const StyledImg = styled.img`
   width: 100%;
@@ -28,6 +29,7 @@ const chooseNextPhotos = (newPhotos, length) => {
 const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+  const [fullImageSrc, setFullImageSrc] = useState("");
 
   const length = shownPhotos.length;
   const prevHash = usePrevious(hash);
@@ -40,11 +42,21 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
     }
   }, [hash, prevHash, photos, length]);
 
+  const openFullImage = (e) => {
+    const { src } = e.target;
+    setFullImageSrc(src);
+  };
+
+  const closeFullImage = () => {
+    setFullImageSrc("");
+  };
+
   const imgElems = shownPhotos.map((photo) => (
     <StyledImg
       src={photo.img_src}
       key={photo.id}
       alt={`Mars by rover ${photo.rover.name}`}
+      onClick={openFullImage}
     />
   ));
 
@@ -56,19 +68,24 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
   };
 
   return (
-    <InfiniteScroll
-      dataLength={shownPhotos.length}
-      next={addPhotosOnScroll}
-      hasMore={hasMore}
-      loader={<Loader />}
-      height={isMobile ? "88vh" : "97vh"}
-    >
-      <StyledResponsiveMasonry
-        columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
+    <>
+      <InfiniteScroll
+        dataLength={shownPhotos.length}
+        next={addPhotosOnScroll}
+        hasMore={hasMore}
+        loader={<Loader />}
+        height={isMobile ? "88vh" : "97vh"}
       >
-        <Masonry gutter="0.3rem">{imgElems}</Masonry>
-      </StyledResponsiveMasonry>
-    </InfiniteScroll>
+        <StyledResponsiveMasonry
+          columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
+        >
+          <Masonry gutter="0.3rem">{imgElems}</Masonry>
+        </StyledResponsiveMasonry>
+      </InfiniteScroll>
+      {fullImageSrc && (
+        <PhotoModal closeHandler={closeFullImage} src={fullImageSrc} />
+      )}
+    </>
   );
 };
 

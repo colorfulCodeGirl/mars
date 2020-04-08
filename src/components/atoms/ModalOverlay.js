@@ -4,25 +4,40 @@ import PropTypes from "prop-types";
 import close from "../../assets/close.svg";
 
 const StyledOverlay = styled.div`
-  z-index: 999;
+  z-index: 998;
   width: 100vw;
   height: 100vh;
   background-color: rgba(81, 80, 80, 0.5);
-  padding: 3rem;
   position: absolute;
   top: 0;
   left: 0;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  @media (min-width: 900px) {
+    padding: 3rem;
+  }
+`;
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  width: min-content;
+  margin: 0 auto;
+}
 `;
 
 const StyledButton = styled.button`
   background-color: transparent;
+  z-index: 999;
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  align-self: start;
+  justify-self: end;
   max-width: 3rem;
   max-height: 3rem;
   border: none;
   padding: 0;
-  position: absolute;
-  top: 3rem;
-  right: 3rem;
   margin: 1rem;
   img {
     width: 100%;
@@ -31,15 +46,17 @@ const StyledButton = styled.button`
 
 const ModalOverlay = ({ children, closeHandler }) => (
   <StyledOverlay>
-    <StyledButton onClick={closeHandler}>
-      <img src={close} alt="close icon" />
-    </StyledButton>
-    {children}
+    <Wrapper>
+      {children}
+      <StyledButton onClick={closeHandler}>
+        <img src={close} alt="close icon" />
+      </StyledButton>
+    </Wrapper>
   </StyledOverlay>
 );
 
 export default ModalOverlay;
 
 ModalOverlay.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };

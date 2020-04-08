@@ -7,7 +7,7 @@ import Gallery from "./components/organisms/Gallery";
 import Button from "./components/atoms/Button/Button";
 import { fetchData } from "./helpers";
 import menuIcon from "./assets/menu.png";
-import ModalOverlay from "./components/molecules/ModalOverlay";
+import ModalOverlay from "./components/atoms/ModalOverlay";
 import hash from "object-hash";
 
 export const GlobalStyles = createGlobalStyle`

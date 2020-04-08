@@ -10,6 +10,8 @@ import ErrorTooltip from "../atoms/ErrorTooltip/ErrorTooltip";
 import { fetchData, validateDate, formateDate } from "../../helpers";
 
 const StyledForm = styled.form`
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   width: 80vw;
   min-height: 75vh;
   max-width: 450px;
@@ -39,6 +41,8 @@ const StyledForm = styled.form`
   ${({ displayLeft }) =>
     displayLeft &&
     css`
+      grid-column: auto;
+      grid-row: auto;
       justify-self: start;
       align-self: stretch;
       height: 100vh;
@@ -47,7 +51,7 @@ const StyledForm = styled.form`
   ${({ isTransparent }) =>
     !isTransparent &&
     css`
-      background-color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.8);
     `}
 `;
 
@@ -80,7 +84,7 @@ const setSolDates = async (rover, setter) => {
   const {
     max_sol: maxSol,
     landing_date: startDate,
-    max_date: endDate
+    max_date: endDate,
   } = roverData;
   setter({ startDate, endDate, maxSol });
 };
@@ -89,7 +93,7 @@ const initialState = {
   rover: "",
   sol: "",
   date: "",
-  error: false
+  error: false,
 };
 
 const reducer = (state, action) => {
@@ -99,7 +103,7 @@ const reducer = (state, action) => {
       setSolDates(value, action.setDates);
       return {
         ...state,
-        rover: value
+        rover: value,
       };
     case "sol":
       const solError =
@@ -110,7 +114,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         sol: value,
-        error: solError
+        error: solError,
       };
     case "date":
       const formattedDate = formateDate(value, state.date);
@@ -119,7 +123,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         date: formattedDate,
-        error: dateError
+        error: dateError,
       };
     default:
       return state;
@@ -134,7 +138,7 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
   const [dates, setDates] = useState({
     startDate: "",
     endDate: "",
-    maxSol: "max"
+    maxSol: "max",
   });
 
   const changeDateInput = ({ target: { value } }) => {
@@ -179,7 +183,7 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
                 ? `SOL from 0 to ${dates.maxSol}`
                 : `Date from ${dates.startDate} to ${dates.endDate}`
             }
-            changeHandler={e => changeDateInput(e)}
+            changeHandler={(e) => changeDateInput(e)}
             value={isSol ? state.sol : state.date}
           />
           <ErrorTooltip
@@ -196,14 +200,14 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        submitHandler={e => handleSearch(null, e, state)}
+        submitHandler={(e) => handleSearch(null, e, state)}
       >
         SEARCH
       </StyledButton>
       <StyledButton
         type="submit"
         isDisabled={!state.rover}
-        submitHandler={e => handleSearch(true, e, state)}
+        submitHandler={(e) => handleSearch(true, e, state)}
       >
         See Latest
       </StyledButton>
@@ -216,5 +220,5 @@ export default SearchFrom;
 SearchFrom.propTypes = {
   arePhotosShown: PropTypes.bool.isRequired,
   handleSearch: PropTypes.func.isRequired,
-  isTransparent: PropTypes.bool
+  isTransparent: PropTypes.bool,
 };

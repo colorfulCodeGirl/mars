@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -29,7 +30,7 @@ const chooseNextPhotos = (newPhotos, length) => {
 const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [fullImageSrc, setFullImageSrc] = useState("");
+  const [fullImage, setFullImage] = useState({});
 
   const length = shownPhotos.length;
   const prevHash = usePrevious(hash);
@@ -43,20 +44,44 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
   }, [hash, prevHash, photos, length]);
 
   const openFullImage = (e) => {
-    const { src } = e.target;
-    setFullImageSrc(src);
+    const {
+      src,
+      dataset: { index },
+    } = e.target;
+    setFullImage({ src, index });
   };
 
   const closeFullImage = () => {
-    setFullImageSrc("");
+    setFullImage({});
   };
 
-  const imgElems = shownPhotos.map((photo) => (
+  const findDirection = (x) => {
+    const halfPoint = window.innerWidth / 2;
+    return x >= halfPoint ? "right" : "left";
+  };
+
+  const changeFullImage = (e, side) => {
+    e.stopPropagation();
+    const { index } = fullImage;
+    const direction = typeof side === "number" ? findDirection(side) : side;
+    if (
+      (index == 0 && direction === "left") ||
+      (index === photos.length - 1 && direction === "right")
+    ) {
+      return;
+    }
+    const nextIndex = direction === "right" ? +index + 1 : +index - 1;
+    const nextImage = photos[nextIndex].img_src;
+    setFullImage({ src: nextImage, index: nextIndex });
+  };
+
+  const imgElems = shownPhotos.map((photo, index) => (
     <StyledImg
       src={photo.img_src}
       key={photo.id}
       alt={`Mars by rover ${photo.rover.name}`}
       onClick={openFullImage}
+      data-index={index}
     />
   ));
 
@@ -82,8 +107,13 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
           <Masonry gutter="0.3rem">{imgElems}</Masonry>
         </StyledResponsiveMasonry>
       </InfiniteScroll>
-      {fullImageSrc && (
-        <PhotoModal closeHandler={closeFullImage} src={fullImageSrc} />
+      {fullImage.src && (
+        <PhotoModal
+          closeHandler={closeFullImage}
+          changeHandler={changeFullImage}
+          image={fullImage}
+          isMobile={isMobile}
+        />
       )}
     </>
   );

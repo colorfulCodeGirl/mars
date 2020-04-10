@@ -16,9 +16,11 @@ export default {
 };
 
 export const Regular = () => {
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(true);
+
   useEffect(() => {
-    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 7000);
   }, []);
+
   return <AnimatedMars isAnimating={isAnimating} />;
 };

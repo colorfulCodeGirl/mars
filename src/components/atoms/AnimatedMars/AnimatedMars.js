@@ -1,20 +1,24 @@
 import React, { useRef, useEffect } from "react";
+import PropTypes from "prop-types";
 import gsap from "gsap";
 import styled from "styled-components";
 import { ReactComponent as Mars } from "../../../assets/mars.svg";
 
 const StyledContainer = styled.div`
-  width: 400px;
-  height: 400px;
+  width: 100%;
+  height: 100vh;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
+  overflow: hidden;
 `;
 
 const StyledMars = styled(Mars)`
   width: 10rem;
   height: 10rem;
+  transform: translateY(-1000%);
 `;
 
 const Shadow = styled.div`
@@ -23,53 +27,129 @@ const Shadow = styled.div`
   background: radial-gradient(rgba(0, 0, 0, 0.5), transparent 60%);
 `;
 
+gsap.registerEffect({
+  name: "bouncePlanet",
+  effect: (target, config) => {
+    const tl = gsap.timeline({ repeat: -1 });
+    return tl
+      .to(
+        target,
+        {
+          yPercent: -160,
+          duration: 1.5,
+          ease: "bounce.in",
+        },
+        config.label
+      )
+      .to(target, {
+        yPercent: 0,
+        duration: 1.5,
+        ease: "bounce.out",
+      });
+  },
+  extendTimeline: true,
+});
+
+gsap.registerEffect({
+  name: "bounceShadow",
+  effect: (target, config) => {
+    const tl = gsap.timeline({ repeat: -1 });
+    return tl
+      .to(
+        target,
+        {
+          scale: 1.5,
+          duration: 1.5,
+          ease: "bounce.in",
+        },
+        config.label
+      )
+      .to(target, {
+        scale: 1,
+        duration: 1.5,
+        ease: "bounce.out",
+      });
+  },
+  extendTimeline: true,
+});
+
 const AnimatedMars = ({ isAnimating }) => {
   const mars = useRef(null);
   const shadow = useRef(null);
 
   useEffect(() => {
-    const tl = gsap.timeline({ repeat: -1 });
     const { current: planet } = mars;
     const { current: shdw } = shadow;
+    const bouncing = gsap.timeline();
 
-    tl.addLabel("start")
-      .to(
-        planet,
-        {
-          y: -160,
-          duration: 1.5,
-          ease: "bounce.in",
-        },
-        "start"
-      )
-      .addLabel("half")
-      .to(
-        planet,
-        {
-          y: 0,
-          duration: 1.5,
-          ease: "bounce.out",
-        },
-        "half"
-      );
+    const bounce = () => {
+      bouncing
+        .addLabel("bounce")
+        .bouncePlanet(planet, { label: "bounce" })
+        .bounceShadow(shdw, { label: "bounce" });
+    };
 
-    tl.to(
-      shdw,
-      {
-        scale: 1.5,
-        duration: 1.5,
-        ease: "bounce.in",
-      },
-      "start"
-    ).to(
-      shdw,
-      {
-        scale: 1,
-        duration: 1.5,
-        ease: "bounce.in",
-      },
-      "half"
-    );
+    if (isAnimating) {
+      bouncing
+        .addLabel("start")
+        .to(
+          planet,
+          {
+            y: 0,
+            duration: 1,
+            ease: "bounce.out",
+            onComplete: bounce,
+          },
+          "start"
+        )
+        .fromTo(
+          shdw,
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            duration: 1,
+            ease: "none",
+          },
+          "start"
+        );
+    } else {
+      bouncing
+        .to(planet, {
+          yPercent: 0,
+          duration: 0.3,
+        })
+        .addLabel("rollOut")
+        .to(
+          planet,
+          {
+            xPercent: 1000,
+            delay: 0.06,
+            duration: 3,
+          },
+          "rollOut"
+        )
+        .to(
+          planet,
+          {
+            transformOrigin: "50% 50%",
+            rotation: 360,
+            duration: 0.3,
+            repeat: 10,
+          },
+          "rollOut"
+        )
+        .to(
+          shdw,
+          {
+            xPercent: 1000,
+            delay: 0.06,
+            duration: 3,
+          },
+          "rollOut"
+        );
+    }
   }, [isAnimating]);
 
   return (
@@ -81,3 +161,7 @@ const AnimatedMars = ({ isAnimating }) => {
 };
 
 export default AnimatedMars;
+
+AnimatedMars.propTypes = {
+  isAnimating: PropTypes.bool.isRequired,
+};

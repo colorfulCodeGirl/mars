@@ -38,9 +38,30 @@ const StyledForm = styled.form`
     width: 30vw;
     min-height: 70vh;
   }
+  ${({ isTransiting }) =>
+    isTransiting &&
+    css`
+      animation-name: slide-out;
+      animation-duration: 2s;
+    `}
+
+  @keyframes slide-out {
+    50% {
+      transform: translateY(200%);
+    }
+    98% {
+      opacity: 0;
+    }
+    100% {
+      transform: translate(-100%, 0);
+    }
+  }
+
   ${({ displayLeft }) =>
     displayLeft &&
     css`
+      animation-name: slide-in;
+      animation-duration: 2s;
       grid-column: auto;
       grid-row: auto;
       justify-self: start;
@@ -48,6 +69,20 @@ const StyledForm = styled.form`
       height: 100vh;
       width: 350px;
     `}
+
+  @keyframes slide-in {
+    0% {
+      transform: translate(-100%, 0);
+      opacity: 0;
+    }
+    75% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+
   ${({ isTransparent }) =>
     !isTransparent &&
     css`
@@ -134,6 +169,7 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSearchAllowed, allowSearch] = useState(false);
+  const [isTransiting, setIsTransiting] = useState(false);
   const [isSol, switchSolDate] = useState(true);
   const [dates, setDates] = useState({
     startDate: "",
@@ -152,11 +188,18 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
     switchSolDate(newValue);
   };
 
+  const handleSubmit = (e) => {
+    setIsTransiting(true);
+    const { latest } = e.target.dataset;
+    handleSearch(latest, e, state);
+  };
+
   return (
     <StyledForm
       data-testid="form"
       displayLeft={arePhotosShown}
       isTransparent={isTransparent}
+      isTransiting={isTransiting}
     >
       <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
       <Select
@@ -200,14 +243,15 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        submitHandler={(e) => handleSearch(null, e, state)}
+        submitHandler={handleSubmit}
       >
         SEARCH
       </StyledButton>
       <StyledButton
         type="submit"
         isDisabled={!state.rover}
-        submitHandler={(e) => handleSearch(true, e, state)}
+        data-latest="true"
+        submitHandler={handleSubmit}
       >
         See Latest
       </StyledButton>

@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import styled, { createGlobalStyle, css } from "styled-components";
-import background from "./assets/background.png";
+import hash from "object-hash";
+
 import SearchForm from "./components/organisms/SearchForm";
 import Gallery from "./components/organisms/Gallery";
 import Button from "./components/atoms/Button/Button";
-import { fetchData } from "./helpers";
-import menuIcon from "./assets/menu.png";
 import ModalOverlay from "./components/atoms/ModalOverlay";
-import hash from "object-hash";
+import AnimatedMars from "./components/atoms/AnimatedMars/AnimatedMars";
+
+import { fetchData } from "./helpers";
+
+import menuIcon from "./assets/menu.png";
+import background from "./assets/background.png";
 
 export const GlobalStyles = createGlobalStyle`
 @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap");
@@ -51,8 +55,6 @@ const AppWrapper = styled.div`
   ${({ arePhotosShown }) =>
     arePhotosShown &&
     css`
-      align-content: start;
-      justify-items: end;
       button {
         margin: 1rem;
       }

@@ -4,11 +4,15 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
+import "react-lazy-load-image-component/src/effects/blur.css";
+import "./Gallery.css";
+
 import { usePrevious } from "../../CustomHooks";
-import Loader from "../../components/atoms/Loader/Loader";
 import PhotoModal from "../molecules/PhotoModal";
 
-const StyledImg = styled.img`
+const StyledImg = styled(LazyLoadImage)`
   width: 100%;
   border-radius: 0.3rem;
 `;
@@ -79,6 +83,7 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
     <StyledImg
       src={photo.img_src}
       key={photo.id}
+      effect="blur"
       alt={`Mars by rover ${photo.rover.name}`}
       onClick={openFullImage}
       data-index={index}
@@ -98,7 +103,6 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
         dataLength={shownPhotos.length}
         next={addPhotosOnScroll}
         hasMore={hasMore}
-        loader={<Loader />}
         height={isMobile ? "88vh" : "97vh"}
       >
         <StyledResponsiveMasonry

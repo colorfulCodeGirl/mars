@@ -49,10 +49,11 @@ const StyledForm = styled.form`
     50% {
       transform: translateY(200%);
     }
-    98% {
+    60% {
       opacity: 0;
     }
     100% {
+      opacity: 0;
       transform: translate(-100%, 0);
     }
   }

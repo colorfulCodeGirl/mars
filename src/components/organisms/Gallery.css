@@ -1,3 +1,6 @@
 .scrollbar-container {
   height: calc(100% - 3rem - 16px) !important;
 }
+.lazy-load-image-background {
+  width: 100%;
+}

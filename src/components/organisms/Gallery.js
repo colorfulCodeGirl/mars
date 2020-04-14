@@ -25,8 +25,8 @@ const StyledResponsiveMasonry = styled(ResponsiveMasonry)`
 const chooseNextPhotos = (newPhotos, length) => {
   const nextStartIndex = length === 0 ? 0 : length;
   const hasMorePhotos =
-    newPhotos.length >= nextStartIndex + 10 || newPhotos.length === 0;
-  const nextEndIndex = hasMorePhotos ? nextStartIndex + 10 : newPhotos.length;
+    newPhotos.length >= nextStartIndex + 8 || newPhotos.length === 0;
+  const nextEndIndex = hasMorePhotos ? nextStartIndex + 8 : newPhotos.length;
   const nextPhotos = newPhotos.slice(nextStartIndex, nextEndIndex);
   return { hasMorePhotos, nextPhotos };
 };

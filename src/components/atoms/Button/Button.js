@@ -51,8 +51,8 @@ export default Button;
 
 Button.propTypes = {
   children: PropTypes.string.isRequired,
-  submitHandler: PropTypes.func.isRequired,
+  submitHandler: PropTypes.func,
   isDisabled: PropTypes.bool,
   icon: PropTypes.string,
-  isGrey: PropTypes.bool
+  isGrey: PropTypes.bool,
 };

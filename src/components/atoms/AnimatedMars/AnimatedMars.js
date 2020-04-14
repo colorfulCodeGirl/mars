@@ -5,14 +5,18 @@ import styled from "styled-components";
 import { ReactComponent as Mars } from "../../../assets/mars.svg";
 
 const StyledContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100vh;
   max-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   overflow: hidden;
+  z-index: 4;
 `;
 
 const StyledMars = styled(Mars)`
@@ -73,7 +77,7 @@ gsap.registerEffect({
   extendTimeline: true,
 });
 
-const AnimatedMars = ({ isAnimating }) => {
+const AnimatedMars = ({ isAnimating, onDone }) => {
   const mars = useRef(null);
   const shadow = useRef(null);
 
@@ -137,6 +141,7 @@ const AnimatedMars = ({ isAnimating }) => {
             rotation: 360,
             duration: 0.3,
             repeat: 10,
+            onComplete: onDone,
           },
           "rollOut"
         )
@@ -150,7 +155,7 @@ const AnimatedMars = ({ isAnimating }) => {
           "rollOut"
         );
     }
-  }, [isAnimating]);
+  }, [isAnimating, onDone]);
 
   return (
     <StyledContainer>

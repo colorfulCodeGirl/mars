@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import close from "../../assets/close.svg";
 
 const StyledOverlay = styled.div`
-  z-index: 998;
+  z-index: 2;
   width: 100vw;
   height: 100vh;
   background-color: rgba(81, 80, 80, 0.5);
@@ -24,7 +24,6 @@ const Wrapper = styled.div`
   grid-template-columns: 1fr;
   width: min-content;
   margin: 0 auto;
-}
 `;
 
 const StyledButton = styled.button`
@@ -45,7 +44,7 @@ const StyledButton = styled.button`
 `;
 
 const ModalOverlay = ({ children, closeHandler }) => (
-  <StyledOverlay onClick={closeHandler}>
+  <StyledOverlay>
     <Wrapper>
       {children}
       <StyledButton onClick={closeHandler}>

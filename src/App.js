@@ -83,6 +83,8 @@ const Credentials = styled.p`
 
 function App() {
   const [arePhotosShown, setPhotosStatus] = useState(false);
+  const [isMarsAnimating, setIsMarsAnimating] = useState(false);
+  const [isLoaderShown, setLoaderVisibility] = useState(false);
   const [photosObj, setPhotos] = useState({ photos: [], hash: "" });
   const [isModalSearchShown, setModalSearchVisibility] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -111,6 +113,8 @@ function App() {
 
   const fetchPhotos = async (newest = null, e, state) => {
     e.preventDefault();
+    setLoaderVisibility(true);
+    setIsMarsAnimating(true);
     const { rover, sol, date } = state;
     const urlParams = newest
       ? `rovers/${rover}/latest_photos?`
@@ -123,7 +127,12 @@ function App() {
       setModalSearchVisibility(false);
     }
     setPhotos({ photos: newPhotos, hash: hash(newPhotos) });
+    setTimeout(() => setIsMarsAnimating(false), 500);
     setPhotosStatus(true);
+  };
+
+  const onMarsAnimationEnd = () => {
+    setLoaderVisibility(false);
   };
 
   return (
@@ -134,6 +143,12 @@ function App() {
           <SearchForm
             arePhotosShown={arePhotosShown}
             handleSearch={fetchPhotos}
+          />
+        )}
+        {isLoaderShown && (
+          <AnimatedMars
+            isAnimating={isMarsAnimating}
+            onDone={onMarsAnimationEnd}
           />
         )}
         {!isFormShown && (

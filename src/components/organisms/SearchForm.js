@@ -24,6 +24,7 @@ const StyledForm = styled.form`
   border: 0.1rem solid #515050;
   align-items: center;
   justify-content: space-between;
+  z-index: 3;
 
   @media (min-height: 580px) {
     min-height: 65vh;

@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import gsap from "gsap";
 import styled from "styled-components";
+
 import { ReactComponent as Mars } from "../../assets/mars.svg";
 
 const StyledContainer = styled.div`
@@ -28,6 +29,7 @@ const StyledMars = styled(Mars)`
 const Shadow = styled.div`
   width: 10rem;
   height: 2rem;
+  opacity: 0;
   background: radial-gradient(rgba(0, 0, 0, 0.5), transparent 60%);
 `;
 
@@ -106,11 +108,8 @@ const AnimatedMars = ({ isAnimating, onDone }) => {
           },
           "start"
         )
-        .fromTo(
+        .to(
           shdw,
-          {
-            opacity: 0,
-          },
           {
             opacity: 1,
             duration: 1,
@@ -168,4 +167,5 @@ export default AnimatedMars;
 
 AnimatedMars.propTypes = {
   isAnimating: PropTypes.bool.isRequired,
+  onDone: PropTypes.func,
 };

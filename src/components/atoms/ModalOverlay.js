@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+
 import close from "../../assets/close.svg";
 
 const StyledOverlay = styled.div`
@@ -33,8 +34,8 @@ const StyledButton = styled.button`
   grid-row: 1 / -1;
   align-self: start;
   justify-self: end;
-  max-width: 3rem;
-  max-height: 3rem;
+  width: 3rem;
+  height: 3rem;
   border: none;
   padding: 0;
   margin: 1rem;
@@ -48,7 +49,7 @@ const ModalOverlay = ({ children, closeHandler }) => (
     <Wrapper>
       {children}
       <StyledButton onClick={closeHandler}>
-        <img src={close} alt="close icon" />
+        <img src={close} alt="close" />
       </StyledButton>
     </Wrapper>
   </StyledOverlay>
@@ -58,4 +59,5 @@ export default ModalOverlay;
 
 ModalOverlay.propTypes = {
   children: PropTypes.node.isRequired,
+  closeHandler: PropTypes.func.isRequired,
 };

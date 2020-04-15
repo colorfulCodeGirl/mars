@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import styled, { createGlobalStyle, css } from "styled-components";
 import hash from "object-hash";
 
@@ -15,7 +14,7 @@ import menuIcon from "./assets/menu.png";
 import background from "./assets/background.png";
 
 export const GlobalStyles = createGlobalStyle`
-@import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap");
+/* @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap"); */
 
 :root {
   box-sizing: border-box;

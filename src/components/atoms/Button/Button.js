@@ -29,6 +29,7 @@ const StyledButton = styled.button`
 `;
 
 const Button = ({
+  className,
   children,
   submitHandler,
   isDisabled = false,
@@ -37,6 +38,7 @@ const Button = ({
   ...props
 }) => (
   <StyledButton
+    className={className}
     onClick={submitHandler}
     disabled={isDisabled}
     icon={icon}

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import gsap from "gsap";
 import styled from "styled-components";
-import { ReactComponent as Mars } from "../../../assets/mars.svg";
+import { ReactComponent as Mars } from "../../assets/mars.svg";
 
 const StyledContainer = styled.div`
   position: absolute;

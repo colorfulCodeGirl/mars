@@ -1,6 +1,6 @@
 import React from "react";
 import { render, getRoles, fireEvent } from "@testing-library/react";
-import SearchForm from "../organisms/SearchForm/SearchForm";
+import SearchForm from "../components/organisms/SearchForm";
 
 describe("Search form component", () => {
   it("renders heading", () => {
@@ -100,7 +100,7 @@ describe("Search form component", () => {
       getByLabelText,
       getByPlaceholderText,
       getAllByRole,
-      getByText
+      getByText,
     } = render(<SearchForm arePhotosShown={false} handleSearch={() => {}} />);
     const select = getByLabelText(/choose rover/i);
     fireEvent.change(select, { target: { value: "opportunity" } });
@@ -165,7 +165,7 @@ describe("Search form component", () => {
     expect(form).toHaveStyle(`
       justify-self: start;
       align-self: stretch;
-      max-height: 100vh;
+      height: 100vh;
       `);
 
     rerender(<SearchForm arePhotosShown={false} handleSearch={() => {}} />);

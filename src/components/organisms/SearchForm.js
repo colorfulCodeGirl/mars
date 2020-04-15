@@ -2,11 +2,11 @@ import React, { useState, useReducer } from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
-import RadioGroup from "../atoms/RadioGroup/RadioGroup";
-import Button from "../atoms/Button/Button";
-import Select from "../atoms/Select/Select";
-import Input from "../atoms/Input/Input";
-import ErrorTooltip from "../atoms/ErrorTooltip/ErrorTooltip";
+import RadioGroup from "../atoms/RadioGroup";
+import Button from "../atoms/Button";
+import Select from "../atoms/Select";
+import Input from "../atoms/Input";
+import ErrorTooltip from "../atoms/ErrorTooltip";
 import { fetchData, validateDate, formateDate } from "../../helpers";
 
 const StyledForm = styled.form`

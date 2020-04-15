@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import App from "../../App";
+import App from "../App";
 
 describe("App component", () => {
   it("changes changes form display if photos are shown", () => {
@@ -24,7 +24,7 @@ describe("App component", () => {
     expect(form).toHaveStyle(`
         justify-self: start;
         align-self: stretch;
-        max-height: 100vh;
+        height: 100vh;
         `);
   });
 });

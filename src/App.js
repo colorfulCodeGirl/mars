@@ -5,9 +5,9 @@ import { Helmet } from "react-helmet";
 
 import SearchForm from "./components/organisms/SearchForm";
 import Gallery from "./components/organisms/Gallery";
-import Button from "./components/atoms/Button/Button";
+import Button from "./components/atoms/Button";
 import ModalOverlay from "./components/atoms/ModalOverlay";
-import AnimatedMars from "./components/atoms/AnimatedMars/AnimatedMars";
+import AnimatedMars from "./components/atoms/AnimatedMars";
 
 import { fetchData } from "./helpers";
 
@@ -39,6 +39,10 @@ export const GlobalStyles = createGlobalStyle`
   position: absolute;
   white-space: nowrap; 
   width: 1px;
+}
+
+.lazy-load-image-background {
+  width: 100%;
 }
 `;
 
@@ -111,6 +115,7 @@ function App() {
 
   const fetchPhotos = async (newest = null, e, state) => {
     e.preventDefault();
+    setPhotosStatus(true);
     setLoaderVisibility(true);
     setIsMarsAnimating(true);
     const { rover, sol, date } = state;
@@ -126,7 +131,6 @@ function App() {
     }
     setPhotos({ photos: newPhotos, hash: hash(newPhotos) });
     setTimeout(() => setIsMarsAnimating(false), 500);
-    setPhotosStatus(true);
   };
 
   const onMarsAnimationEnd = () => {

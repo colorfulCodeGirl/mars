@@ -1,9 +1,9 @@
 import React from "react";
 import { addDecorator } from "@storybook/react";
-import Input from "./Input";
-import { GlobalStyles } from "../../../App";
+import Input from "../components/atoms/Input";
+import { GlobalStyles } from "../App";
 
-addDecorator(s => (
+addDecorator((s) => (
   <>
     <GlobalStyles />
     {s()}
@@ -12,7 +12,7 @@ addDecorator(s => (
 
 export default {
   title: "Input",
-  component: Input
+  component: Input,
 };
 
 export const Regular = () => <Input type="text" placeholder="CAMERA" />;

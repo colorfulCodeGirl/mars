@@ -7,9 +7,8 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import "react-lazy-load-image-component/src/effects/blur.css";
-import "./Gallery.css";
 
-import { usePrevious } from "../../CustomHooks";
+import { usePrevious } from "../../custom-hooks";
 import PhotoModal from "../molecules/PhotoModal";
 
 const StyledImg = styled(LazyLoadImage)`

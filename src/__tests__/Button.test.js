@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import Button from "../atoms/Button/Button";
+import Button from "../components/atoms/Button";
 
 describe("Button component", () => {
   it("renders button element", () => {

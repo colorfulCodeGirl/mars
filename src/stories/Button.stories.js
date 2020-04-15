@@ -1,12 +1,12 @@
 import React from "react";
 import { action } from "@storybook/addon-actions";
 import { addDecorator } from "@storybook/react";
-import Button from "./Button";
-import { GlobalStyles } from "../../../App";
-import menuIcon from "../../../assets/menu.png";
-import background from "../../../assets/background.png";
+import Button from "../components/atoms/Button";
+import { GlobalStyles } from "../App";
+import menuIcon from "../assets/menu.png";
+import background from "../assets/background.png";
 
-addDecorator(s => (
+addDecorator((s) => (
   <>
     <GlobalStyles />
     {s()}
@@ -15,7 +15,7 @@ addDecorator(s => (
 
 export default {
   title: "Button",
-  component: Button
+  component: Button,
 };
 
 export const Regular = () => (
@@ -40,7 +40,7 @@ export const greyWithIcon = () => {
     height: "200px",
     backgroundImage: `url(${background})`,
     backgroundSize: "contain",
-    backgroundRepeat: "no-repeat"
+    backgroundRepeat: "no-repeat",
   };
 
   return (

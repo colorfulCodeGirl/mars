@@ -1,9 +1,9 @@
 import React from "react";
 import { addDecorator } from "@storybook/react";
-import RadioGroup from "./RadioGroup";
-import { GlobalStyles } from "../../../App";
+import RadioGroup from "../components/atoms/RadioGroup";
+import { GlobalStyles } from "../App";
 
-addDecorator(s => (
+addDecorator((s) => (
   <>
     <GlobalStyles />
     {s()}
@@ -12,7 +12,7 @@ addDecorator(s => (
 
 export default {
   title: "RadioGroup",
-  component: RadioGroup
+  component: RadioGroup,
 };
 
 const options = ["SOL", "Earth Date"];

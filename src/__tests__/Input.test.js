@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import Input from "../atoms/Input/Input";
+import Input from "../components/atoms/Input";
 
 describe("Input component", () => {
   it("renders input element", () => {

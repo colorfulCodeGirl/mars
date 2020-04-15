@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addDecorator } from "@storybook/react";
-import AnimatedMars from "./AnimatedMars";
-import { GlobalStyles } from "../../../App";
+import AnimatedMars from "../components/atoms/AnimatedMars";
+import { GlobalStyles } from "../App";
 
 addDecorator((s) => (
   <>

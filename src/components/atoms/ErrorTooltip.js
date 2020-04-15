@@ -19,5 +19,5 @@ export default ErrorTooltip;
 
 ErrorTooltip.propTypes = {
   isError: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
 };

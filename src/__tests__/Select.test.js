@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import Select from "../atoms/Select/Select";
+import Select from "../components/atoms/Select";
 
 describe("Select element", () => {
   it("renders select input with label", () => {

@@ -1,9 +1,9 @@
-import { validateDate, formateDate } from "../../helpers";
+import { validateDate, formateDate } from "../helpers";
 
 describe("validateDate function", () => {
   const mockRange = {
     startDate: "2008-06-07",
-    endDate: "2017-09-15"
+    endDate: "2017-09-15",
   };
 
   it("checks if the date is in a range", () => {

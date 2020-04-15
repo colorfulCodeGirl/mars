@@ -24,7 +24,6 @@ const StyledForm = styled.form`
   border: 0.1rem solid #515050;
   align-items: center;
   justify-content: space-between;
-  z-index: 3;
 
   @media (min-height: 580px) {
     min-height: 65vh;
@@ -112,6 +111,11 @@ const StyledButton = styled(Button)`
   @media (min-width: 375px) {
     margin-top: ${({ marginTop }) => (marginTop ? "auto" : "2rem")};
   }
+`;
+
+const StyledP = styled.p`
+  padding: 1.5rem;
+  color: #515050;
 `;
 
 const setSolDates = async (rover, setter) => {
@@ -215,10 +219,13 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
       {state.rover && (
         <>
           <RadioGroup
-            options={["SOL", "Earth date"]}
+            options={["SOL*", "Earth date"]}
             changeHandler={radioChangeHandler}
             checkedIndex={isSol ? 0 : 1}
           />
+          <StyledP>
+            <i>* day from landing</i>
+          </StyledP>
           <Input
             type="text"
             label={isSol ? "sol" : "Earth days"}

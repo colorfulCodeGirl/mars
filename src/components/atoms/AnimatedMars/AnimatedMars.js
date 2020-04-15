@@ -121,7 +121,7 @@ const AnimatedMars = ({ isAnimating, onDone }) => {
     } else {
       bouncing
         .to(planet, {
-          yPercent: 0,
+          y: 0,
           duration: 0.3,
         })
         .addLabel("rollOut")
@@ -129,7 +129,6 @@ const AnimatedMars = ({ isAnimating, onDone }) => {
           planet,
           {
             xPercent: 1000,
-            delay: 0.06,
             duration: 3,
           },
           "rollOut"

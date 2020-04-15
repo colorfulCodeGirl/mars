@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled, { createGlobalStyle, css } from "styled-components";
 import hash from "object-hash";
+import { Helmet } from "react-helmet";
 
 import SearchForm from "./components/organisms/SearchForm";
 import Gallery from "./components/organisms/Gallery";
@@ -14,8 +15,6 @@ import menuIcon from "./assets/menu.png";
 import background from "./assets/background.png";
 
 export const GlobalStyles = createGlobalStyle`
-/* @import url("https://fonts.googleapis.com/css?family=Montserrat:200,400&display=swap"); */
-
 :root {
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
@@ -136,6 +135,12 @@ function App() {
 
   return (
     <>
+      <Helmet>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
       <GlobalStyles />
       <AppWrapper arePhotosShown={arePhotosShown}>
         {isFormShown && (

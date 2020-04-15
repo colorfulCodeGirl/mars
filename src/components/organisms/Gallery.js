@@ -12,15 +12,15 @@ import "./Gallery.css";
 import { usePrevious } from "../../CustomHooks";
 import PhotoModal from "../molecules/PhotoModal";
 
-// const StyledImg = styled(LazyLoadImage)`
-//   width: 100%;
-//   border-radius: 0.3rem;
-// `;
+const StyledImg = styled(LazyLoadImage)`
+  width: 100%;
+  border-radius: 0.3rem;
+`;
 
-// const StyledResponsiveMasonry = styled(ResponsiveMasonry)`
-//   width: 95%;
-//   margin: 0 auto;
-// `;
+const StyledResponsiveMasonry = styled(ResponsiveMasonry)`
+  width: 95%;
+  margin: 0 auto;
+`;
 
 const chooseNextPhotos = (newPhotos, length) => {
   const nextStartIndex = length === 0 ? 0 : length;
@@ -80,7 +80,7 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
   };
 
   const imgElems = shownPhotos.map((photo, index) => (
-    <LazyLoadImage
+    <StyledImg
       src={photo.img_src}
       key={photo.id}
       effect="blur"
@@ -105,11 +105,11 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
         hasMore={hasMore}
         height={isMobile ? "88vh" : "97vh"}
       >
-        <ResponsiveMasonry
+        <StyledResponsiveMasonry
           columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
         >
           <Masonry gutter="0.3rem">{imgElems}</Masonry>
-        </ResponsiveMasonry>
+        </StyledResponsiveMasonry>
       </InfiniteScroll>
       {fullImage.src && (
         <PhotoModal

@@ -24,7 +24,7 @@ const StyledImage = styled.img`
 
 const ArrowButton = styled.button`
   width: 3rem;
-  height: 15rem;
+  height: 10rem;
   margin: 0.5rem;
   background-color: transparent;
   border: none;
@@ -35,6 +35,7 @@ const ArrowButton = styled.button`
     width: 100%;
     transform: ${(props) => (props.right ? "rotate(180deg)" : "")};
     stroke: ${(props) => (props.disabled ? "#C0C0C0" : "#515050")};
+    stroke-width: 2.5rem;
   }
 `;
 

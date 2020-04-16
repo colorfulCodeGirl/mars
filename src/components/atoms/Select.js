@@ -4,20 +4,20 @@ import styled from "styled-components";
 import arrow from "../../assets/Dropdown.svg";
 
 const StyledSelect = styled.select`
-  border: none;
-  border-bottom: 0.1rem solid #fe6c3d;
   min-width: 200px;
   width: 100%;
   max-width: 100%;
+  min-height: 3rem;
   appearance: none;
+  border: none;
+  text-transform: uppercase;
+  border-bottom: 0.1rem solid #fe6c3d;
   background-image: url(${arrow});
   background-repeat: no-repeat;
   background-color: transparent;
   background-position: 97% 40%;
-  min-height: 3rem;
-  margin: 1rem 0;
   color: #515050;
-  text-transform: uppercase;
+  margin: 1rem 0;
   @media (min-width: 375px) {
     min-width: 270px;
   }
@@ -25,7 +25,7 @@ const StyledSelect = styled.select`
     min-height: 5rem;
   }
   optgroup {
-    border: none;
+    background-color: #ffccba;
   }
 `;
 
@@ -36,11 +36,13 @@ const Select = ({ options, defaultValue, changeHandler, name }) => (
     </label>
     <StyledSelect id={name} name={name} onChange={changeHandler}>
       <option hidden>{defaultValue}</option>
-      {options.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
+      <optgroup>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </optgroup>
     </StyledSelect>
   </>
 );

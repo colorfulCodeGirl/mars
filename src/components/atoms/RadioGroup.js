@@ -15,13 +15,6 @@ const StyledFieldset = styled.div`
   }
 `;
 
-const StyledLegend = styled.legend`
-  opacity: 0;
-  width: 1px;
-  position: absolute;
-  left: -100%;
-`;
-
 const Wrapper = styled.div`
   margin-right: 3rem;
   position: relative;
@@ -88,7 +81,7 @@ const StyledInput = styled.input`
 
 const RadioGroup = ({ options, category, changeHandler, checkedIndex = 0 }) => (
   <StyledFieldset>
-    <StyledLegend>Pick mode</StyledLegend>
+    <legend className="sr-only">Choose mode</legend>
     {options.map((option, index) => (
       <Wrapper key={option}>
         <StyledInput
@@ -97,7 +90,7 @@ const RadioGroup = ({ options, category, changeHandler, checkedIndex = 0 }) => (
           type="radio"
           name={category}
           checked={checkedIndex === index}
-          onChange={e => changeHandler(e)}
+          onChange={(e) => changeHandler(e)}
         />
         <label htmlFor={option}>{option}</label>
       </Wrapper>
@@ -111,5 +104,5 @@ RadioGroup.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   category: PropTypes.string,
   changeHandler: PropTypes.func.isRequired,
-  checkedIndex: PropTypes.number
+  checkedIndex: PropTypes.number,
 };

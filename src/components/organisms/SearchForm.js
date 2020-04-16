@@ -190,7 +190,7 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
   };
 
   const radioChangeHandler = ({ target: { value } }) => {
-    const newValue = value === "sol" ? true : false;
+    const newValue = value === "sol*" ? true : false;
     switchSolDate(newValue);
   };
 

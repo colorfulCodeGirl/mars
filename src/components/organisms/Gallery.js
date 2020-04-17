@@ -1,15 +1,16 @@
 /* eslint-disable eqeqeq */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-
 import "react-lazy-load-image-component/src/effects/blur.css";
 
+import { store } from "./store.js";
 import { usePrevious } from "../../custom-hooks";
 import PhotoModal from "../molecules/PhotoModal";
+import AnimatedMars from "./components/atoms/AnimatedMars";
 
 const StyledImg = styled(LazyLoadImage)`
   width: 100%;
@@ -31,6 +32,7 @@ const chooseNextPhotos = (newPhotos, length) => {
 };
 
 const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
+  const { state, dispatch } = useContext(store);
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [fullImage, setFullImage] = useState({});
@@ -98,6 +100,12 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
 
   return (
     <>
+      {isLoaderShown && (
+        <AnimatedMars
+          isAnimating={isMarsAnimating}
+          onDone={onMarsAnimationEnd}
+        />
+      )}
       <InfiniteScroll
         dataLength={shownPhotos.length}
         next={addPhotosOnScroll}

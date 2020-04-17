@@ -1,13 +1,14 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useContext } from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
+import { store } from "./store.js";
+import * as actionTypes from "../../store/actionTypes";
 import RadioGroup from "../atoms/RadioGroup";
 import Button from "../atoms/Button";
 import Select from "../atoms/Select";
 import Input from "../atoms/Input";
 import ErrorTooltip from "../atoms/ErrorTooltip";
-import { fetchData, validateDate, formateDate } from "../../helpers";
 
 const StyledForm = styled.form`
   grid-column: 1 / -1;
@@ -83,12 +84,6 @@ const StyledForm = styled.form`
       transform: translate(0, 0);
     }
   }
-
-  ${({ isTransparent }) =>
-    !isTransparent &&
-    css`
-      background-color: rgba(255, 255, 255, 0.8);
-    `}
 `;
 
 const StyledHeading = styled.h1`
@@ -118,70 +113,13 @@ const StyledP = styled.p`
   color: #515050;
 `;
 
-const setSolDates = async (rover, setter) => {
-  const urlParams = `manifests/${rover}?`;
-  const data = await fetchData(urlParams);
-  const { photo_manifest: roverData } = data;
-  const {
-    max_sol: maxSol,
-    landing_date: startDate,
-    max_date: endDate,
-  } = roverData;
-  setter({ startDate, endDate, maxSol });
-};
-
-const initialState = {
-  rover: "",
-  sol: "",
-  date: "",
-  error: false,
-};
-
-const reducer = (state, action) => {
-  const { type, value } = action;
-  switch (type) {
-    case "rover":
-      setSolDates(value, action.setDates);
-      return {
-        ...state,
-        rover: value,
-      };
-    case "sol":
-      const solError =
-        +value >= 0 && +value <= +action.validationData && value.length !== 0
-          ? false
-          : true;
-      action.allowSearch(!solError);
-      return {
-        ...state,
-        sol: value,
-        error: solError,
-      };
-    case "date":
-      const formattedDate = formateDate(value, state.date);
-      const dateError = !validateDate(action.validationData, formattedDate);
-      action.allowSearch(!dateError);
-      return {
-        ...state,
-        date: formattedDate,
-        error: dateError,
-      };
-    default:
-      return state;
-  }
-};
-
 const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
-  const rovers = ["Curiosity", "Opportunity", "Spirit"];
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(store);
   const [isSearchAllowed, allowSearch] = useState(false);
   const [isTransiting, setIsTransiting] = useState(false);
   const [isSol, switchSolDate] = useState(true);
-  const [dates, setDates] = useState({
-    startDate: "",
-    endDate: "",
-    maxSol: "max",
-  });
+
+  const rovers = ["Curiosity", "Opportunity", "Spirit"];
 
   const changeDateInput = ({ target: { value } }) => {
     const type = isSol ? "sol" : "date";
@@ -213,7 +151,7 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
         name="rovers"
         defaultValue="Choose rover"
         changeHandler={({ target: { value } }) =>
-          dispatch({ type: "rover", setDates, value })
+          dispatch({ type: actionTypes.SET_MANIFEST, value })
         }
       />
       {state.rover && (

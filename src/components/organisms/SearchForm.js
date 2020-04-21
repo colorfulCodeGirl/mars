@@ -1,14 +1,17 @@
 import React, { useState, useContext } from "react";
+import { connect } from "react-redux";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
-import { store } from "./store.js";
-import * as actionTypes from "../../store/actionTypes";
 import RadioGroup from "../atoms/RadioGroup";
 import Button from "../atoms/Button";
 import Select from "../atoms/Select";
 import Input from "../atoms/Input";
 import ErrorTooltip from "../atoms/ErrorTooltip";
+
+import { store } from "./store.js";
+import * as actionTypes from "../../store/actionTypes";
+import * as actions from "../../store/actionCreators";
 
 const StyledForm = styled.form`
   grid-column: 1 / -1;
@@ -113,23 +116,27 @@ const StyledP = styled.p`
   color: #515050;
 `;
 
-const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
-  const { state, dispatch } = useContext(store);
+const SearchFrom = ({
+  arePhotosShown,
+  handleSearch,
+  fetchManifest,
+  handlePeriod,
+}) => {
   const [isSearchAllowed, allowSearch] = useState(false);
   const [isTransiting, setIsTransiting] = useState(false);
   const [isSol, switchSolDate] = useState(true);
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
 
-  const changeDateInput = ({ target: { value } }) => {
-    const type = isSol ? "sol" : "date";
-    const validationData = isSol ? dates.maxSol : dates;
-    dispatch({ type, validationData, value, allowSearch });
-  };
+  // const changeDateInput = ({ target: { value } }) => {
+  //   const type = isSol ? "sol" : "date";
+  //   const validationData = isSol ? dates.maxSol : dates;
+  //   dispatch({ type, validationData, value, allowSearch });
+  // };
 
   const radioChangeHandler = ({ target: { value } }) => {
-    const newValue = value === "sol*" ? true : false;
-    switchSolDate(newValue);
+    const isSol = value === "sol*" ? true : false;
+    switchSolDate(isSol);
   };
 
   const handleSubmit = (e) => {
@@ -142,7 +149,6 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
     <StyledForm
       data-testid="form"
       displayLeft={arePhotosShown}
-      isTransparent={isTransparent}
       isTransiting={isTransiting}
     >
       <StyledHeading>EXPLORE MARS IMAGES BY ROVERS</StyledHeading>
@@ -150,9 +156,7 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
         options={rovers}
         name="rovers"
         defaultValue="Choose rover"
-        changeHandler={({ target: { value } }) =>
-          dispatch({ type: actionTypes.SET_MANIFEST, value })
-        }
+        changeHandler={fetchManifest}
       />
       {state.rover && (
         <>
@@ -173,7 +177,7 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
                 ? `SOL from 0 to ${dates.maxSol}`
                 : `Date from ${dates.startDate} to ${dates.endDate}`
             }
-            changeHandler={(e) => changeDateInput(e)}
+            changeHandler={handleSol}
             value={isSol ? state.sol : state.date}
           />
           <ErrorTooltip
@@ -206,10 +210,36 @@ const SearchFrom = ({ arePhotosShown, handleSearch, isTransparent = true }) => {
   );
 };
 
-export default SearchFrom;
+const mapStateToProps = ({
+  rover,
+  sol,
+  date,
+  error,
+  startDate,
+  endDate,
+  maxSol,
+}) => ({
+  rover,
+  sol,
+  date,
+  error,
+  startDate,
+  endDate,
+  maxSol,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchManifest: ({ target: { value } }) =>
+    dispatch(actions.fetchManifest(value)),
+  handlePeriod: ({ target: { value } }, isSol) =>
+    dispatch(actions.validatePeriod(value, isSol)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchFrom);
 
 SearchFrom.propTypes = {
   arePhotosShown: PropTypes.bool.isRequired,
   handleSearch: PropTypes.func.isRequired,
-  isTransparent: PropTypes.bool,
+  fetchManifest: PropTypes.func.isRequired,
+  handlePeriod: PropTypes.func.isRequired,
 };

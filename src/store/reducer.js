@@ -1,35 +1,33 @@
-import { fetchData, validateDate, formateDate } from "../helpers";
+import { validateDate, formateDate } from "../helpers";
 import * as actionTypes from "./actionTypes";
 
-const setSolDates = (rover, setter) => {};
+const initialState = {
+  rover: "",
+  sol: "",
+  date: "",
+  error: false,
+  startDate: "",
+  endDate: "",
+  maxSol: "max",
+  photos: [],
+};
 
-export const formReducer = (state, action) => {
+const validateSOL = (value, action) =>
+  +value >= 0 && +value <= +action.validationData && value.length !== 0
+    ? false
+    : true;
+
+const reducer = (state = initialState, action) => {
   const { type, value } = action;
 
   switch (type) {
     case actionTypes.SET_MANIFEST:
-      const urlParams = `manifests/${value}?`;
-      fetchData(urlParams).then((data) => {
-        const {
-          photo_manifest: {
-            max_sol: maxSol,
-            landing_date: startDate,
-            max_date: endDate,
-          },
-        } = data;
-        return {
-          ...state,
-          rover: value,
-          maxSol,
-          startDate,
-          endDate,
-        };
-      });
+      return {
+        ...state,
+        ...value,
+      };
     case actionTypes.SET_SOL:
-      const solError =
-        +value >= 0 && +value <= +action.validationData && value.length !== 0
-          ? false
-          : true;
+      const isValid = validateSOL(value, ) 
       action.allowSearch(!solError);
       return {
         ...state,
@@ -51,3 +49,5 @@ export const formReducer = (state, action) => {
       return state;
   }
 };
+
+export default reducer;

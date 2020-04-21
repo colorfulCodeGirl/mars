@@ -1,23 +1,22 @@
-import React, { createContext, useReducer } from "react";
-import { reducer } from "./reducer";
+import { createStore, compose, applyMiddleware } from "redux";
+import createSagaMiddleware from "redux-saga";
 
-const initialState = {
-  rover: "",
-  sol: "",
-  date: "",
-  error: false,
-  startDate: "",
-  endDate: "",
-  maxSol: "max",
-  photos: [],
+import reducer from "./reducer";
+import rootSaga from "./sagas";
+
+const configureStore = () => {
+  const sagaMiddleware = createSagaMiddleware();
+  const store = createStore(
+    reducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__
+      ? compose(
+          applyMiddleware(sagaMiddleware),
+          window.__REDUX_DEVTOOLS_EXTENSION__()
+        )
+      : applyMiddleware(sagaMiddleware)
+  );
+  sagaMiddleware.run(rootSaga);
+  return store;
 };
-const store = createContext(initialState);
-const { Provider } = store;
 
-const StateProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  return <Provider value={{ state, dispatch }}>{children}</Provider>;
-};
-
-export { store };
-export default StateProvider;
+export default configureStore;

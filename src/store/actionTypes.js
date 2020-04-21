@@ -1,4 +1,9 @@
-export const SET_MANIFEST = "SET_MANIFEST";
+export const SET_ROVER = "SET_ROVER";
 export const SET_SOL = "SET_SOL";
 export const SET_DATE = "SET_DATE";
+export const FETCH_MANIFEST = "FETCH_MANIFEST";
+export const SET_MANIFEST = "SET_MANIFEST";
+export const FETCH_MANIFEST_FAILED = "FETCH_MANIFEST_FAILED";
+export const FETCH_PHOTOS = "FETCH_PHOTOS";
 export const SET_PHOTOS = "SET_PHOTOS";
+export const FETCH_PHOTOS_FAILED = "FETCH_PHOTOS_FAILED";

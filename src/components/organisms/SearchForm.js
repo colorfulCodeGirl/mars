@@ -119,6 +119,9 @@ const SearchFrom = ({
   sol,
   date,
   error,
+  maxSol,
+  startDate,
+  endDate,
   arePhotosShown = false,
   fetchManifest,
   handlePeriod,
@@ -184,11 +187,11 @@ const SearchFrom = ({
             type="text"
             label={isSol ? "sol" : "Earth days"}
             name={isSol ? "sol" : "Earth days"}
-            // placeholder={
-            //   isSol
-            //     ? `SOL from 0 to ${dates.maxSol}`
-            //     : `Date from ${dates.startDate} to ${dates.endDate}`
-            // }
+            placeholder={
+              isSol
+                ? `SOL from 0 to ${maxSol}`
+                : `Date from ${startDate} to ${endDate}`
+            }
             changeHandler={({ target: { value } }) =>
               handlePeriod(value, isSol)
             }
@@ -217,11 +220,22 @@ const SearchFrom = ({
   );
 };
 
-const mapStateToProps = ({ rover, sol, date, error }) => ({
+const mapStateToProps = ({
   rover,
   sol,
   date,
   error,
+  maxSol,
+  startDate,
+  endDate,
+}) => ({
+  rover,
+  sol,
+  date,
+  error,
+  maxSol,
+  startDate,
+  endDate,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -240,6 +254,9 @@ SearchFrom.propTypes = {
   sol: PropTypes.string,
   date: PropTypes.string,
   error: PropTypes.string,
+  maxSol: PropTypes.string,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string,
   arePhotosShown: PropTypes.bool,
   fetchManifest: PropTypes.func.isRequired,
   handlePeriod: PropTypes.func.isRequired,

@@ -1,5 +1,6 @@
 /* eslint-disable eqeqeq */
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -7,7 +8,6 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
-import { usePrevious } from "../../custom-hooks";
 import PhotoModal from "../molecules/PhotoModal";
 import AnimatedMars from "../atoms/AnimatedMars";
 
@@ -30,21 +30,16 @@ const chooseNextPhotos = (newPhotos, length) => {
   return { hasMorePhotos, nextPhotos };
 };
 
-const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
+const Gallery = ({ photos, hash, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [fullImage, setFullImage] = useState({});
 
-  const length = shownPhotos.length;
-  const prevHash = usePrevious(hash);
-
   useEffect(() => {
-    if (prevHash !== hash) {
-      const { hasMorePhotos, nextPhotos } = chooseNextPhotos(photos, length);
-      setShownPhotos([...nextPhotos]);
-      setHasMore(hasMorePhotos);
-    }
-  }, [hash, prevHash, photos, length]);
+    const { hasMorePhotos, nextPhotos } = chooseNextPhotos(photos, 0);
+    setShownPhotos([...nextPhotos]);
+    setHasMore(hasMorePhotos);
+  }, [photos]);
 
   const openFullImage = (e) => {
     const {
@@ -90,9 +85,9 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
   ));
 
   const addPhotosOnScroll = () => {
+    const length = shownPhotos.length;
     const { hasMorePhotos, nextPhotos } = chooseNextPhotos(photos, length);
-    const oldPhotos = prevHash === hash ? shownPhotos : [];
-    setShownPhotos([...oldPhotos, ...nextPhotos]);
+    setShownPhotos([...shownPhotos, ...nextPhotos]);
     setHasMore(hasMorePhotos);
   };
 
@@ -128,7 +123,11 @@ const Gallery = ({ photosObj: { photos, hash }, isMobile }) => {
   );
 };
 
-export default Gallery;
+const mapStateToProps = ({ photos }) => ({
+  photos,
+});
+
+export default connect(mapStateToProps)(Gallery);
 
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(
@@ -137,6 +136,6 @@ Gallery.propTypes = {
       img_src: PropTypes.string.isRequired,
       rover: PropTypes.object,
     })
-  ),
+  ).isRequired,
   isMobile: PropTypes.bool,
 };

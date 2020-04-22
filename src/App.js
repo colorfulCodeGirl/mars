@@ -6,8 +6,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./views/Home";
 import Results from "./views/Results";
 
-// import hash from "object-hash";
-
 import background from "./assets/background.png";
 
 //export needed for storybook

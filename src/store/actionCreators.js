@@ -1,33 +1,33 @@
 import * as actionTypes from "./actionTypes";
 
 export const validatePeriod = (value, isSol) => ({
-  type: actionTypes.SET_SOL,
-  {value, isSol}
+  type: actionTypes.VALIDATE_PERIOD,
+  payload: { value, isSol },
 });
 
-export const setSOL = (sol) => ({
+export const setSOL = (payload) => ({
   type: actionTypes.SET_SOL,
-  sol,
+  payload,
 });
 
-export const setDate = (date) => ({
+export const setDate = (payload) => ({
   type: actionTypes.SET_DATE,
-  date,
+  payload,
 });
 
 export const fetchManifest = (value) => ({
   type: actionTypes.FETCH_MANIFEST,
-  value
+  payload: value,
 });
 
 export const setManifest = (manifest) => ({
   type: actionTypes.SET_MANIFEST,
-  manifest,
+  payload: manifest,
 });
 
 export const fetchManifestFailed = (error) => ({
   type: actionTypes.FETCH_MANIFEST_FAILED,
-  error,
+  payload: error,
 });
 
 export const fetchPhotos = () => ({
@@ -36,5 +36,5 @@ export const fetchPhotos = () => ({
 
 export const setPhotos = (photos) => ({
   type: actionTypes.SET_PHOTOS,
-  photos,
+  payload: photos,
 });

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import SearchForm from "./components/organisms/SearchForm";
-import SearchModal from "./components/organisms/SearchModal";
-import Gallery from "./components/organisms/Gallery";
+import SearchForm from "../components/organisms/SearchForm";
+import SearchModal from "../components/organisms/SearchModal";
+import Gallery from "../components/organisms/Gallery";
 
 const Wrapper = styled.main`
   display: grid;

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
-import SearchForm from "./components/organisms/SearchForm";
+import SearchForm from "../components/organisms/SearchForm";
 
 const Credentials = styled.p`
   color: #ffffff;

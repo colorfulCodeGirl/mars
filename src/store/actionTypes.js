@@ -1,4 +1,5 @@
 export const SET_ROVER = "SET_ROVER";
+export const VALIDATE_PERIOD = "VALIDATE_PERIOD";
 export const SET_SOL = "SET_SOL";
 export const SET_DATE = "SET_DATE";
 export const FETCH_MANIFEST = "FETCH_MANIFEST";

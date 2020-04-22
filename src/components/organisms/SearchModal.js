@@ -1,12 +1,11 @@
-import React, { useState, useReducer } from "react";
-import styled, { css } from "styled-components";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import SearchForm from "./components/organisms/SearchForm";
-import Button from "./components/atoms/Button";
-import ModalOverlay from "./components/atoms/ModalOverlay";
+import SearchForm from "../organisms/SearchForm";
+import Button from "../atoms/Button";
+import ModalOverlay from "../atoms/ModalOverlay";
 
-import menuIcon from "./assets/menu.png";
+import menuIcon from "../../assets/menu.png";
 
 const SearchModal = ({ searchHandler }) => {
   const [isModalOpen, setModalVisibility] = useState(false);

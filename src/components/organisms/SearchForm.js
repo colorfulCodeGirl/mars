@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
@@ -9,8 +9,6 @@ import Select from "../atoms/Select";
 import Input from "../atoms/Input";
 import ErrorTooltip from "../atoms/ErrorTooltip";
 
-import { store } from "./store.js";
-import * as actionTypes from "../../store/actionTypes";
 import * as actions from "../../store/actionCreators";
 
 const StyledForm = styled.form`
@@ -117,14 +115,25 @@ const StyledP = styled.p`
 `;
 
 const SearchFrom = ({
+  rover,
+  sol,
+  date,
+  error,
   arePhotosShown,
-  handleSearch,
   fetchManifest,
   handlePeriod,
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
   const [isTransiting, setIsTransiting] = useState(false);
   const [isSol, switchSolDate] = useState(true);
+
+  useEffect(() => {
+    if ((sol || date) && error === "") {
+      allowSearch(true);
+    } else {
+      allowSearch(false);
+    }
+  }, [sol, date, allowSearch, error]);
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
 
@@ -139,11 +148,10 @@ const SearchFrom = ({
     switchSolDate(isSol);
   };
 
-  const handleSubmit = (e) => {
-    setIsTransiting(true);
-    const { latest } = e.target.dataset;
-    handleSearch(latest, e, state);
-  };
+  // const handleSubmit = (e) => {
+  //   setIsTransiting(true);
+  //   const { latest } = e.target.dataset;
+  // };
 
   return (
     <StyledForm
@@ -158,7 +166,7 @@ const SearchFrom = ({
         defaultValue="Choose rover"
         changeHandler={fetchManifest}
       />
-      {state.rover && (
+      {rover && (
         <>
           <RadioGroup
             options={["SOL*", "Earth date"]}
@@ -172,37 +180,32 @@ const SearchFrom = ({
             type="text"
             label={isSol ? "sol" : "Earth days"}
             name={isSol ? "sol" : "Earth days"}
-            placeholder={
-              isSol
-                ? `SOL from 0 to ${dates.maxSol}`
-                : `Date from ${dates.startDate} to ${dates.endDate}`
+            // placeholder={
+            //   isSol
+            //     ? `SOL from 0 to ${dates.maxSol}`
+            //     : `Date from ${dates.startDate} to ${dates.endDate}`
+            // }
+            changeHandler={({ target: { value } }) =>
+              handlePeriod(value, isSol)
             }
-            changeHandler={handleSol}
-            value={isSol ? state.sol : state.date}
+            value={isSol ? sol : date}
           />
-          <ErrorTooltip
-            isError={state.error}
-            message={
-              isSol
-                ? `SOL should be a number from 0 to ${dates.maxSol}`
-                : `Date should be from ${dates.startDate} to ${dates.endDate}`
-            }
-          />
+          <ErrorTooltip message={error} />
         </>
       )}
       <StyledButton
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        submitHandler={handleSubmit}
+        submitHandler={() => {}}
       >
         SEARCH
       </StyledButton>
       <StyledButton
         type="submit"
-        isDisabled={!state.rover}
+        isDisabled={!rover}
         data-latest="true"
-        submitHandler={handleSubmit}
+        submitHandler={() => {}}
       >
         See Latest
       </StyledButton>
@@ -210,36 +213,28 @@ const SearchFrom = ({
   );
 };
 
-const mapStateToProps = ({
+const mapStateToProps = ({ rover, sol, date, error }) => ({
   rover,
   sol,
   date,
   error,
-  startDate,
-  endDate,
-  maxSol,
-}) => ({
-  rover,
-  sol,
-  date,
-  error,
-  startDate,
-  endDate,
-  maxSol,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchManifest: ({ target: { value } }) =>
     dispatch(actions.fetchManifest(value)),
-  handlePeriod: ({ target: { value } }, isSol) =>
+  handlePeriod: (value, isSol) =>
     dispatch(actions.validatePeriod(value, isSol)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFrom);
 
 SearchFrom.propTypes = {
+  rover: PropTypes.string,
+  sol: PropTypes.string,
+  date: PropTypes.string,
+  error: PropTypes.string,
   arePhotosShown: PropTypes.bool.isRequired,
-  handleSearch: PropTypes.func.isRequired,
   fetchManifest: PropTypes.func.isRequired,
   handlePeriod: PropTypes.func.isRequired,
 };

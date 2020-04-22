@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import { StateProvider } from "./store.js";
 import Home from "./views/Home";
 import Results from "./views/Results";
 
@@ -63,19 +62,17 @@ function App() {
         />
       </Helmet>
       <Router>
-        <StateProvider>
-          <GlobalStyles />
-          <AppWrapper>
-            <Switch>
-              <Route path="/">
-                <Home />
-              </Route>
-              <Route path="/results">
-                <Results />
-              </Route>
-            </Switch>
-          </AppWrapper>
-        </StateProvider>
+        <GlobalStyles />
+        <AppWrapper>
+          <Switch>
+            <Route path="/">
+              <Home />
+            </Route>
+            <Route path="/results">
+              <Results />
+            </Route>
+          </Switch>
+        </AppWrapper>
       </Router>
     </>
   );

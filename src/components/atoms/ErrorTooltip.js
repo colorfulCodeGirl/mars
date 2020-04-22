@@ -11,13 +11,12 @@ const StyledError = styled.p`
   border-radius: 0.4rem;
 `;
 
-const ErrorTooltip = ({ isError, message }) => (
-  <>{isError && <StyledError>{message}</StyledError>}</>
+const ErrorTooltip = ({ message }) => (
+  <>{!(message === "") && <StyledError>{message}</StyledError>}</>
 );
 
 export default ErrorTooltip;
 
 ErrorTooltip.propTypes = {
-  isError: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
 };

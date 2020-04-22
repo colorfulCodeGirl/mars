@@ -26,6 +26,15 @@ const StyledButton = styled.button`
       background-color: rgba(255, 255, 255, 0.6);
       color: #515050;
     `}
+  ${({ isFormBtn }) =>
+    isFormBtn &&
+    css`
+      justify-self: flex-end;
+      margin-top: 2rem;
+      @media (min-width: 375px) {
+        margin-top: ${({ marginTop }) => (marginTop ? "auto" : "2rem")};
+      }
+    `}
 `;
 
 const Button = ({
@@ -34,6 +43,7 @@ const Button = ({
   isDisabled = false,
   icon,
   isGrey,
+  isFormBtn,
   ...props
 }) => (
   <StyledButton
@@ -41,6 +51,7 @@ const Button = ({
     disabled={isDisabled}
     icon={icon}
     isGrey={isGrey}
+    isFormBtn={isFormBtn}
     {...props}
   >
     {children}
@@ -55,4 +66,5 @@ Button.propTypes = {
   isDisabled: PropTypes.bool,
   icon: PropTypes.string,
   isGrey: PropTypes.bool,
+  isFormBtn: PropTypes.bool,
 };

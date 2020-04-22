@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { ReactComponent as Mars } from "../../assets/mars.svg";
 
 const StyledContainer = styled.div`
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;

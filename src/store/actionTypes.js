@@ -5,6 +5,7 @@ export const VALIDATE_PERIOD = "VALIDATE_PERIOD";
 export const SET_SOL = "SET_SOL";
 export const SET_DATE = "SET_DATE";
 export const FETCH_PHOTOS = "FETCH_PHOTOS";
+export const CLEAN_UP_PHOTOS = "CLEAN_UP_PHOTOS";
 export const SET_PHOTOS = "SET_PHOTOS";
 export const FETCH_PHOTOS_FAILED = "FETCH_PHOTOS_FAILED";
 export const CLEAN_UP_PERIOD = "CLEAN_UP_PERIOD";

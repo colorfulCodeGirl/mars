@@ -91,26 +91,26 @@ const Gallery = ({ photos, hash, isMobile }) => {
     setHasMore(hasMorePhotos);
   };
 
+  console.log(photos.length === 0);
+
   return (
     <>
-      {/* {isLoaderShown && (
-        <AnimatedMars
-          isAnimating={isMarsAnimating}
-          onDone={onMarsAnimationEnd}
-        />
-      )} */}
-      <InfiniteScroll
-        dataLength={shownPhotos.length}
-        next={addPhotosOnScroll}
-        hasMore={hasMore}
-        height={isMobile ? "88vh" : "97vh"}
-      >
-        <StyledResponsiveMasonry
-          columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
+      {photos.length === 0 ? (
+        <AnimatedMars isAnimating={true} />
+      ) : (
+        <InfiniteScroll
+          dataLength={shownPhotos.length}
+          next={addPhotosOnScroll}
+          hasMore={hasMore}
+          height={isMobile ? "88vh" : "97vh"}
         >
-          <Masonry gutter="0.3rem">{imgElems}</Masonry>
-        </StyledResponsiveMasonry>
-      </InfiniteScroll>
+          <StyledResponsiveMasonry
+            columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
+          >
+            <Masonry gutter="0.3rem">{imgElems}</Masonry>
+          </StyledResponsiveMasonry>
+        </InfiniteScroll>
+      )}
       {fullImage.src && (
         <PhotoModal
           closeHandler={closeFullImage}

@@ -52,6 +52,7 @@ function* validatePeriod({ payload: { value, isSol } }) {
 }
 
 function* fetchPhotos({ latest = null }) {
+  yield put(actions.cleanUpPhotos());
   const rover = yield select(getRover);
   const sol = yield select(getSol);
   const date = yield select(getDate);

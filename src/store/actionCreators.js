@@ -35,6 +35,10 @@ export const fetchPhotos = (latest) => ({
   latest,
 });
 
+export const cleanUpPhotos = () => ({
+  type: actionTypes.CLEAN_UP_PHOTOS,
+});
+
 export const setPhotos = (photos) => ({
   type: actionTypes.SET_PHOTOS,
   payload: photos,

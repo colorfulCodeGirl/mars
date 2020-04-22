@@ -45,6 +45,11 @@ const reducer = (state = initialState, action) => {
         date: "",
         error: "",
       };
+    case actionTypes.CLEAN_UP_PHOTOS:
+      return {
+        ...state,
+        photos: [],
+      };
     case actionTypes.CLEAN_UP_FORM:
       return initialState;
     case actionTypes.SET_PHOTOS:

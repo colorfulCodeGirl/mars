@@ -119,9 +119,10 @@ const SearchFrom = ({
   sol,
   date,
   error,
-  arePhotosShown,
+  arePhotosShown = false,
   fetchManifest,
   handlePeriod,
+  cleanUpPeriod,
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
   const [isTransiting, setIsTransiting] = useState(false);
@@ -144,8 +145,11 @@ const SearchFrom = ({
   // };
 
   const radioChangeHandler = ({ target: { value } }) => {
-    const isSol = value === "sol*" ? true : false;
-    switchSolDate(isSol);
+    const isSolNew = value === "sol*" ? true : false;
+    if (isSol !== isSolNew) {
+      cleanUpPeriod();
+    }
+    switchSolDate(isSolNew);
   };
 
   // const handleSubmit = (e) => {
@@ -223,8 +227,10 @@ const mapStateToProps = ({ rover, sol, date, error }) => ({
 const mapDispatchToProps = (dispatch) => ({
   fetchManifest: ({ target: { value } }) =>
     dispatch(actions.fetchManifest(value)),
-  handlePeriod: (value, isSol) =>
-    dispatch(actions.validatePeriod(value, isSol)),
+  handlePeriod: (value, isSol) => {
+    dispatch(actions.validatePeriod(value, isSol));
+  },
+  cleanUpPeriod: () => dispatch(actions.cleanUpPeriod()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFrom);
@@ -234,7 +240,8 @@ SearchFrom.propTypes = {
   sol: PropTypes.string,
   date: PropTypes.string,
   error: PropTypes.string,
-  arePhotosShown: PropTypes.bool.isRequired,
+  arePhotosShown: PropTypes.bool,
   fetchManifest: PropTypes.func.isRequired,
   handlePeriod: PropTypes.func.isRequired,
+  cleanUpPeriod: PropTypes.func,
 };

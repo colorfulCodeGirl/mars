@@ -32,6 +32,15 @@ const reducer = (state = initialState, action) => {
         date: payload.date,
         error: payload.massage,
       };
+    case actionTypes.CLEAN_UP_PERIOD:
+      return {
+        ...state,
+        sol: "",
+        date: "",
+        error: "",
+      };
+    case actionTypes.CLEAN_UP_FORM:
+      return initialState;
     //   case actionTypes.FETCH_PHOTOS:
     //   case actionTypes.SET_PHOTOS:
     default:

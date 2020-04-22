@@ -6,6 +6,7 @@ import { getMaxSol, getStartDate, getEndDate, getDate } from "./selectors";
 import { validateDate, formateDate } from "../helpers";
 
 function* fetchManifest({ payload: rover }) {
+  yield put(actions.cleanUpForm());
   const urlParams = `manifests/${rover}?`;
   try {
     const response = yield fetchData(urlParams);

@@ -38,3 +38,11 @@ export const setPhotos = (photos) => ({
   type: actionTypes.SET_PHOTOS,
   payload: photos,
 });
+
+export const cleanUpPeriod = () => ({
+  type: actionTypes.CLEAN_UP_PERIOD,
+});
+
+export const cleanUpForm = () => ({
+  type: actionTypes.CLEAN_UP_FORM,
+});

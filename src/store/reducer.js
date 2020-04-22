@@ -21,6 +21,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         ...payload,
       };
+    case actionTypes.FETCH_MANIFEST_FAILED:
+      return {
+        ...state,
+        fetchError: payload,
+      };
     case actionTypes.SET_SOL:
       return {
         ...state,

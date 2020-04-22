@@ -39,17 +39,19 @@ export const GlobalStyles = createGlobalStyle`
   width: 1px;
 }
 
+/* for library react-lazy-load-image-component */
 .lazy-load-image-background {
   width: 100%;
 }
 `;
 
-const AppWrapper = styled.div`
+const AppWrapper = styled.main`
   background-image: url(${background});
   background-position-x: 50%;
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
+  display: grid;
 `;
 
 function App() {

@@ -16,7 +16,7 @@ const Credentials = styled.p`
 `;
 
 const Home = (props) => (
-  <main>
+  <>
     <SearchForm />
     <Credentials>
       Image by{" "}
@@ -28,7 +28,7 @@ const Home = (props) => (
         Pixabay
       </a>
     </Credentials>
-  </main>
+  </>
 );
 
 export default Home;

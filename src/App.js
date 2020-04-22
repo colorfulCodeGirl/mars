@@ -7,7 +7,6 @@ import Home from "./views/Home";
 import Results from "./views/Results";
 
 // import hash from "object-hash";
-// import { fetchData } from "./helpers";
 
 import background from "./assets/background.png";
 
@@ -67,7 +66,7 @@ function App() {
         <GlobalStyles />
         <AppWrapper>
           <Switch>
-            <Route path="/">
+            <Route path="/" exact>
               <Home />
             </Route>
             <Route path="/results">
@@ -78,54 +77,6 @@ function App() {
       </Router>
     </>
   );
-
-  // const [arePhotosShown, setPhotosStatus] = useState(false);
-  // const [isMarsAnimating, setIsMarsAnimating] = useState(false);
-  // const [isLoaderShown, setLoaderVisibility] = useState(false);
-  // const [photosObj, setPhotos] = useState({ photos: [], hash: "" });
-
-  // const fetchPhotos = async (newest = null, e, state) => {
-  //   e.preventDefault();
-  //   setPhotosStatus(true);
-  //   setLoaderVisibility(true);
-  //   setIsMarsAnimating(true);
-  //   const { rover, sol, date } = state;
-  //   const urlParams = newest
-  //     ? `rovers/${rover}/latest_photos?`
-  //     : sol
-  //     ? `rovers/${rover}/photos?sol=${sol}`
-  //     : `rovers/${rover}/photos?earth_date=${date}`;
-  //   const response = await fetchData(urlParams);
-  //   const newPhotos = response.latest_photos || response.photos;
-  //   if (isMobile) {
-  //     setModalSearchVisibility(false);
-  //   }
-  //   setPhotos({ photos: newPhotos, hash: hash(newPhotos) });
-  //   setTimeout(() => setIsMarsAnimating(false), 500);
-  // };
-
-  // const onMarsAnimationEnd = () => {
-  //   setLoaderVisibility(false);
-  // };
-
-  // return (
-  //   <>
-  //
-  //     <AppWrapper arePhotosShown={arePhotosShown}>
-  //       {isFormShown && (
-  //         <SearchForm
-  //           arePhotosShown={arePhotosShown}
-  //           handleSearch={fetchPhotos}
-  //         />
-  //       )}
-
-  //       {arePhotosShown && (
-  //
-  //       )}
-
-  //     </AppWrapper>
-  //   </>
-  // );
 }
 
 export default App;

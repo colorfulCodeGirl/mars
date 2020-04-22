@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import StyledForm from "../atoms/StyledForm";
@@ -19,14 +20,15 @@ const SearchFrom = ({
   maxSol,
   startDate,
   endDate,
-  arePhotosShown = false,
+  displayLeft = false,
   fetchManifest,
   handlePeriod,
   cleanUpPeriod,
+  fetchPhotos,
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
-  const [isTransiting, setIsTransiting] = useState(false);
   const [isSol, switchSolDate] = useState(true);
+  const history = useHistory();
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
 
@@ -46,17 +48,18 @@ const SearchFrom = ({
     switchSolDate(isSolNew);
   };
 
-  // const handleSubmit = (e) => {
-  //   setIsTransiting(true);
-  //   const { latest } = e.target.dataset;
-  // };
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const { latest } = e.target.dataset;
+    fetchPhotos(latest);
+    history.push("/results");
+  };
 
   return (
     <StyledForm
       data-testid="form"
-      displayLeft={arePhotosShown}
-      isTransiting={isTransiting}
-      onSubmit={() => {}}
+      displayLeft={displayLeft}
+      onSubmit={submitHandler}
     >
       <h1>EXPLORE MARS IMAGES BY ROVERS</h1>
       <Select
@@ -96,7 +99,7 @@ const SearchFrom = ({
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        submitHandler={() => {}}
+        submitHandler={submitHandler}
         isFormBtn
       >
         SEARCH
@@ -105,7 +108,7 @@ const SearchFrom = ({
         type="submit"
         isDisabled={!rover}
         data-latest="true"
-        submitHandler={() => {}}
+        submitHandler={submitHandler}
         isFormBtn
       >
         See Latest
@@ -139,6 +142,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.validatePeriod(value, isSol));
   },
   cleanUpPeriod: () => dispatch(actions.cleanUpPeriod()),
+  fetchPhotos: (latest) => dispatch(actions.fetchPhotos(latest)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFrom);
@@ -151,8 +155,9 @@ SearchFrom.propTypes = {
   maxSol: PropTypes.string,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
-  arePhotosShown: PropTypes.bool,
+  displayLeft: PropTypes.bool,
   fetchManifest: PropTypes.func.isRequired,
   handlePeriod: PropTypes.func.isRequired,
   cleanUpPeriod: PropTypes.func,
+  fetchPhotos: PropTypes.func.isRequired,
 };

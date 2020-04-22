@@ -2,7 +2,14 @@ import { put, select, takeEvery } from "redux-saga/effects";
 import { fetchData } from "../helpers";
 import * as actions from "./actionCreators";
 import * as actionTypes from "./actionTypes";
-import { getMaxSol, getStartDate, getEndDate, getDate } from "./selectors";
+import {
+  getMaxSol,
+  getStartDate,
+  getEndDate,
+  getDate,
+  getRover,
+  getSol,
+} from "./selectors";
 import { validateDate, formateDate } from "../helpers";
 
 function* fetchManifest({ payload: rover }) {
@@ -43,9 +50,28 @@ function* validatePeriod({ payload: { value, isSol } }) {
   }
 }
 
+function* fetchPhotos({ latest = null }) {
+  const rover = yield select(getRover);
+  const sol = yield select(getSol);
+  const date = yield select(getDate);
+  const urlParams = latest
+    ? `rovers/${rover}/latest_photos?`
+    : sol
+    ? `rovers/${rover}/photos?sol=${sol}`
+    : `rovers/${rover}/photos?earth_date=${date}`;
+  try {
+    const response = yield fetchData(urlParams);
+    const newPhotos = response.latest_photos || response.photos;
+    yield put(actions.setPhotos(newPhotos));
+  } catch (error) {
+    yield put(actions.fetchPhotosFailed(error));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionTypes.FETCH_MANIFEST, fetchManifest);
   yield takeEvery(actionTypes.VALIDATE_PERIOD, validatePeriod);
+  yield takeEvery(actionTypes.FETCH_PHOTOS, fetchPhotos);
 }
 
 export default rootSaga;

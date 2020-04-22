@@ -9,6 +9,7 @@ const initialState = {
   endDate: "",
   maxSol: "",
   photos: [],
+  fetchError: "",
 };
 
 const reducer = (state = initialState, action) => {
@@ -41,8 +42,16 @@ const reducer = (state = initialState, action) => {
       };
     case actionTypes.CLEAN_UP_FORM:
       return initialState;
-    //   case actionTypes.FETCH_PHOTOS:
-    //   case actionTypes.SET_PHOTOS:
+    case actionTypes.SET_PHOTOS:
+      return {
+        ...state,
+        photos: payload,
+      };
+    case actionTypes.FETCH_PHOTOS_FAILED:
+      return {
+        ...state,
+        fetchError: payload,
+      };
     default:
       return state;
   }

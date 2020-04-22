@@ -1,20 +1,5 @@
 import * as actionTypes from "./actionTypes";
 
-export const validatePeriod = (value, isSol) => ({
-  type: actionTypes.VALIDATE_PERIOD,
-  payload: { value, isSol },
-});
-
-export const setSOL = (payload) => ({
-  type: actionTypes.SET_SOL,
-  payload,
-});
-
-export const setDate = (payload) => ({
-  type: actionTypes.SET_DATE,
-  payload,
-});
-
 export const fetchManifest = (value) => ({
   type: actionTypes.FETCH_MANIFEST,
   payload: value,
@@ -30,13 +15,34 @@ export const fetchManifestFailed = (error) => ({
   payload: error,
 });
 
-export const fetchPhotos = () => ({
+export const validatePeriod = (value, isSol) => ({
+  type: actionTypes.VALIDATE_PERIOD,
+  payload: { value, isSol },
+});
+
+export const setSOL = (payload) => ({
+  type: actionTypes.SET_SOL,
+  payload,
+});
+
+export const setDate = (payload) => ({
+  type: actionTypes.SET_DATE,
+  payload,
+});
+
+export const fetchPhotos = (latest) => ({
   type: actionTypes.FETCH_PHOTOS,
+  latest,
 });
 
 export const setPhotos = (photos) => ({
   type: actionTypes.SET_PHOTOS,
   payload: photos,
+});
+
+export const fetchPhotosFailed = (error) => ({
+  type: actionTypes.FETCH_PHOTOS_FAILED,
+  payload: error,
 });
 
 export const cleanUpPeriod = () => ({

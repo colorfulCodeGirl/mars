@@ -37,7 +37,7 @@ const Results = () => {
 
   return (
     <Wrapper>
-      {isMobile ? <SearchModal /> : <SearchForm />}
+      {isMobile ? <SearchModal /> : <SearchForm displayLeft />}
       <Gallery isMobile={isMobile} />
     </Wrapper>
   );

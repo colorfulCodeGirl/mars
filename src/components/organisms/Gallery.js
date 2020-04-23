@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -11,7 +10,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import PhotoModal from "../molecules/PhotoModal";
 import AnimatedMars from "../atoms/AnimatedMars";
 
-const StyledImg = styled(LazyLoadImage)`
+const StyledLazyImg = styled(LazyLoadImage)`
   width: 100%;
   border-radius: 0.3rem;
 `;
@@ -49,10 +48,6 @@ const Gallery = ({ photos, hash, isMobile }) => {
     setFullImage({ src, index });
   };
 
-  const closeFullImage = () => {
-    setFullImage({});
-  };
-
   const findDirection = (x) => {
     const halfPoint = window.innerWidth / 2;
     return x >= halfPoint ? "right" : "left";
@@ -60,21 +55,21 @@ const Gallery = ({ photos, hash, isMobile }) => {
 
   const changeFullImage = (e, side) => {
     e.stopPropagation();
-    const { index } = fullImage;
+    const index = +fullImage.index;
     const direction = typeof side === "number" ? findDirection(side) : side;
     if (
-      (index == 0 && direction === "left") ||
+      (index === 0 && direction === "left") ||
       (index === photos.length - 1 && direction === "right")
     ) {
       return;
     }
-    const nextIndex = direction === "right" ? +index + 1 : +index - 1;
+    const nextIndex = direction === "right" ? index + 1 : index - 1;
     const nextImage = photos[nextIndex].img_src;
     setFullImage({ src: nextImage, index: nextIndex });
   };
 
   const imgElems = shownPhotos.map((photo, index) => (
-    <StyledImg
+    <StyledLazyImg
       src={photo.img_src}
       key={photo.id}
       effect="blur"
@@ -90,8 +85,6 @@ const Gallery = ({ photos, hash, isMobile }) => {
     setShownPhotos([...shownPhotos, ...nextPhotos]);
     setHasMore(hasMorePhotos);
   };
-
-  console.log(photos.length === 0);
 
   return (
     <>
@@ -113,7 +106,7 @@ const Gallery = ({ photos, hash, isMobile }) => {
       )}
       {fullImage.src && (
         <PhotoModal
-          closeHandler={closeFullImage}
+          closeHandler={() => setFullImage({})}
           changeHandler={changeFullImage}
           image={fullImage}
           isMobile={isMobile}

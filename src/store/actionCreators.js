@@ -35,10 +35,6 @@ export const fetchPhotos = (latest) => ({
   latest,
 });
 
-export const cleanUpPhotos = () => ({
-  type: actionTypes.CLEAN_UP_PHOTOS,
-});
-
 export const setPhotos = (photos) => ({
   type: actionTypes.SET_PHOTOS,
   payload: photos,
@@ -53,6 +49,15 @@ export const cleanUpPeriod = () => ({
   type: actionTypes.CLEAN_UP_PERIOD,
 });
 
+export const cleanUpPhotos = () => ({
+  type: actionTypes.CLEAN_UP_PHOTOS,
+});
+
 export const cleanUpForm = () => ({
   type: actionTypes.CLEAN_UP_FORM,
+});
+
+export const setFromUrl = (payload) => ({
+  type: actionTypes.SET_FROM_URL,
+  payload,
 });

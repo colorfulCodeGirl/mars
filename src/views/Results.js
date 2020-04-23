@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 
 import SearchForm from "../components/organisms/SearchForm";
 import SearchModal from "../components/organisms/SearchModal";
 import Gallery from "../components/organisms/Gallery";
+
+import { setFromUrl } from "../store/actionCreators";
 
 const Wrapper = styled.main`
   display: grid;
@@ -12,8 +16,16 @@ const Wrapper = styled.main`
   }
 `;
 
-const Results = () => {
+const Results = ({ rover, setFromUrl }) => {
   const [isMobile, setIsMobile] = useState(false);
+  const query = useLocation().search;
+
+  useEffect(() => {
+    if (!rover) {
+      const params = new URLSearchParams(query);
+      setFromUrl(params);
+    }
+  }, [query, rover, setFromUrl]);
 
   useEffect(() => {
     const mobile = window.innerWidth < 780;
@@ -43,4 +55,12 @@ const Results = () => {
   );
 };
 
-export default Results;
+const mapStateToProps = ({ rover }) => ({
+  rover,
+});
+
+const mapDispatchToProps = {
+  setFromUrl,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Results);

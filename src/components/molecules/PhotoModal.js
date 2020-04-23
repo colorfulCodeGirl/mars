@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import React from "react";
 import PropTypes from "prop-types";
 import ModalOverlay from "../atoms/ModalOverlay";
@@ -49,7 +48,7 @@ const PhotoModal = ({
     <PhotoWrapper onClick={(e) => changeHandler(e, e.clientX)}>
       {!isMobile && (
         <ArrowButton
-          disabled={index == 0}
+          disabled={+index === 0}
           onClick={(e) => changeHandler(e, "left")}
         >
           <Arrow />

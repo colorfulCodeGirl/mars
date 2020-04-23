@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from "redux-saga/effects";
+import { put, select, takeEvery, take } from "redux-saga/effects";
 
 import * as actions from "./actionCreators";
 import * as actionTypes from "./actionTypes";
@@ -70,10 +70,28 @@ function* fetchPhotos({ latest = null }) {
   }
 }
 
+function* setFromUrl({ payload: params }) {
+  const rover = params.get("rover");
+  yield put(actions.fetchManifest(rover));
+  const latest = params.get("latest");
+  yield take(actionTypes.SET_MANIFEST);
+  if (latest === "true") {
+    yield put(actions.fetchPhotos(latest));
+  } else {
+    const sol = params.get("sol");
+    const date = params.get("date");
+    console.log({ sol, date });
+    if (sol) yield put(actions.setSOL({ sol, massage: "" }));
+    if (date) yield put(actions.setDate({ date, massage: "" }));
+    yield put(actions.fetchPhotos());
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionTypes.FETCH_MANIFEST, fetchManifest);
   yield takeEvery(actionTypes.VALIDATE_PERIOD, validatePeriod);
   yield takeEvery(actionTypes.FETCH_PHOTOS, fetchPhotos);
+  yield takeEvery(actionTypes.SET_FROM_URL, setFromUrl);
 }
 
 export default rootSaga;

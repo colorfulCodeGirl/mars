@@ -52,7 +52,9 @@ const SearchFrom = ({
     e.preventDefault();
     const { latest } = e.target.dataset;
     fetchPhotos(latest);
-    history.push("/results");
+    history.push(
+      `/results?rover=${rover}&latest=${latest}&sol=${sol}&date=${date}`
+    );
   };
 
   return (

@@ -1,21 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 
 import SearchForm from "../components/organisms/SearchForm";
+import Credentials from "../components/atoms/Credentials";
 
-const Credentials = styled.p`
-  color: #ffffff;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0.5rem;
-  a {
-    color: #ffffff;
-    text-decoration: none;
-  }
-`;
-
-const Home = (props) => (
+const Home = () => (
   <>
     <SearchForm />
     <Credentials>

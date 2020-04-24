@@ -1,23 +1,21 @@
 import { validateDate, formateDate } from "../helpers";
 
 describe("validateDate function", () => {
-  const mockRange = {
-    startDate: "2008-06-07",
-    endDate: "2017-09-15",
-  };
+  const startDate = "2008-06-07";
+  const endDate = "2017-09-15";
 
   it("checks if the date is in a range", () => {
-    expect(validateDate(mockRange, "2015-07-09")).toBeTruthy();
+    expect(validateDate(startDate, endDate, "2015-07-09")).toBeTruthy();
 
-    expect(validateDate(mockRange, "2015-07-")).toBeFalsy();
+    expect(validateDate(startDate, endDate, "2015-07-")).toBeFalsy();
 
-    expect(validateDate(mockRange, "201k-07-kl")).toBeFalsy();
+    expect(validateDate(startDate, endDate, "201k-07-kl")).toBeFalsy();
 
-    expect(validateDate(mockRange, "-&?k-07-kl")).toBeFalsy();
+    expect(validateDate(startDate, endDate, "-&?k-07-kl")).toBeFalsy();
 
-    expect(validateDate(mockRange, "2015-07-006")).toBeFalsy();
+    expect(validateDate(startDate, endDate, "2015-07-006")).toBeFalsy();
 
-    expect(validateDate(mockRange, "2019-07-09")).toBeFalsy();
+    expect(validateDate(startDate, endDate, "2019-07-09")).toBeFalsy();
   });
 });
 

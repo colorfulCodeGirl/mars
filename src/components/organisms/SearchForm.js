@@ -160,6 +160,6 @@ SearchFrom.propTypes = {
   displayLeft: PropTypes.bool,
   fetchManifest: PropTypes.func.isRequired,
   handlePeriod: PropTypes.func.isRequired,
-  cleanUpPeriod: PropTypes.func,
+  cleanUpPeriod: PropTypes.func.isRequired,
   fetchPhotos: PropTypes.func.isRequired,
 };

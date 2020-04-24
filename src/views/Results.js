@@ -9,10 +9,14 @@ import Gallery from "../components/organisms/Gallery";
 
 import { setFromUrl } from "../store/actionCreators";
 
-const Wrapper = styled.main`
+const Wrapper = styled.div`
   display: grid;
   @media (min-width: 780px) {
     grid-template-columns: auto 3fr;
+  }
+  button:first-child {
+    justify-self: end;
+    align-self: center;
   }
 `;
 
@@ -30,18 +34,14 @@ const Results = ({ rover, setFromUrl }) => {
   useEffect(() => {
     const mobile = window.innerWidth < 780;
     setIsMobile(mobile);
-
     // timeoutId for debounce mechanism
     let timeoutId = null;
-
     const resizeListener = () => {
       // prevent execution of previous setTimeout
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => setIsMobile(window.innerWidth < 780), 150);
     };
-
     window.addEventListener("resize", resizeListener);
-
     return () => {
       window.removeEventListener("resize", resizeListener);
     };

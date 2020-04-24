@@ -9,6 +9,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 
 import PhotoModal from "../molecules/PhotoModal";
 import AnimatedMars from "../atoms/AnimatedMars";
+import { chooseNextPhotos } from "../../helpers";
 
 const StyledLazyImg = styled(LazyLoadImage)`
   width: 100%;
@@ -19,15 +20,6 @@ const StyledResponsiveMasonry = styled(ResponsiveMasonry)`
   width: 95%;
   margin: 0 auto;
 `;
-
-const chooseNextPhotos = (newPhotos, length) => {
-  const nextStartIndex = length === 0 ? 0 : length;
-  const hasMorePhotos =
-    newPhotos.length >= nextStartIndex + 8 || newPhotos.length === 0;
-  const nextEndIndex = hasMorePhotos ? nextStartIndex + 8 : newPhotos.length;
-  const nextPhotos = newPhotos.slice(nextStartIndex, nextEndIndex);
-  return { hasMorePhotos, nextPhotos };
-};
 
 const Gallery = ({ photos, hash, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
@@ -53,8 +45,7 @@ const Gallery = ({ photos, hash, isMobile }) => {
     return x >= halfPoint ? "right" : "left";
   };
 
-  const changeFullImage = (e, side) => {
-    e.stopPropagation();
+  const changeFullImage = (side) => {
     const index = +fullImage.index;
     const direction = typeof side === "number" ? findDirection(side) : side;
     if (

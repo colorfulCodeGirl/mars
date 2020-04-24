@@ -80,7 +80,6 @@ function* setFromUrl({ payload: params }) {
   } else {
     const sol = params.get("sol");
     const date = params.get("date");
-    console.log({ sol, date });
     if (sol) yield put(actions.setSOL({ sol, massage: "" }));
     if (date) yield put(actions.setDate({ date, massage: "" }));
     yield put(actions.fetchPhotos());

@@ -15,7 +15,7 @@ const StyledImage = styled.img`
   max-width: 80vw;
   max-height: 90vh;
   margin: 1.5rem;
-  margin-top: 3.5rem;
+  margin-top: 4.5rem;
   @media (min-width: 900px) {
     margin: 2rem;
   }

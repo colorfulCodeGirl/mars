@@ -154,7 +154,7 @@ SearchFrom.propTypes = {
   sol: PropTypes.string,
   date: PropTypes.string,
   error: PropTypes.string,
-  maxSol: PropTypes.string,
+  maxSol: PropTypes.number,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
   displayLeft: PropTypes.bool,

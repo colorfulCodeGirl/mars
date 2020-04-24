@@ -29,12 +29,12 @@ const StyledSelect = styled.select`
   }
 `;
 
-const Select = ({ options, defaultValue, changeHandler, name }) => (
+const Select = ({ options, defaultValue, changeHandler, name, value }) => (
   <>
     <label htmlFor={name} className="sr-only">
       {defaultValue}
     </label>
-    <StyledSelect id={name} name={name} onChange={changeHandler}>
+    <StyledSelect id={name} name={name} value={value} onChange={changeHandler}>
       <option hidden>{defaultValue}</option>
       <optgroup>
         {options.map((option) => (
@@ -54,4 +54,5 @@ Select.propTypes = {
   defaultValue: PropTypes.string.isRequired,
   changeHandler: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  value: PropTypes.string,
 };

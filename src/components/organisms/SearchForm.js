@@ -67,6 +67,7 @@ const SearchFrom = ({
       <Select
         options={rovers}
         name="rovers"
+        value={rover}
         defaultValue="Choose rover"
         changeHandler={fetchManifest}
       />

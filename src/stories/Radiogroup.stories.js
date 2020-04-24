@@ -17,4 +17,6 @@ export default {
 
 const options = ["SOL", "Earth Date"];
 
-export const Regular = () => <RadioGroup options={options} category="mode" />;
+export const Regular = () => (
+  <RadioGroup options={options} category="mode" changeHandler={() => {}} />
+);

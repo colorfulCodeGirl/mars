@@ -15,4 +15,13 @@ export default {
   component: Input,
 };
 
-export const Regular = () => <Input type="text" placeholder="CAMERA" />;
+export const Regular = () => (
+  <Input
+    type="text"
+    placeholder="CAMERA"
+    changeHandler={() => {}}
+    value=""
+    label=""
+    name=""
+  />
+);

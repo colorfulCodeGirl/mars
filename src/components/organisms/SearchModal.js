@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 import SearchForm from "../organisms/SearchForm";
 import Button from "../atoms/Button";
@@ -24,7 +23,7 @@ const SearchModal = ({ searchHandler }) => {
 
       {isModalOpen && (
         <ModalOverlay closeHandler={() => setModalVisibility(false)}>
-          <SearchForm handleSearch={searchHandler} />
+          <SearchForm />
         </ModalOverlay>
       )}
     </>
@@ -32,7 +31,3 @@ const SearchModal = ({ searchHandler }) => {
 };
 
 export default SearchModal;
-
-SearchModal.propTypes = {
-  searchHandler: PropTypes.func.isRequired,
-};

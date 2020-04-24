@@ -18,5 +18,10 @@ export default {
 const options = ["Rover 1", "Rover 2", "Rover 3"];
 
 export const Regular = () => (
-  <Select name="rovers" options={options} defaultValue="Rover" />
+  <Select
+    name="rovers"
+    options={options}
+    defaultValue="Rover"
+    changeHandler={() => {}}
+  />
 );

@@ -6,8 +6,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./views/Home";
 import Results from "./views/Results";
 
-import background from "./assets/background.png";
-
 //export needed for storybook
 export const GlobalStyles = createGlobalStyle`
 :root {
@@ -43,7 +41,7 @@ export const GlobalStyles = createGlobalStyle`
 `;
 
 const AppWrapper = styled.main`
-  background-image: url(${background});
+  background-image: url("https://res.cloudinary.com/vanilna/image/upload/c_scale/dpr_auto/w_auto/f_auto/q_50/v1587722604/mars/background.png");
   background-position-x: 50%;
   background-size: cover;
   background-repeat: no-repeat;

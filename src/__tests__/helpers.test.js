@@ -1,4 +1,4 @@
-import { validateDate, formateDate } from "../helpers";
+import { validateDate, formateDate, fetchData } from "../helpers";
 
 describe("validateDate function", () => {
   const startDate = "2008-06-07";
@@ -30,5 +30,25 @@ describe("formateDate function", () => {
   it("allows to remove dashes", () => {
     expect(formateDate("2015", "2015-")).toBe("2015");
     expect(formateDate("2015-09", "2015-09-")).toBe("2015-09");
+  });
+});
+
+describe("fetchData function", () => {
+  it("fetches data with correct url", async () => {
+    const mockData = { rover: "Curiosity" };
+    const mockUrlParams = "curiosity";
+    const apiKey = process.env.REACT_APP_API_CODE;
+    global.fetch = jest
+      .fn()
+      .mockImplementation(() =>
+        Promise.resolve({ ok: true, json: () => mockData })
+      );
+
+    const response = await fetchData(mockUrlParams);
+    expect(response).toEqual(mockData);
+    expect(global.fetch).toBeCalledTimes(1);
+    expect(global.fetch).toBeCalledWith(
+      `https://api.nasa.gov/mars-photos/api/v1/${mockUrlParams}&api_key=${apiKey}`
+    );
   });
 });

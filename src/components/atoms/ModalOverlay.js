@@ -48,7 +48,7 @@ const ModalOverlay = ({ children, closeHandler }) => (
   <StyledOverlay>
     <Wrapper>
       {children}
-      <StyledButton onClick={closeHandler}>
+      <StyledButton onClick={closeHandler} aria-label="close">
         <img src={close} alt="close" />
       </StyledButton>
     </Wrapper>

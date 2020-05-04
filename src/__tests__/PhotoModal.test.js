@@ -38,6 +38,9 @@ describe("Photo modal", () => {
     const arrowLeft = getByLabelText(/left/i);
     fireEvent.click(arrowRight);
     expect(changeHandler).toBeCalledTimes(1);
+    expect(changeHandler).toHaveBeenLastCalledWith(
+      expect.stringMatching(/right/i)
+    );
     fireEvent.click(arrowLeft);
     expect(changeHandler).toBeCalledTimes(1);
   });
@@ -55,8 +58,14 @@ describe("Photo modal", () => {
     const arrowLeft = getByLabelText(/left/i);
     fireEvent.click(arrowRight);
     expect(changeHandler).toBeCalledTimes(1);
+    expect(changeHandler).toHaveBeenLastCalledWith(
+      expect.stringMatching(/right/i)
+    );
     fireEvent.click(arrowLeft);
     expect(changeHandler).toBeCalledTimes(2);
+    expect(changeHandler).toHaveBeenLastCalledWith(
+      expect.stringMatching(/left/i)
+    );
   });
   it("should have left arrow disabled for first image and enabled for other", () => {
     const { getByLabelText, rerender } = renderPhotoModal(image[0]);
@@ -78,7 +87,7 @@ describe("Photo modal", () => {
     const closeHandler = jest.fn();
     const { getByLabelText } = render(
       <PhotoModal
-        image={image[1]}
+        image={image[0]}
         closeHandler={closeHandler}
         changeHandler={() => {}}
         isMobile={false}
@@ -87,5 +96,31 @@ describe("Photo modal", () => {
     const closeBtn = getByLabelText(/close/i);
     fireEvent.click(closeBtn);
     expect(closeHandler).toBeCalledTimes(1);
+  });
+  it("should not show arrows in mobile view", () => {
+    const { queryByLabelText } = render(
+      <PhotoModal
+        image={image[0]}
+        changeHandler={() => {}}
+        closeHandler={() => {}}
+        isMobile={true}
+      />
+    );
+    expect(queryByLabelText(/left/i)).toBeNull();
+    expect(queryByLabelText(/right/i)).toBeNull();
+  });
+  it("should change image on image click in mobile view", () => {
+    const changeHandler = jest.fn();
+    const { getByAltText } = render(
+      <PhotoModal
+        image={image[1]}
+        closeHandler={() => {}}
+        changeHandler={changeHandler}
+        isMobile={true}
+      />
+    );
+    fireEvent.click(getByAltText(/mars/i));
+    expect(changeHandler).toBeCalledTimes(1);
+    expect(changeHandler).toHaveBeenLastCalledWith(expect.any(Number));
   });
 });

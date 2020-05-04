@@ -102,7 +102,7 @@ const SearchFrom = ({
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        submitHandler={submitHandler}
+        changeHandler={submitHandler}
         isFormBtn
       >
         SEARCH
@@ -111,7 +111,7 @@ const SearchFrom = ({
         type="submit"
         isDisabled={!rover}
         data-latest="true"
-        submitHandler={submitHandler}
+        changeHandler={submitHandler}
         isFormBtn
       >
         See Latest

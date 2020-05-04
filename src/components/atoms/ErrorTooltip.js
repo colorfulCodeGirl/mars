@@ -12,7 +12,11 @@ const StyledError = styled.p`
 `;
 
 const ErrorTooltip = ({ message }) => (
-  <>{!(message === "") && <StyledError>{message}</StyledError>}</>
+  <>
+    {!(message === "") && (
+      <StyledError data-testid="error">{message}</StyledError>
+    )}
+  </>
 );
 
 export default ErrorTooltip;

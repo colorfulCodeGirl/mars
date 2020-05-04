@@ -39,7 +39,7 @@ const StyledButton = styled.button`
 
 const Button = ({
   children,
-  submitHandler,
+  clickHandler,
   isDisabled = false,
   icon,
   isGrey,
@@ -47,7 +47,7 @@ const Button = ({
   ...props
 }) => (
   <StyledButton
-    onClick={submitHandler}
+    onClick={clickHandler}
     disabled={isDisabled}
     icon={icon}
     isGrey={isGrey}
@@ -62,7 +62,7 @@ export default Button;
 
 Button.propTypes = {
   children: PropTypes.string.isRequired,
-  submitHandler: PropTypes.func,
+  clickHandler: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool,
   icon: PropTypes.string,
   isGrey: PropTypes.bool,

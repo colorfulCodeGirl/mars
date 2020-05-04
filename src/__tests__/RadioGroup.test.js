@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import RadioGroup from "../components/atoms/RadioGroup";
 
 describe("Radio group component", () => {
@@ -41,5 +41,18 @@ describe("Radio group component", () => {
 
     expect(getByLabelText(/one/i)).not.toBeChecked();
     expect(getByLabelText(/two/i)).toBeChecked();
+  });
+
+  it("should fire click event", () => {
+    const clickHandler = jest.fn();
+    const { getByLabelText } = render(
+      <RadioGroup
+        options={["one", "two"]}
+        category="sol"
+        changeHandler={clickHandler}
+      />
+    );
+    fireEvent.click(getByLabelText(/two/i));
+    expect(clickHandler).toBeCalledTimes(1);
   });
 });

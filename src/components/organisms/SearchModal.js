@@ -6,14 +6,14 @@ import ModalOverlay from "../atoms/ModalOverlay";
 
 import menuIcon from "../../assets/menu.png";
 
-const SearchModal = ({ searchHandler }) => {
+const SearchModal = () => {
   const [isModalOpen, setModalVisibility] = useState(false);
 
   return (
     <>
       {!isModalOpen && (
         <Button
-          onClick={() => setModalVisibility(true)}
+          clickHandler={() => setModalVisibility(true)}
           isGrey={true}
           icon={menuIcon}
         >

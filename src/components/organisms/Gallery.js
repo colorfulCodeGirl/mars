@@ -35,9 +35,10 @@ const Gallery = ({ photos, hash, isMobile }) => {
   const openFullImage = (e) => {
     const {
       src,
+      alt,
       dataset: { index },
     } = e.target;
-    setFullImage({ src, index });
+    setFullImage({ src, alt, index });
   };
 
   const findDirection = (x) => {
@@ -55,6 +56,7 @@ const Gallery = ({ photos, hash, isMobile }) => {
       return;
     }
     const nextIndex = direction === "right" ? index + 1 : index - 1;
+    console.log({ index, nextIndex });
     const nextImage = photos[nextIndex].img_src;
     setFullImage({ src: nextImage, index: nextIndex });
   };

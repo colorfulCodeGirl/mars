@@ -39,24 +39,33 @@ const ArrowButton = styled.button`
 `;
 
 const PhotoModal = ({
-  image: { src, index },
+  image: { src, alt, index },
   closeHandler,
   changeHandler,
   isMobile,
 }) => (
   <ModalOverlay closeHandler={closeHandler}>
-    <PhotoWrapper onClick={(e) => changeHandler(e, e.clientX)}>
+    <PhotoWrapper>
       {!isMobile && (
         <ArrowButton
           disabled={+index === 0}
-          onClick={(e) => changeHandler(e, "left")}
+          onClick={() => changeHandler("left")}
+          aria-label="left"
         >
           <Arrow />
         </ArrowButton>
       )}
-      <StyledImage src={src} alt="mars" />
+      <StyledImage
+        src={src}
+        alt={alt}
+        onClick={(e) => changeHandler(e.clientX)}
+      />
       {!isMobile && (
-        <ArrowButton right onClick={(e) => changeHandler(e, "right")}>
+        <ArrowButton
+          right
+          onClick={() => changeHandler("right")}
+          aria-label="right"
+        >
           <Arrow />
         </ArrowButton>
       )}

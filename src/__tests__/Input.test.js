@@ -5,7 +5,12 @@ import Input from "../components/atoms/Input";
 describe("Input component", () => {
   it("renders input element", () => {
     const { getByLabelText } = render(
-      <Input label="sol" name="sol" changeHandler={() => {}} value="sol" />
+      <Input
+        placeholder="sol"
+        name="sol"
+        changeHandler={() => {}}
+        value="sol"
+      />
     );
     expect(getByLabelText(/sol/i)).toBeInTheDocument();
   });
@@ -26,7 +31,12 @@ describe("Input component", () => {
   it("fires change event", () => {
     const onChange = jest.fn();
     const { getByLabelText } = render(
-      <Input label="sol" name="sol" changeHandler={onChange} value="sol" />
+      <Input
+        placeholder="sol"
+        name="sol"
+        changeHandler={onChange}
+        value="sol"
+      />
     );
 
     const input = getByLabelText(/sol/i);

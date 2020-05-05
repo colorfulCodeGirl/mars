@@ -7,7 +7,7 @@ const initialState = {
   error: "",
   startDate: "",
   endDate: "",
-  maxSol: "",
+  maxSol: 0,
   photos: [],
   fetchError: "",
 };

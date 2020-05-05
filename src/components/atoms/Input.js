@@ -19,10 +19,10 @@ const StyledInput = styled.input`
   }
 `;
 
-const Input = ({ changeHandler, label, name, value, ...props }) => (
+const Input = ({ changeHandler, name, value, placeholder, ...props }) => (
   <>
     <label className="sr-only" htmlFor={name}>
-      {label}
+      {placeholder}
     </label>
     <StyledInput
       id={name}
@@ -31,6 +31,7 @@ const Input = ({ changeHandler, label, name, value, ...props }) => (
       onChange={changeHandler}
       {...props}
       autocomplete="false"
+      placeholder={placeholder}
     />
   </>
 );
@@ -40,6 +41,6 @@ export default Input;
 Input.propTypes = {
   changeHandler: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired
+  placeholder: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };

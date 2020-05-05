@@ -83,7 +83,6 @@ const SearchFrom = ({
           </p>
           <Input
             type="text"
-            label={isSol ? "sol" : "Earth days"}
             name={isSol ? "sol" : "Earth days"}
             placeholder={
               isSol
@@ -102,7 +101,7 @@ const SearchFrom = ({
         marginTop
         isDisabled={!isSearchAllowed}
         type="submit"
-        changeHandler={submitHandler}
+        clickHandler={submitHandler}
         isFormBtn
       >
         SEARCH
@@ -111,7 +110,7 @@ const SearchFrom = ({
         type="submit"
         isDisabled={!rover}
         data-latest="true"
-        changeHandler={submitHandler}
+        clickHandler={submitHandler}
         isFormBtn
       >
         See Latest

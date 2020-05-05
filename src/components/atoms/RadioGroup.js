@@ -80,7 +80,7 @@ const StyledInput = styled.input`
 `;
 
 const RadioGroup = ({ options, category, changeHandler, checkedIndex = 0 }) => (
-  <StyledFieldset>
+  <StyledFieldset role="radiogroup">
     <legend className="sr-only">Choose mode</legend>
     {options.map((option, index) => (
       <Wrapper key={option}>

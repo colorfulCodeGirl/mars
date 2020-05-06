@@ -173,7 +173,6 @@ describe("Search form component on start", () => {
     expect(searchBtn).toBeEnabled();
 
     fireEvent.change(date, { target: { value: "2020-03-21" } });
-    console.log(prettyDOM(queryByText(/Date should be/i)));
     expect(queryByText(/Date should be/i)).toBeInTheDocument();
     expect(searchBtn).toBeDisabled();
 

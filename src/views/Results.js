@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 
 import SearchForm from "../components/organisms/SearchForm";
-import SearchModal from "../components/organisms/SearchModal";
+import SearchModal from "../components/molecules/SearchModal";
 import Gallery from "../components/organisms/Gallery";
 
 import { setFromUrl } from "../store/actionCreators";

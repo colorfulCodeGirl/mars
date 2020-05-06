@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, prettyDOM } from "@testing-library/react";
 import SearchForm from "../components/organisms/SearchForm";
 import { Provider } from "react-redux";
 
@@ -13,7 +13,7 @@ jest.mock("react-router-dom", () => ({
 
 const mockData = {
   photo_manifest: {
-    launch_date: "2003-06-10",
+    landing_date: "2004-01-04",
     max_sol: 2208,
     max_date: "2010-03-21",
   },
@@ -99,5 +99,40 @@ describe("Search form component on start", () => {
     fireEvent.click(sol);
     expect(sol).toBeChecked();
     expect(date).not.toBeChecked();
+  });
+
+  it("should change sol/date placeholder on sol/date change", async () => {
+    const { getByLabelText, queryByPlaceholderText } = renderSearchForm();
+    fireRoverChange(getByLabelText);
+
+    let sol;
+    let date;
+    await waitFor(() => {
+      sol = getByLabelText("SOL*");
+      date = getByLabelText(/earth date/i);
+    });
+
+    const { landing_date, max_sol, max_date } = mockData.photo_manifest;
+    expect(
+      queryByPlaceholderText(`SOL from 0 to ${max_sol}`)
+    ).toBeInTheDocument();
+    expect(
+      queryByPlaceholderText(`Date from ${landing_date} to ${max_date}`)
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(date);
+    expect(
+      queryByPlaceholderText(`SOL from 0 to ${max_sol}`)
+    ).not.toBeInTheDocument();
+    expect(
+      queryByPlaceholderText(`Date from ${landing_date} to ${max_date}`)
+    ).toBeInTheDocument();
+    fireEvent.click(sol);
+    expect(
+      queryByPlaceholderText(`SOL from 0 to ${max_sol}`)
+    ).toBeInTheDocument();
+    expect(
+      queryByPlaceholderText(`Date from ${landing_date} to ${max_date}`)
+    ).not.toBeInTheDocument();
   });
 });

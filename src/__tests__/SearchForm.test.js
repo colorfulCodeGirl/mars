@@ -135,4 +135,26 @@ describe("Search form component on start", () => {
       queryByPlaceholderText(`Date from ${landing_date} to ${max_date}`)
     ).not.toBeInTheDocument();
   });
+
+  it("should enable search button when sol input is filed correctly", async () => {
+    const { getByLabelText, queryByText, getByText } = renderSearchForm();
+    fireRoverChange(getByLabelText);
+
+    let sol;
+    await waitFor(() => {
+      sol = getByLabelText(/SOL from 0/i);
+    });
+    fireEvent.change(sol, { target: { value: "234" } });
+    const searchBtn = getByText(/search/i);
+    expect(queryByText(/SOL should be/i)).not.toBeInTheDocument();
+    expect(searchBtn).toBeEnabled();
+
+    fireEvent.change(sol, { target: { value: "4545454544544" } });
+    expect(queryByText(/SOL should be/i)).toBeInTheDocument();
+    expect(searchBtn).toBeDisabled();
+
+    fireEvent.change(sol, { target: { value: "" } });
+    expect(queryByText(/SOL should be/i)).not.toBeInTheDocument();
+    expect(searchBtn).toBeDisabled();
+  });
 });

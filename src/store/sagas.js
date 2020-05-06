@@ -35,7 +35,8 @@ function* validatePeriod({ payload: { value, isSol } }) {
   if (isSol) {
     const maxSol = yield select(getMaxSol);
     const numVal = +value;
-    const isValid = numVal >= 0 && numVal <= maxSol && value.length !== 0;
+    const isValid =
+      (numVal >= 0 && numVal <= maxSol && value.length !== 0) || value === "";
     const massage = isValid ? "" : `SOL should be a number from 0 to ${maxSol}`;
     yield put(actions.setSOL({ sol: value, massage }));
   } else {

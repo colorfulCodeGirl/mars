@@ -157,4 +157,28 @@ describe("Search form component on start", () => {
     expect(queryByText(/SOL should be/i)).not.toBeInTheDocument();
     expect(searchBtn).toBeDisabled();
   });
+
+  it("should enable search button when date input is filed correctly", async () => {
+    const { getByLabelText, queryByText, getByText } = renderSearchForm();
+    fireRoverChange(getByLabelText);
+
+    let date;
+    await waitFor(() => {
+      fireEvent.click(getByText(/earth date/i));
+      date = getByLabelText(/Date from/i);
+    });
+    fireEvent.change(date, { target: { value: "2010-03-21" } });
+    const searchBtn = getByText(/search/i);
+    expect(queryByText(/Date should be/i)).not.toBeInTheDocument();
+    expect(searchBtn).toBeEnabled();
+
+    fireEvent.change(date, { target: { value: "2020-03-21" } });
+    console.log(prettyDOM(queryByText(/Date should be/i)));
+    expect(queryByText(/Date should be/i)).toBeInTheDocument();
+    expect(searchBtn).toBeDisabled();
+
+    fireEvent.change(date, { target: { value: "" } });
+    expect(queryByText(/Date should be/i)).not.toBeInTheDocument();
+    expect(searchBtn).toBeDisabled();
+  });
 });

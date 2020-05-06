@@ -44,10 +44,11 @@ function* validatePeriod({ payload: { value, isSol } }) {
     const endDate = yield select(getEndDate);
     const date = yield select(getDate);
     const formattedDate = formateDate(value, date);
-    const isValid = validateDate(startDate, endDate, formattedDate);
+    const isValid =
+      validateDate(startDate, endDate, formattedDate) || value === "";
     const massage = isValid
       ? ""
-      : `SOL should be from ${startDate} to ${endDate}`;
+      : `Date should be from ${startDate} to ${endDate}`;
     yield put(actions.setDate({ date: formattedDate, massage }));
   }
 }

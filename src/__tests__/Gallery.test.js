@@ -46,5 +46,11 @@ describe("Gallery", () => {
     });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });
-  it("should close full image on X click", () => {});
+  it("should close full image on X click", () => {
+    const { getAllByAltText, getByLabelText, queryByTestId } = renderGallery();
+    openFullImg(getAllByAltText);
+    expect(queryByTestId(/full-img/i)).toBeInTheDocument();
+    fireEvent.click(getByLabelText(/close/i));
+    expect(queryByTestId(/full-img/i)).not.toBeInTheDocument();
+  });
 });

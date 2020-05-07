@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -33,6 +33,7 @@ export const Gallery = ({ photos, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [fullImage, setFullImage] = useState({});
+  const imgContainer = useRef(null);
 
   useEffect(() => {
     const { hasMorePhotos, nextPhotos } = chooseNextPhotos(photos, 0);
@@ -68,6 +69,22 @@ export const Gallery = ({ photos, isMobile }) => {
     setFullImage({ src: nextImage, index: nextIndex });
   };
 
+  // needed to fill whole page if on first render was not enough photos
+  // fires on load on last image in a group
+  const checkIfPageIsFilled = (index) => {
+    if (index === shownPhotos.length - 1) {
+      return () => {
+        const {
+          bottom,
+        } = imgContainer.current.container.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        if (bottom < windowHeight) {
+          addPhotosOnScroll();
+        }
+      };
+    }
+  };
+
   const imgElems = shownPhotos.map((photo, index) => (
     <StyledLazyImg
       src={photo.img_src}
@@ -76,6 +93,7 @@ export const Gallery = ({ photos, isMobile }) => {
       alt={`Mars by rover ${photo.rover.name}`}
       onClick={openFullImage}
       data-index={index}
+      afterLoad={checkIfPageIsFilled(index)}
     />
   ));
 
@@ -98,6 +116,7 @@ export const Gallery = ({ photos, isMobile }) => {
           height={isMobile ? "88vh" : "97vh"}
         >
           <StyledResponsiveMasonry
+            ref={imgContainer}
             columnsCountBreakPoints={{ 350: 2, 900: 3, 1100: 4 }}
           >
             <Masonry gutter="0.3rem">{imgElems}</Masonry>

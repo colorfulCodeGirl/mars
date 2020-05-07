@@ -29,7 +29,7 @@ export const chooseNextPhotos = (newPhotos, length) => {
   return { hasMorePhotos, nextPhotos };
 };
 
-const Gallery = ({ photos, isMobile }) => {
+export const Gallery = ({ photos, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [fullImage, setFullImage] = useState({});

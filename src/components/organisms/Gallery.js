@@ -8,7 +8,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import PhotoModal from "../molecules/PhotoModal";
-import AnimatedMars from "../atoms/AnimatedMars";
+// import AnimatedMars from "../atoms/AnimatedMars";
 
 const StyledLazyImg = styled(LazyLoadImage)`
   width: 100%;
@@ -107,7 +107,8 @@ export const Gallery = ({ photos, isMobile }) => {
   return (
     <>
       {photos.length === 0 ? (
-        <AnimatedMars isAnimating={true} />
+        // <AnimatedMars isAnimating={true} />
+        <p>loading...</p>
       ) : (
         <InfiniteScroll
           dataLength={shownPhotos.length}

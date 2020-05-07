@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, prettyDOM, waitFor } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { Gallery } from "../components/organisms/Gallery";
 import { photos } from "../__mocks__/photos";
 
@@ -32,6 +32,19 @@ describe("Gallery", () => {
     fireEvent.click(getByLabelText(/left/i));
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });
-  it("should show next/previous photo on photo click", () => {});
+  it("should show next/previous photo on photo click", () => {
+    const { getAllByAltText, getByTestId } = renderGallery();
+    openFullImg(getAllByAltText);
+    expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
+    const rightSide = window.innerWidth / 2 + 100;
+    fireEvent.click(getByTestId(/full-img/i), {
+      clientX: rightSide,
+    });
+    expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[1].img_src);
+    fireEvent.click(getByTestId(/full-img/i), {
+      clientX: 100,
+    });
+    expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
+  });
   it("should close full image on X click", () => {});
 });

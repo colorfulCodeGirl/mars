@@ -1,13 +1,13 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, prettyDOM, waitFor } from "@testing-library/react";
 import { Gallery } from "../components/organisms/Gallery";
-import { photos } from "./mocks/photos";
+import { photos } from "../__mocks__/photos";
 
 const renderGallery = () => render(<Gallery photos={photos} />);
 
 const openFullImg = (getAllByAltText) => {
   const imgs = getAllByAltText(/mars by rover Curiosity/i);
-  fireEvent.click(imgs[1]);
+  fireEvent.click(imgs[0]);
 };
 
 describe("Gallery", () => {
@@ -26,8 +26,11 @@ describe("Gallery", () => {
   it("should show next/previous photo on arrow click", () => {
     const { getAllByAltText, getByLabelText, getByTestId } = renderGallery();
     openFullImg(getAllByAltText);
-    const initialSrc = getByTestId(/full-img/i);
-    console.log(initialSrc.pendingProps);
+    expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
+    fireEvent.click(getByLabelText(/right/i));
+    expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[1].img_src);
+    fireEvent.click(getByLabelText(/left/i));
+    expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });
   it("should show next/previous photo on photo click", () => {});
   it("should close full image on X click", () => {});

@@ -14,7 +14,7 @@ export const photos = [
   {
     id: 58871,
     img_src:
-      "http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/00010/opgs/edr/ccam/CR0_398381577EDR_F0030000CCAM05010M_.JPG",
+      "http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/00010/opgs/edr/ccam/CR0_398381577EDR_F0030000CCAM050_.JPG",
     rover: { name: "Curiosity" },
   },
   {

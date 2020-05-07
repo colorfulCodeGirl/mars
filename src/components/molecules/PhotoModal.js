@@ -42,7 +42,7 @@ const PhotoModal = ({
   image: { src, alt, index },
   closeHandler,
   changeHandler,
-  isMobile,
+  isMobile = false,
 }) => (
   <ModalOverlay closeHandler={closeHandler}>
     <PhotoWrapper>
@@ -59,6 +59,7 @@ const PhotoModal = ({
         src={src}
         alt={alt}
         onClick={(e) => changeHandler(e.clientX)}
+        data-testid="full-img"
       />
       {!isMobile && (
         <ArrowButton
@@ -82,5 +83,5 @@ PhotoModal.propTypes = {
   }),
   closeHandler: PropTypes.func.isRequired,
   changeHandler: PropTypes.func.isRequired,
-  isMobile: PropTypes.bool.isRequired,
+  isMobile: PropTypes.bool,
 };

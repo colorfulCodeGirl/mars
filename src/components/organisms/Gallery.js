@@ -114,6 +114,7 @@ export const Gallery = ({ photos, isMobile }) => {
           next={addPhotosOnScroll}
           hasMore={hasMore}
           height={isMobile ? "88vh" : "97vh"}
+          data-testid="scroll-container"
         >
           <StyledResponsiveMasonry
             ref={imgContainer}

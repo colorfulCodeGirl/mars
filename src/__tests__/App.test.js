@@ -55,8 +55,13 @@ describe("App component", () => {
     const location = global.window.location.pathname;
     expect(location).toBe("/");
   });
-  it("fetches latest photos, redirects to '/results' and shows Results component", async () => {
-    const { getByTestId, getByLabelText, getByText } = renderApp();
+  it("fetches latest photos, redirects to '/results', shows Results component with filled form and photos", async () => {
+    const {
+      getByTestId,
+      getByLabelText,
+      getByText,
+      getAllByAltText,
+    } = renderApp();
     const seeLatestBtn = getByText(/see latest/i);
     chooseRover(getByLabelText);
 
@@ -73,6 +78,10 @@ describe("App component", () => {
       expect(getByTestId(/results/i)).toBeInTheDocument();
       const location = global.window.location.pathname;
       expect(location).toBe("/results");
+      expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
+      expect(
+        getAllByAltText(/Mars by rover Curiosity/i)[0]
+      ).not.toBeInTheDocument();
     });
   });
 });

@@ -49,14 +49,13 @@ describe("App component", () => {
       font-size: 1.6rem;
     `);
   });
-  it("applies font Montserrat", () => {});
-  it("it renders form on start", () => {
+  it("it renders Home component with form for default path '/'", () => {
     const { getByTestId } = renderApp();
     expect(getByTestId(/form/i)).toBeInTheDocument();
+    const location = global.window.location.pathname;
+    expect(location).toBe("/");
   });
-  it("Shows Home component for a root path", () => {});
-  it("Shows Result Component for '/results' path", () => {});
-  it("fetches latest photos and redirects to '/results'", async () => {
+  it("fetches latest photos, redirects to '/results' and shows Results component", async () => {
     const { getByTestId, getByLabelText, getByText } = renderApp();
     const seeLatestBtn = getByText(/see latest/i);
     chooseRover(getByLabelText);

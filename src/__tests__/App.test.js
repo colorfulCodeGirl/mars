@@ -6,6 +6,7 @@ import { Router } from "react-router-dom";
 import App from "../App";
 import configureStore from "../store/store";
 import { latestPhotos } from "../__response__mocks/latestPhotos";
+import { photosByQuery } from "../__response__mocks/photosByQuery";
 
 const store = configureStore();
 
@@ -49,12 +50,14 @@ describe("App component", () => {
       font-size: 1.6rem;
     `);
   });
+
   it("it renders Home component with form for default path '/'", () => {
     const { getByTestId } = renderApp();
     expect(getByTestId(/form/i)).toBeInTheDocument();
     const location = global.window.location.pathname;
     expect(location).toBe("/");
   });
+
   it("fetches latest photos, redirects to '/results', shows Results component with filled form and photos", async () => {
     const {
       getByTestId,
@@ -81,7 +84,46 @@ describe("App component", () => {
       expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
       expect(
         getAllByAltText(/Mars by rover Curiosity/i)[0]
-      ).not.toBeInTheDocument();
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("fetches photos by query, redirects to '/results', shows Results component with filled form and photos", async () => {
+    const {
+      getByTestId,
+      getByLabelText,
+      getByText,
+      getAllByAltText,
+    } = renderApp();
+    const searchBtn = getByText(/see latest/i);
+    chooseRover(getByLabelText);
+
+    await waitFor(() => {
+      const solInput = getByLabelText(/SOL from 0/i);
+      expect(solInput).toBeInTheDocument();
+      fireEvent.change(getByLabelText(/SOL from 0/i), {
+        target: { value: 54 },
+      });
+    });
+
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => photosByQuery })
+    );
+
+    await waitFor(() => {
+      expect(searchBtn).toBeEnabled();
+    });
+    fireEvent.click(searchBtn);
+
+    await waitFor(() => {
+      expect(getByTestId(/results/i)).toBeInTheDocument();
+      const location = global.window.location.pathname;
+      expect(location).toBe("/results");
+      expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
+      expect(getByLabelText(/SOL from 0/i)).toHaveValue("54");
+      expect(
+        getAllByAltText(/Mars by rover Curiosity/i)[0]
+      ).toBeInTheDocument();
     });
   });
 });

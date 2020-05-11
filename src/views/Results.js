@@ -48,7 +48,7 @@ const Results = ({ rover, setFromUrl }) => {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper data-testid="results">
       {isMobile ? <SearchModal /> : <SearchForm displayLeft />}
       <Gallery isMobile={isMobile} />
     </Wrapper>

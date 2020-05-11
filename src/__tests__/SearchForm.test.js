@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitFor, prettyDOM } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import SearchForm from "../components/organisms/SearchForm";
 import { Provider } from "react-redux";
 

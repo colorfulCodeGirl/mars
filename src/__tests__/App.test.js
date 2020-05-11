@@ -40,11 +40,22 @@ const chooseRover = (getByLabelText) => {
 };
 
 describe("App component", () => {
+  it("applies Global style", () => {
+    const { container } = renderApp();
+    expect(container).toHaveStyle(`
+      box-sizing: inherit;
+      font-family: inherit;
+      margin: 0;
+      font-size: 1.6rem;
+    `);
+  });
+  it("applies font Montserrat", () => {});
   it("it renders form on start", () => {
     const { getByTestId } = renderApp();
     expect(getByTestId(/form/i)).toBeInTheDocument();
   });
-  it("applies Global style", () => {});
+  it("Shows Home component for a root path", () => {});
+  it("Shows Result Component for '/results' path", () => {});
   it("fetches latest photos and redirects to '/results'", async () => {
     const { getByTestId, getByLabelText, getByText } = renderApp();
     const seeLatestBtn = getByText(/see latest/i);
@@ -65,7 +76,4 @@ describe("App component", () => {
       expect(location).toBe("/results");
     });
   });
-  // it("applies font Montserrat", () => {});
-  // it("Shows Home component for a root path", () => {});
-  // it("Shows Result Component for '/results' path", () => {});
 });

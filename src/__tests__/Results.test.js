@@ -57,6 +57,22 @@ describe("Results component", () => {
       expect(getAllByAltText(`Mars by rover ${rover}`)[0]).toBeInTheDocument();
     });
   });
+  it("displays form on the left for desktop look", () => {
+    const { getByTestId } = renderResults(
+      "/results?rover=Spirit&latest=undefined&sol=35&date="
+    );
+    const leftSideStyles = `
+    grid-column: auto;
+      grid-row: auto;
+      justify-self: start;
+      align-self: stretch;
+      height: 100vh;
+      width: 350px;
+    `;
+    expect(getByTestId(/form/i)).toHaveStyle(leftSideStyles);
+  });
+  it("should show next photos on scroll", () => {});
+  it("should on rover change - clean up form, show animation, show new photos", () => {});
   it("shows 'Change search' button in mobile look for opening search form", async () => {
     const { getByText, queryByTestId } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="
@@ -69,7 +85,4 @@ describe("Results component", () => {
       expect(queryByTestId(/form/i)).not.toBeInTheDocument();
     });
   });
-  it("displays form on the left for desktop look", () => {});
-  it("should show next photos on scroll", () => {});
-  it("should on rover change - clean up form, show animation, show new photos", () => {});
 });

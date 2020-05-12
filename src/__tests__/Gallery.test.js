@@ -1,7 +1,9 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { Gallery } from "../components/organisms/Gallery";
-import { photos } from "../__mocks__/photos";
+import { photosByQuery } from "../__response__mocks/photosByQuery";
+
+const { photos } = photosByQuery;
 
 const renderGallery = () => render(<Gallery photos={photos} />);
 

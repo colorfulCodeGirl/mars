@@ -5,7 +5,6 @@ import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
 import Results from "../views/Results";
 import configureStore from "../store/store";
-import { photos } from "../__response__mocks/photos";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
 
 const store = configureStore();
@@ -58,6 +57,19 @@ describe("Results component", () => {
       expect(getAllByAltText(`Mars by rover ${rover}`)[0]).toBeInTheDocument();
     });
   });
-  it("shows SearchModal for mobile look", () => {});
+  it("shows 'Change search' button in mobile look for opening search form", async () => {
+    const { getByText, queryByTestId } = renderResults(
+      "/results?rover=Spirit&latest=undefined&sol=35&date="
+    );
+    window.innerWidth = 375;
+    window.innerHeight = 667;
+    window.dispatchEvent(new Event("resize"));
+    await waitFor(() => {
+      expect(getByText(/change search/i)).toBeInTheDocument();
+      expect(queryByTestId(/form/i)).not.toBeInTheDocument();
+    });
+  });
   it("displays form on the left for desktop look", () => {});
+  it("should show next photos on scroll", () => {});
+  it("should on rover change - clean up form, show animation, show new photos", () => {});
 });

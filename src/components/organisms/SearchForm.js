@@ -138,8 +138,10 @@ const mapStateToProps = ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchManifest: ({ target: { value } }) =>
-    dispatch(actions.fetchManifest(value)),
+  fetchManifest: ({ target: { value } }) => {
+    dispatch(actions.setAllowDataFromUrl(false));
+    dispatch(actions.fetchManifest(value));
+  },
   handlePeriod: (value, isSol) => {
     dispatch(actions.validatePeriod(value, isSol));
   },

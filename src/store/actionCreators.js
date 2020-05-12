@@ -61,3 +61,8 @@ export const setFromUrl = (payload) => ({
   type: actionTypes.SET_FROM_URL,
   payload,
 });
+
+export const setAllowDataFromUrl = (payload) => ({
+  type: actionTypes.SET_ALLOW_DATA_FROM_URL,
+  payload,
+});

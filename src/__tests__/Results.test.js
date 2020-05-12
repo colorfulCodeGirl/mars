@@ -1,15 +1,18 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, prettyDOM } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
 import Results from "../views/Results";
 import configureStore from "../store/store";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
 
 const store = configureStore();
 
-const renderResults = (path) => {
+const renderResults = (
+  path = "/results?rover=Spirit&latest=undefined&sol=35&date="
+) => {
   const history = createBrowserHistory();
   history.push(path);
   return render(
@@ -58,9 +61,7 @@ describe("Results component", () => {
     });
   });
   it("displays form on the left for desktop look", () => {
-    const { getByTestId } = renderResults(
-      "/results?rover=Spirit&latest=undefined&sol=35&date="
-    );
+    const { getByTestId } = renderResults();
     const leftSideStyles = `
     grid-column: auto;
       grid-row: auto;
@@ -71,12 +72,27 @@ describe("Results component", () => {
     `;
     expect(getByTestId(/form/i)).toHaveStyle(leftSideStyles);
   });
-  it("should show next photos on scroll", () => {});
-  it("should on rover change - clean up form, show animation, show new photos", () => {});
+  it("should on rover change - clean up form, show animation, show new photos", async () => {
+    // const { getByLabelText, getByText, container } = renderResults(
+    //   "/results?rover=Spirit&latest=undefined&sol=35&date="
+    // );
+    // const roverSelect = getByLabelText(/choose rover/i);
+    // await waitFor(() => {
+    //   expect(roverSelect).toHaveValue("Spirit");
+    //   expect(getByLabelText(/SOL from 0/i)).toHaveValue("35");
+    // });
+    // // userEvent.selectOptions(roverSelect, ["Curiosity"]);
+    // // console.log(prettyDOM(container));
+    // // expect(getByText(/curiosity/i).selected).toBe(true);
+    // // fireEvent.click(roverSelect);
+    // // fireEvent.click(getByText(/curiosity/i));
+    // fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
+    // await waitFor(() => {
+    //   expect(getByLabelText(/SOL from 0/i)).not.toHaveValue("35");
+    // });
+  });
   it("shows 'Change search' button in mobile look for opening search form", async () => {
-    const { getByText, queryByTestId } = renderResults(
-      "/results?rover=Spirit&latest=undefined&sol=35&date="
-    );
+    const { getByText, queryByTestId } = renderResults();
     window.innerWidth = 375;
     window.innerHeight = 667;
     window.dispatchEvent(new Event("resize"));

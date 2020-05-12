@@ -10,6 +10,7 @@ const initialState = {
   maxSol: 0,
   photos: [],
   fetchError: "",
+  allowDataFromURL: true,
 };
 
 const reducer = (state = initialState, action) => {
@@ -51,7 +52,10 @@ const reducer = (state = initialState, action) => {
         photos: [],
       };
     case actionTypes.CLEAN_UP_FORM:
-      return initialState;
+      return {
+        ...initialState,
+        allowDataFromURL: state.allowDataFromURL,
+      };
     case actionTypes.SET_PHOTOS:
       return {
         ...state,
@@ -61,6 +65,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         fetchError: payload,
+      };
+    case actionTypes.SET_ALLOW_DATA_FROM_URL:
+      return {
+        ...state,
+        allowDataFromURL: payload,
       };
     default:
       return state;

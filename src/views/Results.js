@@ -20,16 +20,16 @@ const Wrapper = styled.div`
   }
 `;
 
-const Results = ({ rover, setFromUrl }) => {
+const Results = ({ rover, setFromUrl, allowDataFromURL }) => {
   const [isMobile, setIsMobile] = useState(false);
   const query = useLocation().search;
 
   useEffect(() => {
-    if (!rover) {
+    if (!rover && allowDataFromURL) {
       const params = new URLSearchParams(query);
       setFromUrl(params);
     }
-  }, [query, rover, setFromUrl]);
+  }, [query, rover, setFromUrl, allowDataFromURL]);
 
   useEffect(() => {
     const mobile = window.innerWidth < 780;
@@ -55,8 +55,9 @@ const Results = ({ rover, setFromUrl }) => {
   );
 };
 
-const mapStateToProps = ({ rover }) => ({
+const mapStateToProps = ({ rover, allowDataFromURL }) => ({
   rover,
+  allowDataFromURL,
 });
 
 const mapDispatchToProps = {

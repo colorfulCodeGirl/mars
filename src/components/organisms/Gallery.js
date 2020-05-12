@@ -105,7 +105,7 @@ export const Gallery = ({ photos, isMobile }) => {
   };
 
   return (
-    <>
+    <div data-testid="gallery">
       {photos.length === 0 ? (
         // <AnimatedMars isAnimating={true} />
         <p>loading...</p>
@@ -133,7 +133,7 @@ export const Gallery = ({ photos, isMobile }) => {
           isMobile={isMobile}
         />
       )}
-    </>
+    </div>
   );
 };
 

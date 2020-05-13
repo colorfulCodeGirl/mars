@@ -1,16 +1,15 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import PhotoModal from "../components/molecules/PhotoModal";
+import { photosByQuery } from "../__response__mocks/photosByQuery";
 
-const image = [
-  { src: "test_0", alt: "Mars by rover Curiosity", index: 0 },
-  { src: "test_1", alt: "Mars by rover Curiosity", index: 1 },
-];
+const { photos } = photosByQuery;
 
-const renderPhotoModal = (img) =>
+const renderPhotoModal = (img, index) =>
   render(
     <PhotoModal
       image={img}
+      index={index}
       closeHandler={() => {}}
       changeHandler={() => {}}
       isMobile={false}
@@ -18,17 +17,25 @@ const renderPhotoModal = (img) =>
   );
 
 describe("Photo modal", () => {
-  const { getByAltText } = renderPhotoModal(image[0]);
   it("should show full image", () => {
-    expect(getByAltText(image[0].alt)).toBeInTheDocument();
+    const { getByAltText } = renderPhotoModal(photos[0], 0);
+    const altText = `Mars by rover ${photos[0].rover.name}`;
+    expect(getByAltText(altText)).toBeInTheDocument();
   });
-  //!!!!!!!!!!!!!!!!TODO!!!!!!!!!!!!!!!!!!!//
-  it("should show description of full image", () => {});
+  it("should show description of full image", () => {
+    const { getByText } = renderPhotoModal(photos[0], 0);
+    const heading = getByText(/mars by rover/i);
+    const description = getByText(/Photo taken on/i);
+    expect(description).toBeInTheDocument();
+    expect(heading.innerHTML).toContain(photos[0].rover.name);
+    // expect(description).toContain(photos[0].camera.full_name);
+  });
   it("should change image on right arrow click and not react on left for first image", () => {
     const changeHandler = jest.fn();
     const { getByLabelText } = render(
       <PhotoModal
-        image={image[0]}
+        image={photos[0]}
+        index={0}
         closeHandler={() => {}}
         changeHandler={changeHandler}
         isMobile={false}
@@ -48,7 +55,8 @@ describe("Photo modal", () => {
     const changeHandler = jest.fn();
     const { getByLabelText } = render(
       <PhotoModal
-        image={image[1]}
+        image={photos[1]}
+        index={1}
         closeHandler={() => {}}
         changeHandler={changeHandler}
         isMobile={false}
@@ -68,12 +76,13 @@ describe("Photo modal", () => {
     );
   });
   it("should have left arrow disabled for first image and enabled for other", () => {
-    const { getByLabelText, rerender } = renderPhotoModal(image[0]);
+    const { getByLabelText, rerender } = renderPhotoModal(photos[0], 0);
     expect(getByLabelText(/left/i)).toBeDisabled();
 
     rerender(
       <PhotoModal
-        image={image[1]}
+        image={photos[1]}
+        index={1}
         closeHandler={() => {}}
         changeHandler={() => {}}
         isMobile={false}
@@ -87,7 +96,8 @@ describe("Photo modal", () => {
     const closeHandler = jest.fn();
     const { getByLabelText } = render(
       <PhotoModal
-        image={image[0]}
+        image={photos[0]}
+        index={0}
         closeHandler={closeHandler}
         changeHandler={() => {}}
         isMobile={false}
@@ -100,7 +110,8 @@ describe("Photo modal", () => {
   it("should not show arrows in mobile view", () => {
     const { queryByLabelText } = render(
       <PhotoModal
-        image={image[0]}
+        image={photos[0]}
+        index={0}
         changeHandler={() => {}}
         closeHandler={() => {}}
         isMobile={true}
@@ -113,7 +124,8 @@ describe("Photo modal", () => {
     const changeHandler = jest.fn();
     const { getByAltText } = render(
       <PhotoModal
-        image={image[1]}
+        image={photos[1]}
+        index={1}
         closeHandler={() => {}}
         changeHandler={changeHandler}
         isMobile={true}

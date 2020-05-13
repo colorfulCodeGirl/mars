@@ -43,11 +43,9 @@ export const Gallery = ({ photos, isMobile }) => {
 
   const openFullImage = (e) => {
     const {
-      src,
-      alt,
       dataset: { index },
     } = e.target;
-    setFullImage({ src, alt, index });
+    setFullImage({ img: shownPhotos[index], index: +index });
   };
 
   const findDirection = (x) => {
@@ -65,8 +63,7 @@ export const Gallery = ({ photos, isMobile }) => {
       return;
     }
     const nextIndex = direction === "right" ? index + 1 : index - 1;
-    const nextImage = photos[nextIndex].img_src;
-    setFullImage({ src: nextImage, index: nextIndex });
+    setFullImage({ img: photos[nextIndex], index: nextIndex });
   };
 
   // needed to fill whole page if on first render was not enough photos
@@ -125,11 +122,12 @@ export const Gallery = ({ photos, isMobile }) => {
           </StyledResponsiveMasonry>
         </InfiniteScroll>
       )}
-      {fullImage.src && (
+      {fullImage.index >= 0 && (
         <PhotoModal
           closeHandler={() => setFullImage({})}
           changeHandler={changeFullImage}
-          image={fullImage}
+          image={fullImage.img}
+          index={fullImage.index}
           isMobile={isMobile}
         />
       )}

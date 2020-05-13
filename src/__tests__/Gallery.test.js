@@ -8,14 +8,14 @@ const { photos } = photosByQuery;
 const renderGallery = () => render(<Gallery photos={photos} />);
 
 const openFullImg = (getAllByAltText) => {
-  const imgs = getAllByAltText(/mars by rover Curiosity/i);
+  const imgs = getAllByAltText(/mars by rover/i);
   fireEvent.click(imgs[0]);
 };
 
 describe("Gallery", () => {
   it("shows photos from store", () => {
     const { getAllByAltText } = render(<Gallery photos={photos.slice(0, 5)} />);
-    const imgs = getAllByAltText(/mars by rover Curiosity/i);
+    const imgs = getAllByAltText(/mars by rover/i);
     expect(imgs.length).toBe(5);
   });
   it("opens full image on click", () => {

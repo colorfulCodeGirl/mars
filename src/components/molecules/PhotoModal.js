@@ -38,8 +38,13 @@ const ArrowButton = styled.button`
   }
 `;
 
+const StyledDescription = styled.div`
+  max-width: 250px;
+`;
+
 const PhotoModal = ({
-  image: { src, alt, index },
+  image: { img_src: src, rover },
+  index,
   closeHandler,
   changeHandler,
   isMobile = false,
@@ -48,7 +53,7 @@ const PhotoModal = ({
     <PhotoWrapper>
       {!isMobile && (
         <ArrowButton
-          disabled={+index === 0}
+          disabled={index === 0}
           onClick={() => changeHandler("left")}
           aria-label="left"
         >
@@ -57,10 +62,15 @@ const PhotoModal = ({
       )}
       <StyledImage
         src={src}
-        alt={alt}
+        alt={`Mars by rover ${rover.name}`}
         onClick={(e) => changeHandler(e.clientX)}
         data-testid="full-img"
       />
+      <StyledDescription>
+        <h2>{`Mars by rover ${rover.name}`}</h2>
+        <p>{`Photo taken on ,  days from landing.`}</p>
+        <p>{`By camera `}</p>
+      </StyledDescription>
       {!isMobile && (
         <ArrowButton
           right
@@ -78,9 +88,12 @@ export default PhotoModal;
 
 PhotoModal.propTypes = {
   image: PropTypes.shape({
-    index: PropTypes.any.isRequired,
-    src: PropTypes.string.isRequired,
-  }),
+    img_src: PropTypes.string.isRequired,
+    rover: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  index: PropTypes.number.isRequired,
   closeHandler: PropTypes.func.isRequired,
   changeHandler: PropTypes.func.isRequired,
   isMobile: PropTypes.bool,

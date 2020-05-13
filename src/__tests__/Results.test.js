@@ -65,17 +65,17 @@ describe("Results component", () => {
       expect(getByText(/search/i)).toBeEnabled();
     });
   });
-  // it("gets data from url and renders filled form (query by latest)", async () => {
-  //   const { getByLabelText, getByText } = renderResults(
-  //     "/results?rover=Spirit&latest=undefined&sol=35&date="
-  //   );
-  //   await waitFor(() => {
-  //     expect(getByLabelText(/choose rover/i)).toHaveValue("Spirit");
-  //     expect(getByLabelText(/SOL from 0/i)).toHaveValue("35");
-  //     expect(getByText(/see latest/i)).toBeEnabled();
-  //     expect(getByText(/search/i)).toBeEnabled();
-  //   });
-  // });
+  it("gets data from url and renders filled form (query by latest)", async () => {
+    const { getByLabelText, getByText } = renderResults(
+      "results?rover=Opportunity&latest=true&sol=&date="
+    );
+    await waitFor(() => {
+      expect(getByLabelText(/choose rover/i)).toHaveValue("Opportunity");
+      expect(getByLabelText(/SOL from 0/i)).toHaveValue("");
+      expect(getByText(/see latest/i)).toBeEnabled();
+      expect(getByText(/search/i)).toBeDisabled();
+    });
+  });
   it("gets data from url and renders gallery with photos", async () => {
     const { getAllByAltText } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="

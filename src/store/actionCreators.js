@@ -15,9 +15,9 @@ export const fetchManifestFailed = (error) => ({
   payload: error,
 });
 
-export const validatePeriod = (value, isSol) => ({
+export const validatePeriod = (value, solSwitcher) => ({
   type: actionTypes.VALIDATE_PERIOD,
-  payload: { value, isSol },
+  payload: { value, solSwitcher },
 });
 
 export const setSOL = (payload) => ({
@@ -64,5 +64,10 @@ export const setFromUrl = (payload) => ({
 
 export const setAllowDataFromUrl = (payload) => ({
   type: actionTypes.SET_ALLOW_DATA_FROM_URL,
+  payload,
+});
+
+export const setSolSwitcher = (payload) => ({
+  type: actionTypes.SET_SOL_SWITCHER,
   payload,
 });

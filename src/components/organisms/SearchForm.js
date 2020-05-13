@@ -25,9 +25,10 @@ const SearchFrom = ({
   handlePeriod,
   cleanUpPeriod,
   fetchPhotos,
+  solSwitcher,
+  setSolSwitcher,
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
-  const [isSol, switchSolDate] = useState(true);
   const history = useHistory();
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
@@ -41,11 +42,11 @@ const SearchFrom = ({
   }, [sol, date, allowSearch, error]);
 
   const radioChangeHandler = ({ target: { value } }) => {
-    const isSolNew = value === "sol*" ? true : false;
-    if (isSol !== isSolNew) {
+    const newSolSwitch = value === "sol*" ? "sol" : "date";
+    if (solSwitcher !== newSolSwitch) {
       cleanUpPeriod();
     }
-    switchSolDate(isSolNew);
+    setSolSwitcher(newSolSwitch);
   };
 
   const submitHandler = (e) => {
@@ -76,23 +77,23 @@ const SearchFrom = ({
           <RadioGroup
             options={["SOL*", "Earth date"]}
             changeHandler={radioChangeHandler}
-            checkedIndex={isSol ? 0 : 1}
+            checkedIndex={solSwitcher === "sol" ? 0 : 1}
           />
           <p>
             <i>* day from landing</i>
           </p>
           <Input
             type="text"
-            name={isSol ? "sol" : "Earth days"}
+            name={solSwitcher === "sol" ? "sol" : "Earth days"}
             placeholder={
-              isSol
+              solSwitcher === "sol"
                 ? `SOL from 0 to ${maxSol}`
                 : `Date from ${startDate} to ${endDate}`
             }
             changeHandler={({ target: { value } }) =>
-              handlePeriod(value, isSol)
+              handlePeriod(value, solSwitcher)
             }
-            value={isSol ? sol : date}
+            value={solSwitcher === "sol" ? sol : date}
           />
           <ErrorTooltip message={error} />
         </>
@@ -127,6 +128,7 @@ const mapStateToProps = ({
   maxSol,
   startDate,
   endDate,
+  solSwitcher,
 }) => ({
   rover,
   sol,
@@ -135,6 +137,7 @@ const mapStateToProps = ({
   maxSol,
   startDate,
   endDate,
+  solSwitcher,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -142,11 +145,12 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.setAllowDataFromUrl(false));
     dispatch(actions.fetchManifest(value));
   },
-  handlePeriod: (value, isSol) => {
-    dispatch(actions.validatePeriod(value, isSol));
+  handlePeriod: (value, solSwitcher) => {
+    dispatch(actions.validatePeriod(value, solSwitcher));
   },
   cleanUpPeriod: () => dispatch(actions.cleanUpPeriod()),
   fetchPhotos: (latest) => dispatch(actions.fetchPhotos(latest)),
+  setSolSwitcher: (value) => dispatch(actions.setSolSwitcher(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFrom);

@@ -11,6 +11,7 @@ const initialState = {
   photos: [],
   fetchError: "",
   allowDataFromURL: true,
+  solSwitcher: "sol",
 };
 
 const reducer = (state = initialState, action) => {
@@ -70,6 +71,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         allowDataFromURL: payload,
+      };
+    case actionTypes.SET_SOL_SWITCHER:
+      return {
+        ...state,
+        solSwitcher: payload,
       };
     default:
       return state;

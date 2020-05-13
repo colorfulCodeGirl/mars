@@ -31,8 +31,8 @@ function* fetchManifest({ payload: rover }) {
   }
 }
 
-function* validatePeriod({ payload: { value, isSol } }) {
-  if (isSol) {
+function* validatePeriod({ payload: { value, solSwitcher } }) {
+  if (solSwitcher === "sol") {
     const maxSol = yield select(getMaxSol);
     const numVal = +value;
     const isValid =
@@ -83,7 +83,10 @@ function* setFromUrl({ payload: params }) {
     const sol = params.get("sol");
     const date = params.get("date");
     if (sol) yield put(actions.setSOL({ sol, massage: "" }));
-    if (date) yield put(actions.setDate({ date, massage: "" }));
+    if (date) {
+      yield put(actions.setSolSwitcher("date"));
+      yield put(actions.setDate({ date, massage: "" }));
+    }
     yield put(actions.fetchPhotos());
   }
 }

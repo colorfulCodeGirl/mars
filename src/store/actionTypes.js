@@ -12,3 +12,4 @@ export const CLEAN_UP_PERIOD = "CLEAN_UP_PERIOD";
 export const CLEAN_UP_FORM = "CLEAN_UP_FORM";
 export const SET_FROM_URL = "SET_FROM_URL";
 export const SET_ALLOW_DATA_FROM_URL = "SET_ALLOW_DATA_FROM_URL";
+export const SET_SOL_SWITCHER = "SET_SOL_SWITCHER";

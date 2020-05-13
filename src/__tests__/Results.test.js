@@ -1,20 +1,30 @@
 import React from "react";
-import { render, fireEvent, waitFor, prettyDOM } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
-import userEvent from "@testing-library/user-event";
 import Results from "../views/Results";
 import configureStore from "../store/store";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
 
-const store = configureStore();
+beforeEach(() => {
+  localStorage.clear();
+  global.fetch = jest
+    .fn()
+    .mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => mockManifest })
+    )
+    .mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => photosByQuery })
+    );
+});
 
 const renderResults = (
   path = "/results?rover=Spirit&latest=undefined&sol=35&date="
 ) => {
   const history = createBrowserHistory();
   history.push(path);
+  const store = configureStore();
   return render(
     <Provider store={store}>
       <Router history={history}>
@@ -32,25 +42,40 @@ const mockManifest = {
   },
 };
 
-global.fetch = jest
-  .fn()
-  .mockImplementationOnce(() =>
-    Promise.resolve({ ok: true, json: () => mockManifest })
-  )
-  .mockImplementationOnce(() =>
-    Promise.resolve({ ok: true, json: () => photosByQuery })
-  );
-
 describe("Results component", () => {
-  it("gets data from url and renders filled form", async () => {
-    const { getByLabelText } = renderResults(
+  it("gets data from url and renders filled form (query by SOL)", async () => {
+    const { getByLabelText, getByText } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="
     );
     await waitFor(() => {
       expect(getByLabelText(/choose rover/i)).toHaveValue("Spirit");
       expect(getByLabelText(/SOL from 0/i)).toHaveValue("35");
+      expect(getByText(/see latest/i)).toBeEnabled();
+      expect(getByText(/search/i)).toBeEnabled();
     });
   });
+  it("gets data from url and renders filled form (query by Date)", async () => {
+    const { getByLabelText, getByText } = renderResults(
+      "/results?rover=Curiosity&latest=undefined&sol=&date=2012-08-28"
+    );
+    await waitFor(() => {
+      expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
+      expect(getByLabelText(/Date from/i)).toHaveValue("2012-08-28");
+      expect(getByText(/see latest/i)).toBeEnabled();
+      expect(getByText(/search/i)).toBeEnabled();
+    });
+  });
+  // it("gets data from url and renders filled form (query by latest)", async () => {
+  //   const { getByLabelText, getByText } = renderResults(
+  //     "/results?rover=Spirit&latest=undefined&sol=35&date="
+  //   );
+  //   await waitFor(() => {
+  //     expect(getByLabelText(/choose rover/i)).toHaveValue("Spirit");
+  //     expect(getByLabelText(/SOL from 0/i)).toHaveValue("35");
+  //     expect(getByText(/see latest/i)).toBeEnabled();
+  //     expect(getByText(/search/i)).toBeEnabled();
+  //   });
+  // });
   it("gets data from url and renders gallery with photos", async () => {
     const { getAllByAltText } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="

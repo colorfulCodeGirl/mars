@@ -97,24 +97,27 @@ describe("Results component", () => {
     `;
     expect(getByTestId(/form/i)).toHaveStyle(leftSideStyles);
   });
-  it("should on rover change - clean up form, show animation, show new photos", async () => {
-    // const { getByLabelText, getByText, container } = renderResults(
-    //   "/results?rover=Spirit&latest=undefined&sol=35&date="
-    // );
-    // const roverSelect = getByLabelText(/choose rover/i);
-    // await waitFor(() => {
-    //   expect(roverSelect).toHaveValue("Spirit");
-    //   expect(getByLabelText(/SOL from 0/i)).toHaveValue("35");
-    // });
-    // // userEvent.selectOptions(roverSelect, ["Curiosity"]);
-    // // console.log(prettyDOM(container));
-    // // expect(getByText(/curiosity/i).selected).toBe(true);
-    // // fireEvent.click(roverSelect);
-    // // fireEvent.click(getByText(/curiosity/i));
-    // fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
-    // await waitFor(() => {
-    //   expect(getByLabelText(/SOL from 0/i)).not.toHaveValue("35");
-    // });
+  it("should on rover change - clean up form, show animation and doesn't show photos", async () => {
+    const { getByLabelText, queryAllByAltText, queryByAltText } = renderResults(
+      "/results?rover=Spirit&latest=undefined&sol=35&date="
+    );
+    const roverSelect = getByLabelText(/choose rover/i);
+    await waitFor(() => {
+      expect(roverSelect).toHaveValue("Spirit");
+      expect(getByLabelText(/SOL from 0/i)).toHaveValue("35");
+      expect(queryAllByAltText(/mars by rover/i)[0]).toBeInTheDocument();
+    });
+
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => mockManifest })
+    );
+    fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
+    await waitFor(() => {
+      expect(roverSelect).toHaveValue("Curiosity");
+      ///// TODO - check animation //////
+      expect(getByLabelText(/SOL from 0/i)).not.toHaveValue("35");
+      expect(queryByAltText(/mars by rover/i)).not.toBeInTheDocument();
+    });
   });
   it("shows 'Change search' button in mobile look for opening search form", async () => {
     const { getByText, queryByTestId } = renderResults();

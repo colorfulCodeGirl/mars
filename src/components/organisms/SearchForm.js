@@ -27,6 +27,7 @@ const SearchFrom = ({
   fetchPhotos,
   solSwitcher,
   setSolSwitcher,
+  modalCloseHandler,
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
   const history = useHistory();
@@ -51,6 +52,7 @@ const SearchFrom = ({
 
   const submitHandler = (e) => {
     e.preventDefault();
+    if (modalCloseHandler) modalCloseHandler();
     const { latest } = e.target.dataset;
     fetchPhotos(latest);
     history.push(
@@ -168,4 +170,7 @@ SearchFrom.propTypes = {
   handlePeriod: PropTypes.func.isRequired,
   cleanUpPeriod: PropTypes.func.isRequired,
   fetchPhotos: PropTypes.func.isRequired,
+  solSwitcher: PropTypes.string.isRequired,
+  setSolSwitcher: PropTypes.func.isRequired,
+  modalCloseHandler: PropTypes.func,
 };

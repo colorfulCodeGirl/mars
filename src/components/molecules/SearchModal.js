@@ -23,7 +23,7 @@ const SearchModal = () => {
 
       {isModalOpen && (
         <ModalOverlay closeHandler={() => setModalVisibility(false)}>
-          <SearchForm />
+          <SearchForm modalCloseHandler={() => setModalVisibility(false)} />
         </ModalOverlay>
       )}
     </>

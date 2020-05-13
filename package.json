@@ -46,6 +46,12 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/src/stories"
+    ]
+  },
   "devDependencies": {
     "@storybook/addon-actions": "^5.3.14",
     "@storybook/addon-links": "^5.3.14",

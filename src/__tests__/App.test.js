@@ -185,4 +185,25 @@ describe("App component", () => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });
   });
+
+  it("doesn't opens fetch error modal, when error was closed and next fetching was success", async () => {
+    const { getByLabelText, getByText, queryByText } = renderApp();
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    chooseRover(getByLabelText);
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+    fireEvent.click(getByLabelText(/close/i));
+    expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => mockManifest })
+    );
+    chooseRover(getByLabelText);
+    await waitFor(() => {
+      expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
+      expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
+    });
+  });
 });

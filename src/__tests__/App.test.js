@@ -131,9 +131,7 @@ describe("App component", () => {
     const { getByLabelText, getByText } = renderApp();
     global.fetch.mockReset();
     global.fetch.mockImplementationOnce(() => new Error("Bad request"));
-    fireEvent.change(getByLabelText(/choose rover/i), {
-      target: { value: "Curiosity" },
-    });
+    chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });
@@ -146,9 +144,7 @@ describe("App component", () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({ ok: true, json: () => mockManifest })
     );
-    fireEvent.change(getByLabelText(/choose rover/i), {
-      target: { value: "Curiosity" },
-    });
+    chooseRover(getByLabelText);
     await waitFor(() => {
       expect(button).toBeEnabled();
     });
@@ -160,17 +156,33 @@ describe("App component", () => {
     });
   });
 
-  it("allows to close fetch error module", async () => {
+  it("allows to close fetch error modal", async () => {
     const { getByLabelText, getByText, queryByText } = renderApp();
     global.fetch.mockReset();
     global.fetch.mockImplementationOnce(() => new Error("Bad request"));
-    fireEvent.change(getByLabelText(/choose rover/i), {
-      target: { value: "Curiosity" },
-    });
+    chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });
     fireEvent.click(getByLabelText(/close/i));
     expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
+  });
+
+  it("opens fetch error modal, when error was closed and fetching error happened again", async () => {
+    const { getByLabelText, getByText, queryByText } = renderApp();
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    chooseRover(getByLabelText);
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+    fireEvent.click(getByLabelText(/close/i));
+    expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    chooseRover(getByLabelText);
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
   });
 });

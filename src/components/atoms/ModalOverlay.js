@@ -25,6 +25,7 @@ const Wrapper = styled.div`
   grid-template-columns: 1fr;
   width: min-content;
   margin: 0 auto;
+  max-height: fit-content;
 `;
 
 const StyledButton = styled.button`

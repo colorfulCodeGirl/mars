@@ -13,9 +13,12 @@ const PhotoWrapper = styled.div`
 `;
 
 const StyledDescription = styled.div`
-  margin: 2rem;
+  margin: 1.5rem;
   margin-top: 0;
   color: #515050;
+  @media (min-width: 900px) {
+    margin: 2rem;
+  }
   h2 {
     text-transform: uppercase;
     padding-bottom: 1.5rem;

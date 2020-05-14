@@ -180,4 +180,16 @@ describe("Search form component on start", () => {
     expect(queryByText(/Date should be/i)).not.toBeInTheDocument();
     expect(searchBtn).toBeDisabled();
   });
+
+  it("show error when fetching manifest fails", async () => {
+    const { getByLabelText, getByText } = renderSearchForm();
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    fireEvent.change(getByLabelText(/choose rover/i), {
+      target: { value: "Curiosity" },
+    });
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+  });
 });

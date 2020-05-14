@@ -9,7 +9,7 @@ const initialState = {
   endDate: "",
   maxSol: 0,
   photos: [],
-  fetchError: "",
+  fetchError: false,
   allowDataFromURL: true,
   solSwitcher: "sol",
 };
@@ -26,7 +26,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.FETCH_MANIFEST_FAILED:
       return {
         ...state,
-        fetchError: payload,
+        fetchError: true,
       };
     case actionTypes.SET_SOL:
       return {
@@ -65,7 +65,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.FETCH_PHOTOS_FAILED:
       return {
         ...state,
-        fetchError: payload,
+        fetchError: true,
       };
     case actionTypes.SET_ALLOW_DATA_FROM_URL:
       return {

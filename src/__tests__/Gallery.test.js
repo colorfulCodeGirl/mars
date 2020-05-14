@@ -18,6 +18,7 @@ describe("Gallery", () => {
     const imgs = getAllByAltText(/mars by rover/i);
     expect(imgs.length).toBe(5);
   });
+
   it("opens full image on click", () => {
     const { getAllByAltText, getByTestId } = renderGallery();
     openFullImg(getAllByAltText);
@@ -25,6 +26,7 @@ describe("Gallery", () => {
     expect(overlay).toBeInTheDocument();
     expect(overlay).toContainElement(getByTestId(/full-img/i));
   });
+
   it("should show next/previous photo on arrow click", () => {
     const { getAllByAltText, getByLabelText, getByTestId } = renderGallery();
     openFullImg(getAllByAltText);
@@ -34,6 +36,7 @@ describe("Gallery", () => {
     fireEvent.click(getByLabelText(/left/i));
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });
+
   it("should show next/previous photo on photo click", () => {
     const { getAllByAltText, getByTestId } = renderGallery();
     openFullImg(getAllByAltText);
@@ -48,6 +51,7 @@ describe("Gallery", () => {
     });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });
+
   it("should not show next/previous photo on first photo click on left side", () => {
     const { getAllByAltText, getByTestId } = renderGallery();
     openFullImg(getAllByAltText);
@@ -58,6 +62,7 @@ describe("Gallery", () => {
     });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });
+
   it("should close full image on X click", () => {
     const { getAllByAltText, getByLabelText, queryByTestId } = renderGallery();
     openFullImg(getAllByAltText);

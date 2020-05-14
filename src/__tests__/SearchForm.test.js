@@ -209,4 +209,16 @@ describe("Search form component on start", () => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });
   });
+
+  it("allows to close error and returns to filled form", async () => {
+    const { getByLabelText, getByText, queryByText } = renderSearchForm();
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    fireRoverChange(getByLabelText);
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+    fireEvent.click(getByLabelText(/close/i));
+    expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
+  });
 });

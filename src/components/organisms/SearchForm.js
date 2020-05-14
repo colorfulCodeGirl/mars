@@ -32,6 +32,7 @@ const SearchFrom = ({
   modalCloseHandler,
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(true);
   const history = useHistory();
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
@@ -120,7 +121,9 @@ const SearchFrom = ({
       >
         See Latest
       </Button>
-      {fetchError && <ErrorModal closeHandler={() => {}} />}
+      {fetchError && isErrorOpen && (
+        <ErrorModal closeHandler={() => setIsErrorOpen(false)} />
+      )}
     </StyledForm>
   );
 };

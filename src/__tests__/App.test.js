@@ -7,20 +7,12 @@ import App from "../App";
 import configureStore from "../store/store";
 import { latestPhotos } from "../__response__mocks/latestPhotos";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
-
-const store = configureStore();
-
-const mockManifest = {
-  photo_manifest: {
-    landing_date: "2004-01-04",
-    max_sol: 2208,
-    max_date: "2010-03-21",
-  },
-};
+import { mockManifest } from "../__response__mocks/mockManifest";
 
 global.fetch = jest.fn();
 
 const renderApp = () => {
+  const store = configureStore();
   const history = createBrowserHistory();
   return render(
     <Provider store={store}>
@@ -32,15 +24,19 @@ const renderApp = () => {
 };
 
 const chooseRover = (getByLabelText) => {
-  global.fetch.mockImplementationOnce(() =>
-    Promise.resolve({ ok: true, json: () => mockManifest })
-  );
   fireEvent.change(getByLabelText(/choose rover/i), {
     target: { value: "Curiosity" },
   });
 };
 
-describe("App component", () => {
+describe("App component main block", () => {
+  beforeEach(() => {
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => mockManifest })
+    );
+  });
+
   it("applies Global style", () => {
     const { container } = renderApp();
     expect(container).toHaveStyle(`
@@ -126,11 +122,23 @@ describe("App component", () => {
       ).toBeInTheDocument();
     });
   });
+});
+
+describe("App fetch errors", () => {
+  beforeEach(() => {
+    global.fetch.mockReset();
+    global.fetch.mockImplementation(() => new Error("Bad request"));
+  });
+
+  const setManifestSuccess = () => {
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => mockManifest })
+    );
+  };
 
   it("show error when fetching manifest fails", async () => {
     const { getByLabelText, getByText } = renderApp();
-    global.fetch.mockReset();
-    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
     chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
@@ -138,18 +146,14 @@ describe("App component", () => {
   });
 
   it("show error when fetching photos fails", async () => {
-    const { getByLabelText, getByText } = renderApp();
+    const { getByLabelText, getByText, queryByText } = renderApp();
     const button = getByText(/see latest/i);
-    global.fetch.mockReset();
-    global.fetch.mockImplementationOnce(() =>
-      Promise.resolve({ ok: true, json: () => mockManifest })
-    );
+    setManifestSuccess();
     chooseRover(getByLabelText);
     await waitFor(() => {
       expect(button).toBeEnabled();
+      expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
     });
-    global.fetch.mockReset();
-    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
     fireEvent.click(button);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
@@ -158,8 +162,6 @@ describe("App component", () => {
 
   it("allows to close fetch error modal", async () => {
     const { getByLabelText, getByText, queryByText } = renderApp();
-    global.fetch.mockReset();
-    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
     chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
@@ -170,16 +172,12 @@ describe("App component", () => {
 
   it("opens fetch error modal, when error was closed and fetching error happened again", async () => {
     const { getByLabelText, getByText, queryByText } = renderApp();
-    global.fetch.mockReset();
-    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
     chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });
     fireEvent.click(getByLabelText(/close/i));
     expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
-    global.fetch.mockReset();
-    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
     chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
@@ -188,18 +186,13 @@ describe("App component", () => {
 
   it("doesn't opens fetch error modal, when error was closed and next fetching was success", async () => {
     const { getByLabelText, getByText, queryByText } = renderApp();
-    global.fetch.mockReset();
-    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
     chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });
     fireEvent.click(getByLabelText(/close/i));
     expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
-    global.fetch.mockReset();
-    global.fetch.mockImplementationOnce(() =>
-      Promise.resolve({ ok: true, json: () => mockManifest })
-    );
+    setManifestSuccess();
     chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");

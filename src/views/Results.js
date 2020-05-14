@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import SearchForm from "../components/organisms/SearchForm";
 import SearchModal from "../components/molecules/SearchModal";
 import Gallery from "../components/organisms/Gallery";
+import ErrorModal from "../components/molecules/ErrorModal";
 
 import { setFromUrl } from "../store/actionCreators";
 
@@ -20,7 +21,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Results = ({ rover, setFromUrl, allowDataFromURL }) => {
+const Results = ({ rover, setFromUrl, allowDataFromURL, fetchError }) => {
   const [isMobile, setIsMobile] = useState(false);
   const query = useLocation().search;
 
@@ -51,13 +52,15 @@ const Results = ({ rover, setFromUrl, allowDataFromURL }) => {
     <Wrapper data-testid="results">
       {isMobile ? <SearchModal /> : <SearchForm displayLeft />}
       <Gallery isMobile={isMobile} />
+      {fetchError && <ErrorModal />}
     </Wrapper>
   );
 };
 
-const mapStateToProps = ({ rover, allowDataFromURL }) => ({
+const mapStateToProps = ({ rover, allowDataFromURL, fetchError }) => ({
   rover,
   allowDataFromURL,
+  fetchError,
 });
 
 const mapDispatchToProps = {

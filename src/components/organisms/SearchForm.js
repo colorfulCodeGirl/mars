@@ -11,7 +11,6 @@ import Input from "../atoms/Input";
 import ErrorTooltip from "../atoms/ErrorTooltip";
 
 import * as actions from "../../store/actionCreators";
-import ErrorModal from "../molecules/ErrorModal";
 
 const SearchFrom = ({
   rover,
@@ -21,7 +20,6 @@ const SearchFrom = ({
   maxSol,
   startDate,
   endDate,
-  fetchError,
   displayLeft = false,
   fetchManifest,
   handlePeriod,
@@ -32,7 +30,6 @@ const SearchFrom = ({
   modalCloseHandler,
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
-  const [isErrorOpen, setIsErrorOpen] = useState(true);
   const history = useHistory();
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
@@ -121,9 +118,6 @@ const SearchFrom = ({
       >
         See Latest
       </Button>
-      {fetchError && isErrorOpen && (
-        <ErrorModal closeHandler={() => setIsErrorOpen(false)} />
-      )}
     </StyledForm>
   );
 };
@@ -137,7 +131,6 @@ const mapStateToProps = ({
   startDate,
   endDate,
   solSwitcher,
-  fetchError,
 }) => ({
   rover,
   sol,
@@ -147,7 +140,6 @@ const mapStateToProps = ({
   startDate,
   endDate,
   solSwitcher,
-  fetchError,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -173,7 +165,6 @@ SearchFrom.propTypes = {
   maxSol: PropTypes.number,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
-  fetchError: PropTypes.bool,
   displayLeft: PropTypes.bool,
   fetchManifest: PropTypes.func.isRequired,
   handlePeriod: PropTypes.func.isRequired,

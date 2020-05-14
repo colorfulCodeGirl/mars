@@ -126,4 +126,51 @@ describe("App component", () => {
       ).toBeInTheDocument();
     });
   });
+
+  it("show error when fetching manifest fails", async () => {
+    const { getByLabelText, getByText } = renderApp();
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    fireEvent.change(getByLabelText(/choose rover/i), {
+      target: { value: "Curiosity" },
+    });
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+  });
+
+  it("show error when fetching photos fails", async () => {
+    const { getByLabelText, getByText } = renderApp();
+    const button = getByText(/see latest/i);
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => mockManifest })
+    );
+    fireEvent.change(getByLabelText(/choose rover/i), {
+      target: { value: "Curiosity" },
+    });
+    await waitFor(() => {
+      expect(button).toBeEnabled();
+    });
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    fireEvent.click(button);
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+  });
+
+  it("allows to close fetch error module", async () => {
+    const { getByLabelText, getByText, queryByText } = renderApp();
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    fireEvent.change(getByLabelText(/choose rover/i), {
+      target: { value: "Curiosity" },
+    });
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+    fireEvent.click(getByLabelText(/close/i));
+    expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
+  });
 });

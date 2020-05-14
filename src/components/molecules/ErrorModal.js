@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ModalOverlay from "../atoms/ModalOverlay";
 import PropTypes from "prop-types";
@@ -20,17 +20,20 @@ const Wrapper = styled.div`
   }
 `;
 
-const ErrorModal = ({ massage, closeHandler }) => (
-  <ModalOverlay closeHandler={closeHandler}>
-    <Wrapper>
-      <p>{massage || "Something went wrong. Please, try again later."}</p>
-    </Wrapper>
-  </ModalOverlay>
-);
+const ErrorModal = ({ massage }) => {
+  const [isErrorOpen, setIsErrorOpen] = useState(true);
+  const modal = isErrorOpen ? (
+    <ModalOverlay closeHandler={() => setIsErrorOpen(false)}>
+      <Wrapper>
+        <p>{massage || "Something went wrong. Please, try again later."}</p>
+      </Wrapper>
+    </ModalOverlay>
+  ) : null;
+  return modal;
+};
 
 export default ErrorModal;
 
 ErrorModal.propTypes = {
   massage: PropTypes.string,
-  closeHandler: PropTypes.func.isRequired,
 };

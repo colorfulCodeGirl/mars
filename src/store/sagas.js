@@ -61,7 +61,7 @@ function* fetchPhotos({ latest = null }) {
   const urlParams = latest
     ? `rovers/${rover}/latest_photos?`
     : sol
-    ? `rover/${rover}/photos?sol=${sol}`
+    ? `rovers/${rover}/photos?sol=${sol}`
     : `rovers/${rover}/photos?earth_date=${date}`;
   try {
     const response = yield fetchData(urlParams);

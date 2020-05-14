@@ -7,5 +7,10 @@ describe("Error Modal", () => {
     const { getByText } = render(<ErrorModal closeHandler={() => {}} />);
     expect(getByText(/something went wrong/i)).toBeInTheDocument();
   });
-  it("shows custom error massage", () => {});
+  it("shows custom error massage", () => {
+    const { getByText } = render(
+      <ErrorModal closeHandler={() => {}} massage="custom massage" />
+    );
+    expect(getByText(/custom massage/i)).toBeInTheDocument();
+  });
 });

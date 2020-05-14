@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 const ErrorModal = ({ massage, closeHandler }) => (
   <ModalOverlay closeHandler={closeHandler}>
     <Wrapper>
-      <p>Something went wrong. Please, try again later.</p>
+      <p>{massage || "Something went wrong. Please, try again later."}</p>
     </Wrapper>
   </ModalOverlay>
 );

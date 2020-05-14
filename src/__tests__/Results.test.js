@@ -119,6 +119,14 @@ describe("Results component", () => {
       expect(queryByAltText(/mars by rover/i)).not.toBeInTheDocument();
     });
   });
+  it("show error when fetching manifest fails", async () => {
+    const { getByLabelText, getByText } = renderResults();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    fireEvent.click(getByLabelText(/choose rover/i));
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+  });
   it("shows 'Change search' button in mobile look for opening search form", async () => {
     const { getByText, queryByTestId } = renderResults();
     window.innerWidth = 375;

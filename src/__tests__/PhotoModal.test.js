@@ -24,11 +24,13 @@ describe("Photo modal", () => {
   });
   it("should show description of full image", () => {
     const { getByText } = renderPhotoModal(photos[0], 0);
-    const heading = getByText(/mars by rover/i);
-    const description = getByText(/Photo taken on/i);
-    expect(description).toBeInTheDocument();
-    expect(heading.innerHTML).toContain(photos[0].rover.name);
-    // expect(description).toContain(photos[0].camera.full_name);
+    const { rover } = photos[0];
+    expect(getByText(`Mars by rover ${rover.name}`)).toBeInTheDocument();
+    expect(getByText(/Photo taken on 2012-08-16/i)).toBeInTheDocument();
+    expect(getByText(/10 days from landing/i)).toBeInTheDocument();
+    expect(
+      getByText(/By camera Chemistry and Camera Complex/i)
+    ).toBeInTheDocument();
   });
   it("should change image on right arrow click and not react on left for first image", () => {
     const changeHandler = jest.fn();

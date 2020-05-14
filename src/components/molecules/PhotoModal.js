@@ -12,12 +12,15 @@ const PhotoWrapper = styled.div`
 `;
 
 const StyledImage = styled.img`
-  max-width: 80vw;
-  max-height: 90vh;
+  max-width: 85vw;
+  max-height: 80vh;
   margin: 1.5rem;
   margin-top: 4.5rem;
   @media (min-width: 900px) {
     margin: 2rem;
+  }
+  @media (orientation: landscape) {
+    max-width: 80vw;
   }
 `;
 
@@ -39,11 +42,17 @@ const ArrowButton = styled.button`
 `;
 
 const StyledDescription = styled.div`
-  max-width: 250px;
+  margin: 2rem;
+  margin-top: 0;
+  color: #515050;
+  h2 {
+    text-transform: uppercase;
+    padding-bottom: 1.5rem;
+  }
 `;
 
 const PhotoModal = ({
-  image: { img_src: src, rover },
+  image: { img_src: src, sol, earth_date, rover, camera },
   index,
   closeHandler,
   changeHandler,
@@ -60,17 +69,19 @@ const PhotoModal = ({
           <Arrow />
         </ArrowButton>
       )}
-      <StyledImage
-        src={src}
-        alt={`Mars by rover ${rover.name}`}
-        onClick={(e) => changeHandler(e.clientX)}
-        data-testid="full-img"
-      />
-      <StyledDescription>
-        <h2>{`Mars by rover ${rover.name}`}</h2>
-        <p>{`Photo taken on ,  days from landing.`}</p>
-        <p>{`By camera `}</p>
-      </StyledDescription>
+      <div>
+        <StyledImage
+          src={src}
+          alt={`Mars by rover ${rover.name}`}
+          onClick={(e) => changeHandler(e.clientX)}
+          data-testid="full-img"
+        />
+        <StyledDescription>
+          <h2>{`Mars by rover ${rover.name}`}</h2>
+          <p>{`Photo taken on ${earth_date}, ${sol} days from landing.`}</p>
+          <p>{`By camera ${camera.full_name}.`}</p>
+        </StyledDescription>
+      </div>
       {!isMobile && (
         <ArrowButton
           right
@@ -89,8 +100,13 @@ export default PhotoModal;
 PhotoModal.propTypes = {
   image: PropTypes.shape({
     img_src: PropTypes.string.isRequired,
+    sol: PropTypes.number.isRequired,
+    earth_date: PropTypes.string.isRequired,
     rover: PropTypes.shape({
       name: PropTypes.string.isRequired,
+    }).isRequired,
+    camera: PropTypes.shape({
+      full_name: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,

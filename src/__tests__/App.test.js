@@ -8,6 +8,7 @@ import configureStore from "../store/store";
 import { latestPhotos } from "../__response__mocks/latestPhotos";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
 import { mockManifest } from "../__response__mocks/mockManifest";
+import { chooseRover } from "../helpers/testHelpers";
 
 global.fetch = jest.fn();
 
@@ -21,12 +22,6 @@ const renderApp = () => {
       </Router>
     </Provider>
   );
-};
-
-const chooseRover = (getByLabelText) => {
-  fireEvent.change(getByLabelText(/choose rover/i), {
-    target: { value: "Curiosity" },
-  });
 };
 
 describe("App component main block", () => {

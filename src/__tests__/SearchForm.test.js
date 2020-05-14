@@ -185,9 +185,26 @@ describe("Search form component on start", () => {
     const { getByLabelText, getByText } = renderSearchForm();
     global.fetch.mockReset();
     global.fetch.mockImplementationOnce(() => new Error("Bad request"));
-    fireEvent.change(getByLabelText(/choose rover/i), {
-      target: { value: "Curiosity" },
+    fireRoverChange(getByLabelText);
+    await waitFor(() => {
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });
+  });
+
+  it("show error when fetching photos fails", async () => {
+    const { getByLabelText, getByText } = renderSearchForm();
+    const button = getByText(/see latest/i);
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => mockData })
+    );
+    fireRoverChange(getByLabelText);
+    await waitFor(() => {
+      expect(button).toBeEnabled();
+    });
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() => new Error("Bad request"));
+    fireEvent.click(button);
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });

@@ -21,6 +21,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SET_MANIFEST:
       return {
         ...state,
+        fetchError: false,
         ...payload,
       };
     case actionTypes.FETCH_MANIFEST_FAILED:
@@ -60,6 +61,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SET_PHOTOS:
       return {
         ...state,
+        fetchError: false,
         photos: payload,
       };
     case actionTypes.FETCH_PHOTOS_FAILED:

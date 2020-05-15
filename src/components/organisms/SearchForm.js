@@ -20,12 +20,12 @@ const SearchFrom = ({
   maxSol,
   startDate,
   endDate,
+  solSwitcher,
   displayLeft = false,
   fetchManifest,
   handlePeriod,
   cleanUpPeriod,
   fetchPhotos,
-  solSwitcher,
   setSolSwitcher,
   modalCloseHandler,
 }) => {

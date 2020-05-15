@@ -1,10 +1,9 @@
 export const fetchData = async (urlParams) => {
   const apiKey = process.env.REACT_APP_API_CODE;
-  const data = await fetch(
+  const response = await fetch(
     `https://api.nasa.gov/mars-photos/api/v1/${urlParams}&api_key=${apiKey}`
-  )
-    .then((response) => response.json())
-    .catch((error) => console.error(error));
+  );
+  const data = await response.json();
   return data;
 };
 

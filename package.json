@@ -49,7 +49,8 @@
   "jest": {
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/src/stories"
+      "/src/stories",
+      "/src/__response__mocks"
     ]
   },
   "devDependencies": {

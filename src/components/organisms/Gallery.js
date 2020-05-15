@@ -129,6 +129,7 @@ export const Gallery = ({ photos, isMobile }) => {
           image={fullImage.img}
           index={fullImage.index}
           isMobile={isMobile}
+          last={photos.length - 1}
         />
       )}
     </div>

@@ -11,6 +11,7 @@ const renderPhotoModal = ([
   mobile = false,
   changeHandler = () => {},
   closeHandler = () => {},
+  last,
 ]) =>
   render(
     <PhotoModal
@@ -19,6 +20,7 @@ const renderPhotoModal = ([
       closeHandler={closeHandler}
       changeHandler={changeHandler}
       isMobile={mobile}
+      last={last}
     />
   );
 
@@ -82,8 +84,19 @@ describe("Photo modal", () => {
     );
     expect(getByLabelText(/left/i)).toBeEnabled();
   });
-  //!!!!!!!!!!!!!!!!TODO!!!!!!!!!!!!!!!!!!!//
-  it("should have right arrow disabled for the last one", () => {});
+  it("should have right arrow disabled for the last one", () => {
+    const lastIndex = photos.length - 1;
+    const changeHandler = jest.fn;
+    const { getByLabelText } = renderPhotoModal([
+      lastIndex,
+      ,
+      changeHandler,
+      ,
+      lastIndex,
+    ]);
+    expect(getByLabelText(/right/i)).toBeDisabled();
+    expect(getByLabelText(/left/i)).toBeEnabled();
+  });
   it("should close full image on X click", () => {
     const closeHandler = jest.fn();
     const { getByLabelText } = renderPhotoModal([0, , , closeHandler]);

@@ -31,6 +31,7 @@ const PhotoModal = ({
   closeHandler,
   changeHandler,
   isMobile = false,
+  last,
 }) => (
   <ModalOverlay closeHandler={closeHandler}>
     <PhotoWrapper>
@@ -59,6 +60,7 @@ const PhotoModal = ({
           right
           onClick={() => changeHandler("right")}
           aria-label="right"
+          disabled={index === last}
         />
       )}
     </PhotoWrapper>
@@ -83,4 +85,5 @@ PhotoModal.propTypes = {
   closeHandler: PropTypes.func.isRequired,
   changeHandler: PropTypes.func.isRequired,
   isMobile: PropTypes.bool,
+  last: PropTypes.number,
 };

@@ -6,6 +6,7 @@ import { Router } from "react-router-dom";
 import Results from "../views/Results";
 import configureStore from "../store/store";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
+import { mockManifest } from "../__response__mocks/mockManifest";
 
 beforeEach(() => {
   localStorage.clear();
@@ -32,14 +33,6 @@ const renderResults = (
       </Router>
     </Provider>
   );
-};
-
-const mockManifest = {
-  photo_manifest: {
-    landing_date: "2004-01-04",
-    max_sol: 2208,
-    max_date: "2010-03-21",
-  },
 };
 
 describe("Results component", () => {

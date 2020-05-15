@@ -2,39 +2,28 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import SearchForm from "../components/organisms/SearchForm";
 import { Provider } from "react-redux";
-
+import { mockManifest } from "../__response__mocks/mockManifest";
 import configureStore from "../store/store";
-const store = configureStore();
+import { chooseRover } from "../helpers/testHelpers";
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useHistory: jest.fn().mockReturnValue([]),
 }));
 
-const mockData = {
-  photo_manifest: {
-    landing_date: "2004-01-04",
-    max_sol: 2208,
-    max_date: "2010-03-21",
-  },
-};
-
 global.fetch = jest
   .fn()
   .mockImplementation(() =>
-    Promise.resolve({ ok: true, json: () => mockData })
+    Promise.resolve({ ok: true, json: () => mockManifest })
   );
 
-const renderSearchForm = () =>
-  render(
+const renderSearchForm = () => {
+  const store = configureStore();
+  return render(
     <Provider store={store}>
       <SearchForm displayLeft={false} />
     </Provider>
   );
-
-const fireRoverChange = (getByLabelText) => {
-  const select = getByLabelText(/choose rover/i);
-  fireEvent.change(select, { target: { value: "Curiosity" } });
 };
 
 describe("Search form component on start", () => {
@@ -63,18 +52,18 @@ describe("Search form component on start", () => {
 
   it("it fetches rover manifest and shows sol radio group and sol input", async () => {
     const { getByLabelText, getByRole } = renderSearchForm();
-    fireRoverChange(getByLabelText);
+    chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByRole("radiogroup")).toBeInTheDocument();
       expect(getByLabelText(/SOL from 0 to/i)).toBeInTheDocument();
     });
   });
-
+  ////////////////////////TODO////////////////////
   it("shows animation while fetching manifest", () => {});
 
   it("it enables see latest button when rover is set, search button is still disabled", async () => {
     const { getByLabelText, getByText } = renderSearchForm();
-    fireRoverChange(getByLabelText);
+    chooseRover(getByLabelText);
     await waitFor(() => {
       expect(getByText(/see latest/i)).toBeEnabled();
       expect(getByText(/search/i)).toBeDisabled();
@@ -83,8 +72,7 @@ describe("Search form component on start", () => {
 
   it("should handle change sol/date radio group correctly", async () => {
     const { getByLabelText } = renderSearchForm();
-    fireRoverChange(getByLabelText);
-
+    chooseRover(getByLabelText);
     let sol;
     let date;
     await waitFor(() => {
@@ -103,8 +91,7 @@ describe("Search form component on start", () => {
 
   it("should change sol/date placeholder on sol/date change", async () => {
     const { getByLabelText, queryByPlaceholderText } = renderSearchForm();
-    fireRoverChange(getByLabelText);
-
+    chooseRover(getByLabelText);
     let sol;
     let date;
     await waitFor(() => {
@@ -112,7 +99,7 @@ describe("Search form component on start", () => {
       date = getByLabelText(/earth date/i);
     });
 
-    const { landing_date, max_sol, max_date } = mockData.photo_manifest;
+    const { landing_date, max_sol, max_date } = mockManifest.photo_manifest;
     expect(
       queryByPlaceholderText(`SOL from 0 to ${max_sol}`)
     ).toBeInTheDocument();
@@ -138,8 +125,7 @@ describe("Search form component on start", () => {
 
   it("should enable search button when sol input is filed correctly", async () => {
     const { getByLabelText, queryByText, getByText } = renderSearchForm();
-    fireRoverChange(getByLabelText);
-
+    chooseRover(getByLabelText);
     let sol;
     await waitFor(() => {
       sol = getByLabelText(/SOL from 0/i);
@@ -160,7 +146,7 @@ describe("Search form component on start", () => {
 
   it("should enable search button when date input is filed correctly", async () => {
     const { getByLabelText, queryByText, getByText } = renderSearchForm();
-    fireRoverChange(getByLabelText);
+    chooseRover(getByLabelText);
 
     let date;
     await waitFor(() => {

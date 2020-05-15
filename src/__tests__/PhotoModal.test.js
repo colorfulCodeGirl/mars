@@ -30,6 +30,7 @@ describe("Photo modal", () => {
     const altText = `Mars by rover ${photos[0].rover.name}`;
     expect(getByAltText(altText)).toBeInTheDocument();
   });
+
   it("should show description of full image", () => {
     const { getByText } = renderPhotoModal([0]);
     const { rover } = photos[0];
@@ -40,6 +41,7 @@ describe("Photo modal", () => {
       getByText(/By camera Chemistry and Camera Complex/i)
     ).toBeInTheDocument();
   });
+
   it("should change image on right arrow click and not react on left for first image", () => {
     const changeHandler = jest.fn();
     const { getByLabelText } = renderPhotoModal([0, , changeHandler]);
@@ -53,6 +55,7 @@ describe("Photo modal", () => {
     fireEvent.click(arrowLeft);
     expect(changeHandler).toBeCalledTimes(1);
   });
+
   it("should change image on both arrows click for not first image", () => {
     const changeHandler = jest.fn();
     const { getByLabelText } = renderPhotoModal([1, , changeHandler]);
@@ -69,6 +72,7 @@ describe("Photo modal", () => {
       expect.stringMatching(/left/i)
     );
   });
+
   it("should have left arrow disabled for first image and enabled for other", () => {
     const { getByLabelText, rerender } = renderPhotoModal([0]);
     expect(getByLabelText(/left/i)).toBeDisabled();
@@ -84,6 +88,7 @@ describe("Photo modal", () => {
     );
     expect(getByLabelText(/left/i)).toBeEnabled();
   });
+
   it("should have right arrow disabled for the last one", () => {
     const lastIndex = photos.length - 1;
     const changeHandler = jest.fn;
@@ -97,6 +102,7 @@ describe("Photo modal", () => {
     expect(getByLabelText(/right/i)).toBeDisabled();
     expect(getByLabelText(/left/i)).toBeEnabled();
   });
+
   it("should close full image on X click", () => {
     const closeHandler = jest.fn();
     const { getByLabelText } = renderPhotoModal([0, , , closeHandler]);
@@ -104,11 +110,13 @@ describe("Photo modal", () => {
     fireEvent.click(closeBtn);
     expect(closeHandler).toBeCalledTimes(1);
   });
+
   it("should not show arrows in mobile view", () => {
     const { queryByLabelText } = renderPhotoModal([0, true]);
     expect(queryByLabelText(/left/i)).toBeNull();
     expect(queryByLabelText(/right/i)).toBeNull();
   });
+
   it("should change image on image click in mobile view", () => {
     const changeHandler = jest.fn();
     const { getByAltText } = renderPhotoModal([1, true, changeHandler]);

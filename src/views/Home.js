@@ -14,7 +14,8 @@ const startState = { opacity: 0, y: -150 };
 const Home = ({ cleanUpForm, fetchError, show }) => {
   useEffect(() => {
     cleanUpForm();
-  }, [cleanUpForm]);
+  }, [cleanUpForm, show]);
+
   return (
     <Transition
       unmountOnExit
@@ -25,8 +26,8 @@ const Home = ({ cleanUpForm, fetchError, show }) => {
       addEndListener={(node, done) =>
         gsap.to(node, {
           duration: 0.5,
-          opacity: show ? 1 : 0,
-          y: show ? 0 : 150,
+          opacity: 1,
+          y: 0,
           onComplete: done,
         })
       }

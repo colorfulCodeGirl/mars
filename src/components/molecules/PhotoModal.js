@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import ModalOverlay from "../atoms/ModalOverlay";
 import styled from "styled-components";

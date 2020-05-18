@@ -62,8 +62,8 @@ const Results = ({ rover, setFromUrl, allowDataFromURL, fetchError, show }) => {
       addEndListener={(node, done) =>
         gsap.to(node, {
           duration: 0.5,
-          opacity: show ? 1 : 0,
-          x: show ? 0 : 150,
+          opacity: 1,
+          x: 0,
           onComplete: done,
         })
       }

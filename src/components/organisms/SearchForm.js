@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Transition } from "react-transition-group";
+import gsap from "gsap";
 
 import StyledForm from "../atoms/StyledForm";
 import RadioGroup from "../atoms/RadioGroup";
@@ -30,6 +32,7 @@ const SearchFrom = ({
   modalCloseHandler,
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
+  const [show, setShow] = useState(true);
   const history = useHistory();
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
@@ -52,73 +55,83 @@ const SearchFrom = ({
 
   const submitHandler = (e) => {
     e.preventDefault();
+    if (!displayLeft) setShow(false);
     if (modalCloseHandler) modalCloseHandler();
     const { latest } = e.target.dataset;
     fetchPhotos(latest);
-    history.push(
-      `/results?rover=${rover}&latest=${latest}&sol=${sol}&date=${date}`
-    );
+    setTimeout(() => {
+      history.push(
+        `/results?rover=${rover}&latest=${latest}&sol=${sol}&date=${date}`
+      );
+    }, 500);
   };
 
   return (
-    <StyledForm
-      data-testid="form"
-      displayLeft={displayLeft}
-      onSubmit={submitHandler}
+    <Transition
+      appear={true}
+      in={show}
+      timeout={1000}
+      onExit={(node) => gsap.to(node, { duration: 0.5, opacity: 0, y: 50 })}
     >
-      <h1>EXPLORE MARS IMAGES BY ROVERS</h1>
-      <Select
-        options={rovers}
-        name="rovers"
-        value={rover}
-        defaultValue="Choose rover"
-        changeHandler={fetchManifest}
-      />
-      {rover && (
-        <>
-          <RadioGroup
-            options={["SOL*", "Earth date"]}
-            changeHandler={radioChangeHandler}
-            checkedIndex={solSwitcher === "sol" ? 0 : 1}
-          />
-          <p>
-            <i>* day from landing</i>
-          </p>
-          <Input
-            type="text"
-            name={solSwitcher === "sol" ? "sol" : "Earth days"}
-            placeholder={
-              solSwitcher === "sol"
-                ? `SOL from 0 to ${maxSol}`
-                : `Date from ${startDate} to ${endDate}`
-            }
-            changeHandler={({ target: { value } }) =>
-              handlePeriod(value, solSwitcher)
-            }
-            value={solSwitcher === "sol" ? sol : date}
-          />
-          <ErrorTooltip message={error} />
-        </>
-      )}
-      <Button
-        marginTop
-        isDisabled={!isSearchAllowed}
-        type="submit"
-        clickHandler={submitHandler}
-        isFormBtn
+      <StyledForm
+        data-testid="form"
+        displayLeft={displayLeft}
+        onSubmit={submitHandler}
       >
-        SEARCH
-      </Button>
-      <Button
-        type="submit"
-        isDisabled={!rover}
-        data-latest="true"
-        clickHandler={submitHandler}
-        isFormBtn
-      >
-        See Latest
-      </Button>
-    </StyledForm>
+        <h1>EXPLORE MARS IMAGES BY ROVERS</h1>
+        <Select
+          options={rovers}
+          name="rovers"
+          value={rover}
+          defaultValue="Choose rover"
+          changeHandler={fetchManifest}
+        />
+        {rover && (
+          <>
+            <RadioGroup
+              options={["SOL*", "Earth date"]}
+              changeHandler={radioChangeHandler}
+              checkedIndex={solSwitcher === "sol" ? 0 : 1}
+            />
+            <p>
+              <i>* day from landing</i>
+            </p>
+            <Input
+              type="text"
+              name={solSwitcher === "sol" ? "sol" : "Earth days"}
+              placeholder={
+                solSwitcher === "sol"
+                  ? `SOL from 0 to ${maxSol}`
+                  : `Date from ${startDate} to ${endDate}`
+              }
+              changeHandler={({ target: { value } }) =>
+                handlePeriod(value, solSwitcher)
+              }
+              value={solSwitcher === "sol" ? sol : date}
+            />
+            <ErrorTooltip message={error} />
+          </>
+        )}
+        <Button
+          marginTop
+          isDisabled={!isSearchAllowed}
+          type="submit"
+          clickHandler={submitHandler}
+          isFormBtn
+        >
+          SEARCH
+        </Button>
+        <Button
+          type="submit"
+          isDisabled={!rover}
+          data-latest="true"
+          clickHandler={submitHandler}
+          isFormBtn
+        >
+          See Latest
+        </Button>
+      </StyledForm>
+    </Transition>
   );
 };
 

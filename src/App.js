@@ -63,10 +63,10 @@ function App() {
         <AppWrapper>
           <Switch>
             <Route path="/" exact>
-              <Home />
+              {({ match }) => <Home show={match !== null} />}
             </Route>
             <Route path="/results">
-              <Results />
+              {({ match }) => <Results show={match !== null} />}
             </Route>
           </Switch>
         </AppWrapper>

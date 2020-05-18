@@ -48,13 +48,6 @@ const StyledForm = styled.form`
     min-height: 70vh;
   }
 
-  /* ${({ isTransiting }) =>
-    isTransiting &&
-    css`
-      animation-name: slide-out;
-      animation-duration: 2s;
-    `} */
-
   ${({ displayLeft }) =>
     displayLeft &&
     css`
@@ -67,32 +60,6 @@ const StyledForm = styled.form`
       height: 100vh;
       width: 350px;
     `}
-
-  /* @keyframes slide-out {
-    50% {
-      transform: translateY(200%);
-    }
-    60% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0;
-      transform: translate(-100%, 0);
-    }
-  } */
-
-  @keyframes slide-in {
-    0% {
-      transform: translate(-100%, 0);
-      opacity: 0;
-    }
-    75% {
-      opacity: 1;
-    }
-    100% {
-      transform: translate(0, 0);
-    }
-  }
 `;
 
 export default StyledForm;

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import { Transition } from "react-transition-group";
+import gsap from "gsap";
 
 import SearchForm from "../components/organisms/SearchForm";
 import SearchModal from "../components/molecules/SearchModal";
@@ -21,7 +23,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const Results = ({ rover, setFromUrl, allowDataFromURL, fetchError }) => {
+const startState = { opacity: 0, x: -150 };
+
+const Results = ({ rover, setFromUrl, allowDataFromURL, fetchError, show }) => {
   const [isMobile, setIsMobile] = useState(false);
   const query = useLocation().search;
 
@@ -49,11 +53,27 @@ const Results = ({ rover, setFromUrl, allowDataFromURL, fetchError }) => {
   }, []);
 
   return (
-    <Wrapper data-testid="results">
-      {isMobile ? <SearchModal /> : <SearchForm displayLeft />}
-      <Gallery isMobile={isMobile} />
-      {fetchError && <ErrorModal />}
-    </Wrapper>
+    <Transition
+      unmountOnExit
+      appear={true}
+      in={show}
+      timeout={1000}
+      onEnter={(node) => gsap.set(node, startState)}
+      addEndListener={(node, done) =>
+        gsap.to(node, {
+          duration: 0.5,
+          opacity: show ? 1 : 0,
+          x: show ? 0 : 150,
+          onComplete: done,
+        })
+      }
+    >
+      <Wrapper data-testid="results">
+        {isMobile ? <SearchModal /> : <SearchForm displayLeft />}
+        <Gallery isMobile={isMobile} />
+        {fetchError && <ErrorModal />}
+      </Wrapper>
+    </Transition>
   );
 };
 

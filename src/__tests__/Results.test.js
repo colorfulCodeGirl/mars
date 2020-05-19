@@ -29,7 +29,7 @@ const renderResults = (
   return render(
     <Provider store={store}>
       <Router history={history}>
-        <Results />
+        <Results show={true}/>
       </Router>
     </Provider>
   );
@@ -91,7 +91,7 @@ describe("Results component", () => {
     expect(getByTestId(/form/i)).toHaveStyle(leftSideStyles);
   });
   it("should on rover change - clean up form, show animation and doesn't show photos", async () => {
-    const { getByLabelText, queryAllByAltText, queryByAltText } = renderResults(
+    const { getByLabelText, queryAllByAltText, queryByAltText,getByTestId } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="
     );
     const roverSelect = getByLabelText(/choose rover/i);
@@ -107,7 +107,7 @@ describe("Results component", () => {
     fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
     await waitFor(() => {
       expect(roverSelect).toHaveValue("Curiosity");
-      ///// TODO - check animation //////
+      // expect(getByTestId(/mars/i)).toBeInTheDocument();
       expect(getByLabelText(/SOL from 0/i)).not.toHaveValue("35");
       expect(queryByAltText(/mars by rover/i)).not.toBeInTheDocument();
     });

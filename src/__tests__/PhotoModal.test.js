@@ -1,8 +1,14 @@
 /* eslint-disable no-sparse-arrays */
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
+import gsap from "gsap";
 import PhotoModal from "../components/molecules/PhotoModal";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
+
+const animateImmediately = () => {
+  const tl = gsap.exportRoot();
+  tl.totalProgress(1);
+};
 
 const { photos } = photosByQuery;
 
@@ -48,6 +54,7 @@ describe("Photo modal", () => {
     const arrowRight = getByLabelText(/right/i);
     const arrowLeft = getByLabelText(/left/i);
     fireEvent.click(arrowRight);
+    animateImmediately();
     expect(changeHandler).toBeCalledTimes(1);
     expect(changeHandler).toHaveBeenLastCalledWith(
       expect.stringMatching(/right/i)
@@ -62,11 +69,13 @@ describe("Photo modal", () => {
     const arrowRight = getByLabelText(/right/i);
     const arrowLeft = getByLabelText(/left/i);
     fireEvent.click(arrowRight);
+    animateImmediately();
     expect(changeHandler).toBeCalledTimes(1);
     expect(changeHandler).toHaveBeenLastCalledWith(
       expect.stringMatching(/right/i)
     );
     fireEvent.click(arrowLeft);
+    animateImmediately();
     expect(changeHandler).toBeCalledTimes(2);
     expect(changeHandler).toHaveBeenLastCalledWith(
       expect.stringMatching(/left/i)
@@ -121,6 +130,7 @@ describe("Photo modal", () => {
     const changeHandler = jest.fn();
     const { getByAltText } = renderPhotoModal([1, true, changeHandler]);
     fireEvent.click(getByAltText(/mars/i));
+    animateImmediately();
     expect(changeHandler).toBeCalledTimes(1);
     expect(changeHandler).toHaveBeenLastCalledWith(expect.any(Number));
   });

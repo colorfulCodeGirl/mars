@@ -53,7 +53,7 @@ const Mars = () => {
 
   return (
     <Wrapper>
-      <Scene ref={scene} />
+      <Scene ref={scene} data-testid="mars"/>
     </Wrapper>
   );
 };

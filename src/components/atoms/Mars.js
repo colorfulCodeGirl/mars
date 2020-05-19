@@ -1,3 +1,5 @@
+/*eslint object-property-newline: ["error", { "allowAllPropertiesOnSameLine": true }]*/
+/*eslint function-call-argument-newline: ["error", "never"]*/
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import gsap from "gsap";
@@ -33,52 +35,15 @@ const Mars = () => {
 
     tl.to(current, { duration: 0.7, autoAlpha: 1 })
       .addLabel("appear")
-      .fromTo(
-        rover,
-        { y: "-=300" },
-        { duration: 1, y: "+=300", autoAlpha: 1, ease: "bounce.out" },
-        "appear"
-      )
+      .fromTo(rover, { y: "-=300" }, { duration: 1, y: "+=300", autoAlpha: 1, ease: "bounce.out" }, "appear")
       .to(stars, { duration: 1, autoAlpha: 1, stagger: 0.1 }, "appear")
       .to(asteroids, { duration: 1, autoAlpha: 1, stagger: 0.1 }, "appear")
       .addLabel("animate")
-      .to(
-        stars,
-        { duration: 0.3, scale: 1.3, repeat: -1, repeatDelay: 0, yoyo: true },
-        "animate"
-      )
-      .to(
-        asteroids,
-        {
-          duration: 1.5,
-          rotation: 360,
-          repeat: -1,
-          repeatDelay: 0,
-          ease: "linear",
-        },
-        "animate"
-      )
-      .to(
-        auras,
-        {
-          duration: 0.5,
-          scale: 1.02,
-          stager: 0.2,
-          repeat: -1,
-          yoyo: true,
-        },
-        "animate"
-      )
-      .to(
-        rover,
-        { duration: 7, rotation: -360, ease: "linear", repeat: -1 },
-        "animate"
-      )
-      .to(
-        rover,
-        { duration: 0.2, scale: 1.02, y: "-=1", repeat: -1 },
-        "animate"
-      );
+      .to(stars, { duration: 0.3, scale: 1.3, repeat: -1, repeatDelay: 0, yoyo: true }, "animate")
+      .to(asteroids, {duration: 1.5, rotation: 360, repeat: -1, ease: "linear"}, "animate")
+      .to(auras, {duration: 0.5, scale: 1.02, stager: 0.2, repeat: -1, yoyo: true,}, "animate")
+      .to(rover, { duration: 7, rotation: -360, ease: "linear", repeat: -1 }, "animate")
+      .to(rover, { duration: 0.2, scale: 1.02, y: "-=1", repeat: -1 }, "animate");
   }, []);
 
   return (

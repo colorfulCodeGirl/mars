@@ -55,7 +55,7 @@ describe("App component main block", () => {
       getByLabelText,
       getByText,
       getAllByAltText,
-      queryByTestId
+      queryByTestId,
     } = renderApp();
     const seeLatestBtn = getByText(/see latest/i);
     chooseRover(getByLabelText);
@@ -74,14 +74,14 @@ describe("App component main block", () => {
       const location = global.window.location.pathname;
       expect(location).toBe("/results");
       expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
-      // expect(getByTestId(/mars/i)).toBeInTheDocument();
+      expect(getByTestId(/mars/i)).toBeInTheDocument();
     });
     await waitFor(() => {
       expect(
         getAllByAltText(/Mars by rover Curiosity/i)[0]
       ).toBeInTheDocument();
-        // expect(queryByTestId(/mars/i)).not.toBeInTheDocument();
-    })
+      expect(queryByTestId(/mars/i)).not.toBeInTheDocument();
+    });
   });
 
   it("fetches photos by query, redirects to '/results', shows Results component with filled form and photos", async () => {

@@ -1,7 +1,8 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, act } from "@testing-library/react";
 import { Gallery } from "../components/organisms/Gallery";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
+import { animateImmediately } from "../helpers/testHelpers";
 
 const { photos } = photosByQuery;
 
@@ -31,9 +32,15 @@ describe("Gallery", () => {
     const { getAllByAltText, getByLabelText, getByTestId } = renderGallery();
     openFullImg(getAllByAltText);
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
-    fireEvent.click(getByLabelText(/right/i));
+    act(() => {
+      fireEvent.click(getByLabelText(/right/i));
+      animateImmediately();
+    });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[1].img_src);
-    fireEvent.click(getByLabelText(/left/i));
+    act(() => {
+      fireEvent.click(getByLabelText(/left/i));
+      animateImmediately();
+    });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });
 
@@ -42,12 +49,18 @@ describe("Gallery", () => {
     openFullImg(getAllByAltText);
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
     const rightSide = window.innerWidth / 2 + 100;
-    fireEvent.click(getByTestId(/full-img/i), {
-      clientX: rightSide,
+    act(() => {
+      fireEvent.click(getByTestId(/full-img/i), {
+        clientX: rightSide,
+      });
+      animateImmediately();
     });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[1].img_src);
-    fireEvent.click(getByTestId(/full-img/i), {
-      clientX: 100,
+    act(() => {
+      fireEvent.click(getByTestId(/full-img/i), {
+        clientX: 100,
+      });
+      animateImmediately();
     });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });

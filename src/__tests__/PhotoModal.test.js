@@ -1,14 +1,9 @@
 /* eslint-disable no-sparse-arrays */
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import gsap from "gsap";
 import PhotoModal from "../components/molecules/PhotoModal";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
-
-const animateImmediately = () => {
-  const tl = gsap.exportRoot();
-  tl.totalProgress(1);
-};
+import { animateImmediately } from "../helpers/testHelpers";
 
 const { photos } = photosByQuery;
 

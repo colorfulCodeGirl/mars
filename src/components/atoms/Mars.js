@@ -21,12 +21,12 @@ const Mars = () => {
     const stars = current.querySelectorAll(".star");
     const asteroids = current.querySelectorAll(".asteroid");
     const rover = current.querySelector("#rover");
-    const planet = current.querySelector("#mars");
-
-    const radius = planet.getBoundingClientRect().width / 2;
+    const auras = current.querySelectorAll(".aura");
 
     gsap.set([current, ...stars, ...asteroids, rover], { autoAlpha: 0 });
-    gsap.set([...stars, ...asteroids], { transformOrigin: "center center" });
+    gsap.set([...stars, ...asteroids, ...auras], {
+      transformOrigin: "center center",
+    });
     gsap.set(rover, { transformOrigin: `center 310%` });
 
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
@@ -55,6 +55,17 @@ const Mars = () => {
           repeat: -1,
           repeatDelay: 0,
           ease: "linear",
+        },
+        "animate"
+      )
+      .to(
+        auras,
+        {
+          duration: 0.5,
+          scale: 1.02,
+          stager: 0.2,
+          repeat: -1,
+          yoyo: true,
         },
         "animate"
       )

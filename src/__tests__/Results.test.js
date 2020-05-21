@@ -9,6 +9,7 @@ import { photosByQuery } from "../__response__mocks/photosByQuery";
 import { mockManifest } from "../__response__mocks/mockManifest";
 import Mars from "../components/atoms/Mars";
 import MarsSmall from "../components/atoms/MarsSmall";
+import { act } from "react-dom/test-utils";
 
 jest.mock('../components/atoms/Mars');
 Mars.mockImplementation(() => <p>animation</p>);
@@ -98,7 +99,7 @@ describe("Results component", () => {
     expect(getByTestId(/form/i)).toHaveStyle(leftSideStyles);
   });
   it("should on rover change - clean up form, show animation and doesn't show photos", async () => {
-    const { getByLabelText, queryAllByAltText, queryByAltText, getByTestId } = renderResults(
+    const { getByLabelText, queryAllByAltText, queryByAltText } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="
     );
     const roverSelect = getByLabelText(/choose rover/i);
@@ -111,10 +112,11 @@ describe("Results component", () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({ ok: true, json: () => mockManifest })
     );
-    fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
+    act(() => {
+      fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
+    })
     await waitFor(() => {
       expect(roverSelect).toHaveValue("Curiosity");
-      // expect(getByTestId(/mars/i)).toBeInTheDocument();
       expect(getByLabelText(/SOL from 0/i)).not.toHaveValue("35");
       expect(queryByAltText(/mars by rover/i)).not.toBeInTheDocument();
     });

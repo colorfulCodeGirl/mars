@@ -7,6 +7,10 @@ import Results from "../views/Results";
 import configureStore from "../store/store";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
 import { mockManifest } from "../__response__mocks/mockManifest";
+import Mars from "../components/atoms/Mars";
+
+jest.mock('../components/atoms/Mars');
+Mars.mockImplementation(() => <p>animation</p>);
 
 beforeEach(() => {
   localStorage.clear();
@@ -91,7 +95,7 @@ describe("Results component", () => {
     expect(getByTestId(/form/i)).toHaveStyle(leftSideStyles);
   });
   it("should on rover change - clean up form, show animation and doesn't show photos", async () => {
-    const { getByLabelText, queryAllByAltText, queryByAltText,getByTestId } = renderResults(
+    const { getByLabelText, queryAllByAltText, queryByAltText, getByTestId } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="
     );
     const roverSelect = getByLabelText(/choose rover/i);

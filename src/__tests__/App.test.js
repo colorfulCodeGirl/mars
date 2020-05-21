@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, act } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
@@ -9,8 +9,12 @@ import { latestPhotos } from "../__response__mocks/latestPhotos";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
 import { mockManifest } from "../__response__mocks/mockManifest";
 import { chooseRover } from "../helpers/testHelpers";
+import Mars from "../components/atoms/Mars";
 
 global.fetch = jest.fn();
+jest.mock('../components/atoms/Mars');
+Mars.mockImplementation(() => <p>animation</p>);
+
 
 const renderApp = () => {
   const store = configureStore();
@@ -49,13 +53,12 @@ describe("App component main block", () => {
     expect(location).toBe("/");
   });
 
-  it("fetches latest photos, redirects to '/results', shows Results component with filled form, first animation and then photos", async () => {
+  it("fetches latest photos, redirects to '/results', shows Results component with filled form and photos", async () => {
     const {
       getByTestId,
       getByLabelText,
       getByText,
-      getAllByAltText,
-      queryByTestId,
+      getAllByAltText
     } = renderApp();
     const seeLatestBtn = getByText(/see latest/i);
     chooseRover(getByLabelText);
@@ -67,22 +70,20 @@ describe("App component main block", () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({ ok: true, json: () => latestPhotos })
     );
-    fireEvent.click(seeLatestBtn);
-
+    act(() => {
+      fireEvent.click(seeLatestBtn);
+    })
+    
     await waitFor(() => {
       expect(getByTestId(/results/i)).toBeInTheDocument();
       const location = global.window.location.pathname;
       expect(location).toBe("/results");
       expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
-      expect(getByTestId(/mars/i)).toBeInTheDocument();
-    });
-    await waitFor(() => {
       expect(
         getAllByAltText(/Mars by rover Curiosity/i)[0]
-      ).toBeInTheDocument();
-      expect(queryByTestId(/mars/i)).not.toBeInTheDocument();
+        ).toBeInTheDocument();
+      });
     });
-  });
 
   it("fetches photos by query, redirects to '/results', shows Results component with filled form and photos", async () => {
     const {
@@ -110,7 +111,7 @@ describe("App component main block", () => {
       expect(searchBtn).toBeEnabled();
     });
     fireEvent.click(searchBtn);
-
+    
     await waitFor(() => {
       expect(getByTestId(/results/i)).toBeInTheDocument();
       const location = global.window.location.pathname;

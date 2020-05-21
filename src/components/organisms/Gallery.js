@@ -10,6 +10,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 
 import PhotoModal from "../molecules/PhotoModal";
 import Mars from "../atoms/Mars";
+import MarsSmall from "../atoms/MarsSmall";
 import { Transition } from "react-transition-group";
 
 const StyledLazyImg = styled(LazyLoadImage)`
@@ -114,7 +115,7 @@ export const Gallery = ({ photos, isMobile }) => {
 
   return (
     <div data-testid="gallery">
-      <Transition
+      {!isMobile ? <Transition
         unmountOnExit
         timeout={3000}
         in={showAnimation}
@@ -128,7 +129,22 @@ export const Gallery = ({ photos, isMobile }) => {
         }}
       >
         <Mars />
-      </Transition>
+      </Transition> :
+      <Transition
+        unmountOnExit
+        timeout={3000}
+        in={showAnimation}
+        onEnter={(node) => gsap.set(node, {autoAlpha: 0})}
+        addEndListener={(node, done) => {
+          gsap.to(node, {
+            duration: showAnimation ? 0.5 : 1,
+            autoAlpha: showAnimation ? 1 : 0,
+            onComplete: done,
+          });
+        }}
+      >
+        <MarsSmall />
+      </Transition>}
       <Transition
         timeout={3000}
         in={!showAnimation}

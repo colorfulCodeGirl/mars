@@ -8,9 +8,12 @@ import configureStore from "../store/store";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
 import { mockManifest } from "../__response__mocks/mockManifest";
 import Mars from "../components/atoms/Mars";
+import MarsSmall from "../components/atoms/MarsSmall";
 
 jest.mock('../components/atoms/Mars');
 Mars.mockImplementation(() => <p>animation</p>);
+jest.mock('../components/atoms/MarsSmall');
+MarsSmall.mockImplementation(() => <p>animation</p>);
 
 beforeEach(() => {
   localStorage.clear();

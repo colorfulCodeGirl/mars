@@ -10,7 +10,7 @@ const renderGallery = () => render(<Gallery photos={photos} />);
 
 const openFullImg = (getAllByAltText) => {
   const imgs = getAllByAltText(/mars by rover/i);
-  fireEvent.click(imgs[0]);
+    fireEvent.click(imgs[0]);
 };
 
 describe("Gallery", () => {
@@ -22,7 +22,9 @@ describe("Gallery", () => {
 
   it("opens full image on click", () => {
     const { getAllByAltText, getByTestId } = renderGallery();
-    openFullImg(getAllByAltText);
+    act(() => {
+      openFullImg(getAllByAltText)
+    });
     const overlay = getByTestId(/overlay/i);
     expect(overlay).toBeInTheDocument();
     expect(overlay).toContainElement(getByTestId(/full-img/i));
@@ -30,7 +32,9 @@ describe("Gallery", () => {
 
   it("should show next/previous photo on arrow click", () => {
     const { getAllByAltText, getByLabelText, getByTestId } = renderGallery();
-    openFullImg(getAllByAltText);
+    act(() => {
+      openFullImg(getAllByAltText)
+    });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
     act(() => {
       fireEvent.click(getByLabelText(/right/i));
@@ -46,7 +50,9 @@ describe("Gallery", () => {
 
   it("should show next/previous photo on photo click", () => {
     const { getAllByAltText, getByTestId } = renderGallery();
-    openFullImg(getAllByAltText);
+    act(() => {
+      openFullImg(getAllByAltText)
+    });
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
     const rightSide = window.innerWidth / 2 + 100;
     act(() => {
@@ -67,20 +73,28 @@ describe("Gallery", () => {
 
   it("should not show next/previous photo on first photo click on left side", () => {
     const { getAllByAltText, getByTestId } = renderGallery();
-    openFullImg(getAllByAltText);
+    act(() => {
+      openFullImg(getAllByAltText)
+    });
     const img = getByTestId(/full-img/i);
     expect(img).toHaveAttribute("src", photos[0].img_src);
-    fireEvent.click(img, {
-      clientX: 100,
-    });
+    act(() => {
+      fireEvent.click(img, {
+        clientX: 100,
+      });
+    })
     expect(getByTestId(/full-img/i)).toHaveAttribute("src", photos[0].img_src);
   });
 
   it("should close full image on X click", () => {
     const { getAllByAltText, getByLabelText, queryByTestId } = renderGallery();
-    openFullImg(getAllByAltText);
+    act(() => {
+      openFullImg(getAllByAltText)
+    });
     expect(queryByTestId(/full-img/i)).toBeInTheDocument();
-    fireEvent.click(getByLabelText(/close/i));
+    act(() => {
+      fireEvent.click(getByLabelText(/close/i));
+    })
     expect(queryByTestId(/full-img/i)).not.toBeInTheDocument();
   });
 });

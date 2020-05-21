@@ -110,7 +110,9 @@ describe("App component main block", () => {
     await waitFor(() => {
       expect(searchBtn).toBeEnabled();
     });
-    fireEvent.click(searchBtn);
+    act(() => {
+      fireEvent.click(searchBtn);
+    })
     
     await waitFor(() => {
       expect(getByTestId(/results/i)).toBeInTheDocument();
@@ -155,7 +157,9 @@ describe("App fetch errors", () => {
       expect(button).toBeEnabled();
       expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
     });
-    fireEvent.click(button);
+    act(() => {
+      fireEvent.click(button);
+    })
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });

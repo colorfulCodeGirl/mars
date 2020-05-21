@@ -19,7 +19,7 @@
 .env.production.local
 
 #assets
-.crd
+src/assets/vector-original
 
 npm-debug.log*
 yarn-debug.log*

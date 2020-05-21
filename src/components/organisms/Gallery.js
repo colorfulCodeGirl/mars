@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import gsap from "gsap";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import PhotoModal from "../molecules/PhotoModal";
-// import AnimatedMars from "../atoms/AnimatedMars";
+import Mars from "../atoms/Mars";
+import { Transition } from "react-transition-group";
 
 const StyledLazyImg = styled(LazyLoadImage)`
   width: 100%;
@@ -31,14 +33,23 @@ export const chooseNextPhotos = (newPhotos, length) => {
 
 export const Gallery = ({ photos, isMobile }) => {
   const [shownPhotos, setShownPhotos] = useState([]);
+  const [showAnimation, setShowAnimation] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [fullImage, setFullImage] = useState({});
   const imgContainer = useRef(null);
 
   useEffect(() => {
+    let timer;
+    if (photos.length === 0) {
+      setShowAnimation(true);
+    } else {
+      timer = setTimeout(() => {
+        setShowAnimation(false)}, 1000);
+    }
     const { hasMorePhotos, nextPhotos } = chooseNextPhotos(photos, 0);
     setShownPhotos([...nextPhotos]);
     setHasMore(hasMorePhotos);
+    return () => clearTimeout(timer);
   }, [photos]);
 
   const openFullImage = (e) => {
@@ -103,10 +114,35 @@ export const Gallery = ({ photos, isMobile }) => {
 
   return (
     <div data-testid="gallery">
-      {photos.length === 0 ? (
-        // <AnimatedMars isAnimating={true} />
-        <p>loading...</p>
-      ) : (
+      <Transition
+        unmountOnExit
+        timeout={3000}
+        in={showAnimation}
+        onEnter={(node) => gsap.set(node, {autoAlpha: 0})}
+        addEndListener={(node, done) => {
+          gsap.to(node, {
+            duration: showAnimation ? 0.5 : 1,
+            autoAlpha: showAnimation ? 1 : 0,
+            onComplete: done,
+          });
+        }}
+      >
+        <Mars />
+      </Transition>
+      <Transition
+        timeout={3000}
+        in={!showAnimation}
+        appear={true}
+        onEnter={(node) => {
+          gsap.set(node, { autoAlpha: 0 });
+        }}
+        addEndListener={(node, done) => {
+         gsap.to(
+            node,
+            { duration: 1, autoAlpha: !showAnimation ? 1 : 0, onComplete: done },
+          );
+        }}
+      >
         <InfiniteScroll
           dataLength={shownPhotos.length}
           next={addPhotosOnScroll}
@@ -121,7 +157,7 @@ export const Gallery = ({ photos, isMobile }) => {
             <Masonry gutter="0.3rem">{imgElems}</Masonry>
           </StyledResponsiveMasonry>
         </InfiniteScroll>
-      )}
+      </Transition>
       {fullImage.index >= 0 && (
         <PhotoModal
           closeHandler={() => setFullImage({})}

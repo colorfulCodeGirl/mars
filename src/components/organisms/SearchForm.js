@@ -11,6 +11,7 @@ import Button from "../atoms/Button";
 import Select from "../atoms/Select";
 import Input from "../atoms/Input";
 import ErrorTooltip from "../atoms/ErrorTooltip";
+import MarsSmall from "../atoms/MarsSmall";
 
 import * as actions from "../../store/actionCreators";
 
@@ -33,6 +34,7 @@ const SearchFrom = ({
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
   const [show, setShow] = useState(true);
+  const [showAnimation, setShowAnimation] = useState(true);
   const history = useHistory();
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
@@ -44,6 +46,10 @@ const SearchFrom = ({
       allowSearch(false);
     }
   }, [sol, date, allowSearch, error]);
+
+  useEffect(() => {
+    if(!rover) {}
+  }, [rover])
 
   const radioChangeHandler = ({ target: { value } }) => {
     const newSolSwitch = value === "sol*" ? "sol" : "date";
@@ -86,6 +92,23 @@ const SearchFrom = ({
           defaultValue="Choose rover"
           changeHandler={fetchManifest}
         />
+        {!rover && (
+          <Transition
+          unmountOnExit
+          timeout={3000}
+          in={!rover}
+          onEnter={(node) => gsap.set(node, {autoAlpha: 0})}
+          addEndListener={(node, done) => {
+            gsap.to(node, {
+              duration: !rover ? 0.5 : 1,
+              autoAlpha: !rover ? 1 : 0,
+              onComplete: done,
+            });
+          }}
+        >
+          <MarsSmall />
+        </Transition>
+        )}
         {rover && (
           <>
             <RadioGroup

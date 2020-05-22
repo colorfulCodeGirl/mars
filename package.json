@@ -50,8 +50,8 @@
   "jest": {
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/src/stories",
-      "/src/__response__mocks"
+      "/src/stories/",
+      "/src/__response__mocks/"
     ]
   },
   "devDependencies": {

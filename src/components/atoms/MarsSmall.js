@@ -7,9 +7,9 @@ import { ReactComponent as Scene } from "../../assets/mars-and-rover-mobile.svg"
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 90vh;
   display: flex;
   justify-content: center;
+  padding-bottom: 1rem;
   svg {
   align-self: flex-end;
     width: 100%;

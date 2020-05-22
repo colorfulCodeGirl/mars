@@ -4,8 +4,11 @@ import SearchForm from "../components/organisms/SearchForm";
 import { Provider } from "react-redux";
 import { mockManifest } from "../__response__mocks/mockManifest";
 import configureStore from "../store/store";
-import { chooseRover } from "../helpers/testHelpers";
+import { chooseRover } from "../test-helpers";
+import MarsSmall from "../components/atoms/MarsSmall";
 
+jest.mock("../components/atoms/MarsSmall");
+MarsSmall.mockImplementation(() => <p>animation</p>);
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useHistory: jest.fn().mockReturnValue([]),

@@ -4,7 +4,11 @@ import { Provider } from "react-redux";
 import configureStore from "../store/store";
 import SearchModal from "../components/molecules/SearchModal";
 import { mockManifest } from "../__response__mocks/mockManifest";
-import { chooseRover } from "../helpers/testHelpers";
+import { chooseRover } from "../test-helpers";
+import MarsSmall from "../components/atoms/MarsSmall";
+
+jest.mock("../components/atoms/MarsSmall");
+MarsSmall.mockImplementation(() => <p>animation</p>);
 
 const renderSearchModal = () => {
   const store = configureStore();

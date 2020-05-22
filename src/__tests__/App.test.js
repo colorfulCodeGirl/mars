@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitFor, act } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
@@ -8,13 +8,26 @@ import configureStore from "../store/store";
 import { latestPhotos } from "../__response__mocks/latestPhotos";
 import { photosByQuery } from "../__response__mocks/photosByQuery";
 import { mockManifest } from "../__response__mocks/mockManifest";
-import { chooseRover } from "../helpers/testHelpers";
+import { chooseRover } from "../test-helpers";
 import Mars from "../components/atoms/Mars";
+import MarsSmall from "../components/atoms/MarsSmall";
 
 global.fetch = jest.fn();
-jest.mock('../components/atoms/Mars');
+jest.mock("../components/atoms/Mars");
 Mars.mockImplementation(() => <p>animation</p>);
-
+jest.mock("../components/atoms/MarsSmall");
+MarsSmall.mockImplementation(() => <p>animation</p>);
+jest.mock("react-lazy-load-image-component", () => ({
+  LazyLoadImage: ({ src, key, alt, onClick, ...rest }) => (
+    <img
+      src={src}
+      alt={alt}
+      onClick={onClick}
+      key={key}
+      data-index={rest["data-index"]}
+    />
+  ),
+}));
 
 const renderApp = () => {
   const store = configureStore();
@@ -58,7 +71,7 @@ describe("App component main block", () => {
       getByTestId,
       getByLabelText,
       getByText,
-      getAllByAltText
+      getAllByAltText,
     } = renderApp();
     const seeLatestBtn = getByText(/see latest/i);
     chooseRover(getByLabelText);
@@ -70,10 +83,8 @@ describe("App component main block", () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({ ok: true, json: () => latestPhotos })
     );
-    act(() => {
-      fireEvent.click(seeLatestBtn);
-    })
-    
+    fireEvent.click(seeLatestBtn);
+
     await waitFor(() => {
       expect(getByTestId(/results/i)).toBeInTheDocument();
       const location = global.window.location.pathname;
@@ -81,9 +92,9 @@ describe("App component main block", () => {
       expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
       expect(
         getAllByAltText(/Mars by rover Curiosity/i)[0]
-        ).toBeInTheDocument();
-      });
+      ).toBeInTheDocument();
     });
+  });
 
   it("fetches photos by query, redirects to '/results', shows Results component with filled form and photos", async () => {
     const {
@@ -110,10 +121,8 @@ describe("App component main block", () => {
     await waitFor(() => {
       expect(searchBtn).toBeEnabled();
     });
-    act(() => {
-      fireEvent.click(searchBtn);
-    })
-    
+    fireEvent.click(searchBtn);
+
     await waitFor(() => {
       expect(getByTestId(/results/i)).toBeInTheDocument();
       const location = global.window.location.pathname;
@@ -157,9 +166,8 @@ describe("App fetch errors", () => {
       expect(button).toBeEnabled();
       expect(queryByText(/something went wrong/i)).not.toBeInTheDocument();
     });
-    act(() => {
-      fireEvent.click(button);
-    })
+    fireEvent.click(button);
+
     await waitFor(() => {
       expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });

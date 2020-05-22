@@ -9,12 +9,22 @@ import { photosByQuery } from "../__response__mocks/photosByQuery";
 import { mockManifest } from "../__response__mocks/mockManifest";
 import Mars from "../components/atoms/Mars";
 import MarsSmall from "../components/atoms/MarsSmall";
-import { act } from "react-dom/test-utils";
 
-jest.mock('../components/atoms/Mars');
+jest.mock("../components/atoms/Mars");
 Mars.mockImplementation(() => <p>animation</p>);
-jest.mock('../components/atoms/MarsSmall');
+jest.mock("../components/atoms/MarsSmall");
 MarsSmall.mockImplementation(() => <p>animation</p>);
+jest.mock("react-lazy-load-image-component", () => ({
+  LazyLoadImage: ({ src, key, alt, onClick, ...rest }) => (
+    <img
+      src={src}
+      alt={alt}
+      onClick={onClick}
+      key={key}
+      data-index={rest["data-index"]}
+    />
+  ),
+}));
 
 beforeEach(() => {
   localStorage.clear();
@@ -37,7 +47,7 @@ const renderResults = (
   return render(
     <Provider store={store}>
       <Router history={history}>
-        <Results show={true}/>
+        <Results show={true} />
       </Router>
     </Provider>
   );
@@ -55,6 +65,7 @@ describe("Results component", () => {
       expect(getByText(/search/i)).toBeEnabled();
     });
   });
+
   it("gets data from url and renders filled form (query by Date)", async () => {
     const { getByLabelText, getByText } = renderResults(
       "/results?rover=Curiosity&latest=undefined&sol=&date=2012-08-28"
@@ -66,6 +77,7 @@ describe("Results component", () => {
       expect(getByText(/search/i)).toBeEnabled();
     });
   });
+
   it("gets data from url and renders filled form (query by latest)", async () => {
     const { getByLabelText, getByText } = renderResults(
       "results?rover=Opportunity&latest=true&sol=&date="
@@ -77,6 +89,7 @@ describe("Results component", () => {
       expect(getByText(/search/i)).toBeDisabled();
     });
   });
+
   it("gets data from url and renders gallery with photos", async () => {
     const { getAllByAltText } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="
@@ -86,6 +99,7 @@ describe("Results component", () => {
       expect(getAllByAltText(`Mars by rover ${rover}`)[0]).toBeInTheDocument();
     });
   });
+
   it("displays form on the left for desktop look", () => {
     const { getByTestId } = renderResults();
     const leftSideStyles = `
@@ -98,6 +112,7 @@ describe("Results component", () => {
     `;
     expect(getByTestId(/form/i)).toHaveStyle(leftSideStyles);
   });
+
   it("should on rover change - clean up form, show animation and doesn't show photos", async () => {
     const { getByLabelText, queryAllByAltText, queryByAltText } = renderResults(
       "/results?rover=Spirit&latest=undefined&sol=35&date="
@@ -112,15 +127,14 @@ describe("Results component", () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({ ok: true, json: () => mockManifest })
     );
-    act(() => {
-      fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
-    })
+    fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
     await waitFor(() => {
       expect(roverSelect).toHaveValue("Curiosity");
       expect(getByLabelText(/SOL from 0/i)).not.toHaveValue("35");
       expect(queryByAltText(/mars by rover/i)).not.toBeInTheDocument();
     });
   });
+
   it("shows 'Change search' button in mobile look for opening search form", async () => {
     const { getByText, queryByTestId } = renderResults();
     window.innerWidth = 375;

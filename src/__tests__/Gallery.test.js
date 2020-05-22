@@ -10,6 +10,17 @@ jest.mock("gsap", () => ({
   //change handler in PhotoModal is passed through onComplete
   to: (node, options) => options.onComplete && options.onComplete(),
 }));
+jest.mock("react-lazy-load-image-component", () => ({
+  LazyLoadImage: ({ src, key, alt, onClick, ...rest }) => (
+    <img
+      src={src}
+      alt={alt}
+      onClick={onClick}
+      key={key}
+      data-index={rest["data-index"]}
+    />
+  ),
+}));
 
 const { photos } = photosByQuery;
 

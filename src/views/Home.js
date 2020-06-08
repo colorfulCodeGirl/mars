@@ -36,7 +36,7 @@ const Home = ({ cleanUpForm, fetchError, show }) => {
         <SearchForm />
         {fetchError && <ErrorModal />}
         <Credentials>
-          Image by{" "}
+          <p>Image by{" "}
           <a href="https://pixabay.com/users/WikiImages-1897/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=67522">
             WikiImages
           </a>{" "}
@@ -44,6 +44,11 @@ const Home = ({ cleanUpForm, fetchError, show }) => {
           <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=67522">
             Pixabay
           </a>
+          </p>
+          <p>
+          Vectors by freepik and macrovector from{" "}
+          <a href="https://www.freepik.com/free-photos-vectors/">www.freepik.com</a>
+          </p>
         </Credentials>
       </>
     </Transition>

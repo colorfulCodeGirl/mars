@@ -76,7 +76,7 @@ const SearchFrom = ({
   };
 
   const radioChangeHandler = ({ target: { value } }) => {
-    const newSolSwitch = value === "sol*" ? "sol" : "date";
+    const newSolSwitch = value === "day from landing" ? "sol" : "date";
     if (solSwitcher !== newSolSwitch) {
       cleanUpPeriod();
     }

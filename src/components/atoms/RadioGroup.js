@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 const StyledFieldset = styled.div`
   border: none;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   min-width: 200px;
@@ -18,6 +19,7 @@ const StyledFieldset = styled.div`
 const Wrapper = styled.div`
   margin-right: 3rem;
   position: relative;
+  margin-top: 1.5rem;
 `;
 
 const StyledInput = styled.input`

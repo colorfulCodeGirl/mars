@@ -11,6 +11,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import PhotoModal from "../molecules/PhotoModal";
 import Mars from "../atoms/Mars";
 import MarsSmall from "../atoms/MarsSmall";
+import ErrorModal from "../molecules/ErrorModal";
 import { Transition } from "react-transition-group";
 
 const StyledLazyImg = styled(LazyLoadImage)`

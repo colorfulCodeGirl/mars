@@ -40,6 +40,10 @@ export const setPhotos = (photos) => ({
   payload: photos,
 });
 
+export const setNoPhotosError = () => ({
+  type: actionTypes.SET_NO_PHOTOS_ERROR,
+});
+
 export const fetchPhotosFailed = (error) => ({
   type: actionTypes.FETCH_PHOTOS_FAILED,
   payload: error,

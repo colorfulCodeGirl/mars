@@ -10,6 +10,7 @@ const initialState = {
   maxSol: 0,
   photos: [],
   fetchError: false,
+  noPhotosError: false,
   allowDataFromURL: true,
   solSwitcher: "sol",
 };
@@ -22,6 +23,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         fetchError: false,
+        noPhotosError: false,
         ...payload,
       };
     case actionTypes.FETCH_MANIFEST_FAILED:
@@ -52,6 +54,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         photos: [],
+        noPhotosError: false
       };
     case actionTypes.CLEAN_UP_FORM:
       return {
@@ -62,7 +65,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         fetchError: false,
+        noPhotosError: false,
         photos: payload,
+      };
+    case actionTypes.SET_NO_PHOTOS_ERROR:
+      return {
+        ...state,
+        noPhotosError: true,
       };
     case actionTypes.FETCH_PHOTOS_FAILED:
       return {

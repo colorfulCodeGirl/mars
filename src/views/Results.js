@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
@@ -25,7 +26,7 @@ const Wrapper = styled.div`
 
 const startState = { opacity: 0, x: -150 };
 
-const Results = ({ rover, setFromUrl, allowDataFromURL, fetchError, show }) => {
+const Results = ({ rover, setFromUrl, allowDataFromURL, fetchError, show, noPhotosError }) => {
   const [isMobile, setIsMobile] = useState(false);
   const query = useLocation().search;
 
@@ -72,15 +73,17 @@ const Results = ({ rover, setFromUrl, allowDataFromURL, fetchError, show }) => {
         {isMobile ? <SearchModal /> : <SearchForm displayLeft />}
         <Gallery isMobile={isMobile} />
         {fetchError && <ErrorModal />}
+        {noPhotosError && <ErrorModal massage="No photos was made on that day. Please change search parameters." />}
       </Wrapper>
     </Transition>
   );
 };
 
-const mapStateToProps = ({ rover, allowDataFromURL, fetchError }) => ({
+const mapStateToProps = ({ rover, allowDataFromURL, fetchError, noPhotosError }) => ({
   rover,
   allowDataFromURL,
   fetchError,
+  noPhotosError
 });
 
 const mapDispatchToProps = {
@@ -88,3 +91,10 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);
+
+Results.propTypes = {
+  rover: PropTypes.string.isRequired,
+  allowDataFromURL: PropTypes.bool.isRequired,
+  fetchError: PropTypes.bool.isRequired,
+  noPhotosError: PropTypes.bool.isRequired,
+}

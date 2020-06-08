@@ -66,7 +66,11 @@ function* fetchPhotos({ latest = null }) {
   try {
     const response = yield fetchData(urlParams);
     const newPhotos = response.latest_photos || response.photos;
-    yield put(actions.setPhotos(newPhotos));
+    if(newPhotos.length === 0) {
+      yield put(actions.setNoPhotosError());
+    } else {
+      yield put(actions.setPhotos(newPhotos));
+    }
   } catch (error) {
     yield put(actions.fetchPhotosFailed(error));
   }

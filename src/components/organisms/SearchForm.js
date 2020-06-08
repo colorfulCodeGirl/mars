@@ -64,14 +64,18 @@ const SearchFrom = ({
   }, [sol, date, allowSearch, error]);
 
   useEffect(() => {
-    let timeout;
-    if (rover) {
-      timeout = setTimeout(() => {
+    // let timeout;
+    // if (rover) {
+    //   timeout = setTimeout(() => {
+      if(rover !== '') {
         setShowAnimation(false);
         setShowRestForm(true);
-      }, 1000);
-    }
-    return () => clearTimeout(timeout);
+      } else {
+        setShowRestForm(false);
+      }
+    //   }, 1000);
+    // }
+    // return () => clearTimeout(timeout);
   }, [rover]);
 
   const changeRover = ({ target: { value } }) => {
@@ -130,6 +134,7 @@ const SearchFrom = ({
             addEndListener={(node, done) => {
               gsap.to(node, {
                 duration: 0.3,
+                delay: showRestFrom ? 1 : 0,
                 autoAlpha: !rover ? 1 : 0,
                 onComplete: done,
               });
@@ -148,6 +153,7 @@ const SearchFrom = ({
             addEndListener={(node, done) => {
               gsap.to(node, {
                 duration: showRestFrom ? 1 : 0,
+                delay: showRestFrom ? 1 : 0,
                 autoAlpha: showRestFrom ? 1 : 0,
                 onComplete: done,
               });

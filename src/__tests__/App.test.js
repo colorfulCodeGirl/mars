@@ -28,6 +28,9 @@ jest.mock("react-lazy-load-image-component", () => ({
     />
   ),
 }));
+jest.mock("react-transition-group", () => ({
+  Transition: (props) => (props.in ? props.children : null),
+}));
 
 const renderApp = () => {
   const store = configureStore();

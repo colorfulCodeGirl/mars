@@ -18,7 +18,7 @@ Mars.mockImplementation(() => <p>animation</p>);
 jest.mock("../components/atoms/MarsSmall");
 MarsSmall.mockImplementation(() => <p>animation</p>);
 jest.mock("react-lazy-load-image-component", () => ({
-  LazyLoadImage: ({ src, key, alt, onClick, ...rest }) => (
+  LazyLoadImage: ({ src, key, alt, onClick, afterLoad, ...rest }) => (
     <img
       src={src}
       alt={alt}
@@ -29,7 +29,7 @@ jest.mock("react-lazy-load-image-component", () => ({
   ),
 }));
 jest.mock("react-transition-group", () => ({
-  Transition: (props) => (props.in ? props.children : null),
+  Transition: (props) => props.children,
 }));
 
 const renderApp = () => {

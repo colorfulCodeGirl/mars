@@ -6,12 +6,12 @@ import gsap from "gsap";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Transition } from "react-transition-group";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import PhotoModal from "../molecules/PhotoModal";
 import Mars from "../atoms/Mars";
 import MarsSmall from "../atoms/MarsSmall";
-import { Transition } from "react-transition-group";
 
 const StyledLazyImg = styled(LazyLoadImage)`
   width: 100%;
@@ -40,17 +40,12 @@ export const Gallery = ({ photos, isMobile }) => {
   const imgContainer = useRef(null);
 
   useEffect(() => {
-    let timer;
     if (photos.length === 0) {
       setShowAnimation(true);
-    } else {
-      timer = setTimeout(() => {
-        setShowAnimation(false)}, 1000);
-    }
+    } 
     const { hasMorePhotos, nextPhotos } = chooseNextPhotos(photos, 0);
     setShownPhotos([...nextPhotos]);
     setHasMore(hasMorePhotos);
-    return () => clearTimeout(timer);
   }, [photos]);
 
   const openFullImage = (e) => {
@@ -81,6 +76,9 @@ export const Gallery = ({ photos, isMobile }) => {
   // needed to fill whole page if on first render was not enough photos
   // fires on load on last image in a group
   const checkIfPageIsFilled = (index) => {
+    if (index === 0 ) {
+      return () => setShowAnimation(false);
+    }
     if (index === shownPhotos.length - 1) {
       return () => {
         const {
@@ -155,7 +153,11 @@ export const Gallery = ({ photos, isMobile }) => {
         addEndListener={(node, done) => {
          gsap.to(
             node,
-            { duration: 1, autoAlpha: !showAnimation ? 1 : 0, onComplete: done },
+            { 
+              duration: 1,
+              autoAlpha: !showAnimation ? 1 : 0, 
+              onComplete: done 
+            },
           );
         }}
       >

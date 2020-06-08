@@ -76,12 +76,12 @@ describe("Search form component on start", () => {
   });
 
   it("should handle change sol/date radio group correctly", async () => {
-    const { getByLabelText } = renderSearchForm();
+    const { getByLabelText, getAllByLabelText } = renderSearchForm();
     chooseRover(getByLabelText);
     let sol;
     let date;
     await waitFor(() => {
-      sol = getByLabelText(/day from landing/i);
+      sol = getAllByLabelText(/day from landing/i)[0];
       date = getByLabelText(/earth date/i);
     });
     expect(sol).toBeChecked();
@@ -95,12 +95,12 @@ describe("Search form component on start", () => {
   });
 
   it("should change sol/date placeholder on sol/date change", async () => {
-    const { getByLabelText, queryByPlaceholderText } = renderSearchForm();
+    const { getByLabelText, queryByPlaceholderText, getAllByLabelText } = renderSearchForm();
     chooseRover(getByLabelText);
     let sol;
     let date;
     await waitFor(() => {
-      sol = getByLabelText("Day from landing");
+      sol = getAllByLabelText(/day from landing/i)[0];
       date = getByLabelText(/earth date/i);
     });
 

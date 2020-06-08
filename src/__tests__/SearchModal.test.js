@@ -76,7 +76,7 @@ describe("SearchModal", () => {
       expect(solInput).toBeInTheDocument();
       fireEvent.change(solInput, { target: { value: "54" } });
     });
-    const searchBtn = getByText(/search/i);
+    const searchBtn = getByText(/search by day/i);
     expect(searchBtn).toBeEnabled();
     fireEvent.click(searchBtn);
     expect(queryByTestId(/form/i)).not.toBeInTheDocument();

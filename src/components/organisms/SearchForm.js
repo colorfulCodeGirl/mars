@@ -64,18 +64,12 @@ const SearchFrom = ({
   }, [sol, date, allowSearch, error]);
 
   useEffect(() => {
-    // let timeout;
-    // if (rover) {
-    //   timeout = setTimeout(() => {
       if(rover !== '') {
         setShowAnimation(false);
         setShowRestForm(true);
       } else {
         setShowRestForm(false);
       }
-    //   }, 1000);
-    // }
-    // return () => clearTimeout(timeout);
   }, [rover]);
 
   const changeRover = ({ target: { value } }) => {

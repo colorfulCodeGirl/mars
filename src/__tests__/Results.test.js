@@ -26,8 +26,7 @@ jest.mock("react-lazy-load-image-component", () => ({
   ),
 }));
 jest.mock("react-transition-group", () => ({
-  Transition: (props) => {
-    return (props.in ? props.children : null)},
+  Transition: (props) => props.children,
 }));
 
 beforeEach(() => {

@@ -26,6 +26,7 @@ const Wrapper = styled.div`
   width: min-content;
   margin: 0 auto;
   max-height: fit-content;
+  background-color: rgba(255,255,255,0.6);
 `;
 
 const StyledButton = styled.button`

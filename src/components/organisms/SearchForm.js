@@ -76,6 +76,7 @@ const SearchFrom = ({
 
   const changeRover = ({ target: { value } }) => {
     setShowAnimation(true);
+    setShowRestForm(false);
     fetchManifest(value);
   };
 
@@ -124,7 +125,7 @@ const SearchFrom = ({
           <Transition
             unmountOnExit
             timeout={3000}
-            in={showAnimation && !displayLeft}
+            in={showAnimation}
             onEnter={(node) => gsap.set(node, { autoAlpha: 0 })}
             addEndListener={(node, done) => {
               gsap.to(node, {
@@ -139,15 +140,15 @@ const SearchFrom = ({
           <Transition
             unmountOnExit
             timeout={3000}
-            in={(showRestFrom) || displayLeft}
+            in={showRestFrom}
             appear={true}
             onEnter={(node) => {
               gsap.set(node, { autoAlpha: 0 });
             }}
             addEndListener={(node, done) => {
               gsap.to(node, {
-                duration: 1,
-                autoAlpha: !showAnimation ? 1 : 0,
+                duration: showRestFrom ? 1 : 0,
+                autoAlpha: showRestFrom ? 1 : 0,
                 onComplete: done,
               });
             }}

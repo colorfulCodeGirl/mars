@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
-import styled from "styled-components";
+import PropTypes from "prop-types";
+import styled, { css } from "styled-components";
 import gsap from "gsap";
 import { ReactComponent as Scene } from "../../assets/mars-and-rover-mobile.svg";
 
@@ -13,9 +14,15 @@ const Wrapper = styled.div`
     align-self: flex-end;
     width: 100%;
   }
+  ${({fullHeight}) => 
+    fullHeight && 
+    css`
+      position: fixed;
+      top: 30vh;
+    `}
 `;
 
-const MarsSmall = () => {
+const MarsSmall = ({fullHeight = false}) => {
   const scene = useRef(null);
 
   useEffect(() => {
@@ -89,10 +96,15 @@ const MarsSmall = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper fullHeight={fullHeight}>
       <Scene ref={scene} data-testid="mars" />
     </Wrapper>
   );
 };
 
 export default MarsSmall;
+
+
+MarsSmall.propTypes ={
+  fullHeight: PropTypes.bool
+}

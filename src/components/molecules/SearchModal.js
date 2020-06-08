@@ -11,15 +11,13 @@ const SearchModal = () => {
 
   return (
     <>
-      {!isModalOpen && (
-        <Button
-          clickHandler={() => setModalVisibility(true)}
-          isGrey={true}
-          icon={menuIcon}
-        >
-          CHANGE SEARCH PARAMS
-        </Button>
-      )}
+      <Button
+        clickHandler={() => setModalVisibility(true)}
+        isGrey={true}
+        icon={menuIcon}
+      >
+        CHANGE SEARCH PARAMS
+      </Button>
 
       {isModalOpen && (
         <ModalOverlay closeHandler={() => setModalVisibility(false)}>

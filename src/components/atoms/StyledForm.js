@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 const StyledForm = styled.form`
   grid-column: 1 / -1;
   grid-row: 1 / -1;
-  width: 80vw;
+  width: 90vw;
   min-height: 75vh;
   max-width: 450px;
   justify-self: center;

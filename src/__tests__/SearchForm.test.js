@@ -7,43 +7,44 @@ import configureStore from "../store/store";
 import { chooseRover } from "../test-helpers";
 import MarsSmall from "../components/atoms/MarsSmall";
 
+global.fetch = jest.fn();
 jest.mock("../components/atoms/MarsSmall");
 MarsSmall.mockImplementation(() => <p>animation</p>);
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useHistory: jest.fn().mockReturnValue([]),
 }));
-
-global.fetch = jest
-  .fn()
-  .mockImplementation(() =>
-    Promise.resolve({ ok: true, json: () => mockManifest })
-  );
+jest.mock("react-transition-group", () => ({
+  Transition: (props) => (props.in ? props.children : null),
+}));
 
 const renderSearchForm = () => {
   const store = configureStore();
   return render(
     <Provider store={store}>
-      <SearchForm displayLeft={false} />
+      <SearchForm displayLeft={false} show />
     </Provider>
   );
 };
 
 describe("Search form component on start", () => {
-  it("renders heading", () => {
-    const { getByText } = renderSearchForm();
-    expect(getByText(/explore/i)).toBeInTheDocument();
+  beforeEach(() => {
+    global.fetch.mockReset();
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true, json: () => mockManifest })
+    );
   });
 
-  it("renders select element for rovers on start", () => {
-    const { getByLabelText } = renderSearchForm();
+  it("renders heading and select element for rovers on start", () => {
+    const { getByText, getByLabelText } = renderSearchForm();
+    expect(getByText(/explore/i)).toBeInTheDocument();
     expect(getByLabelText(/rover/i)).toBeInTheDocument();
   });
 
   it("doesn't render radio group and sol input on start", () => {
     const { queryByLabelText } = renderSearchForm();
 
-    expect(queryByLabelText(/sol/i)).not.toBeInTheDocument();
+    expect(queryByLabelText(/day from landing/i)).not.toBeInTheDocument();
     expect(queryByLabelText(/earth date/i)).not.toBeInTheDocument();
   });
 
@@ -53,16 +54,17 @@ describe("Search form component on start", () => {
     expect(getByText(/see latest/i)).toBeDisabled();
   });
 
-  it("it fetches rover manifest and shows sol radio group and sol input", async () => {
-    const { getByLabelText, getByRole } = renderSearchForm();
+  it("fetches rover manifest and shows sol radio group and sol input", async () => {
+    const { getByLabelText, getByRole, queryByText } = renderSearchForm();
+
     chooseRover(getByLabelText);
+    expect(queryByText(/animation/i)).toBeInTheDocument();
     await waitFor(() => {
       expect(getByRole("radiogroup")).toBeInTheDocument();
-      expect(getByLabelText(/SOL from 0 to/i)).toBeInTheDocument();
+      expect(getByLabelText(/Day from landing from 0 to/i)).toBeInTheDocument();
+      expect(queryByText(/animation/i)).not.toBeInTheDocument();
     });
   });
-  ////////////////////////TODO////////////////////
-  it("shows animation while fetching manifest", () => {});
 
   it("it enables see latest button when rover is set, search button is still disabled", async () => {
     const { getByLabelText, getByText } = renderSearchForm();
@@ -79,7 +81,7 @@ describe("Search form component on start", () => {
     let sol;
     let date;
     await waitFor(() => {
-      sol = getByLabelText("SOL*");
+      sol = getByLabelText(/day from landing/i);
       date = getByLabelText(/earth date/i);
     });
     expect(sol).toBeChecked();
@@ -98,13 +100,13 @@ describe("Search form component on start", () => {
     let sol;
     let date;
     await waitFor(() => {
-      sol = getByLabelText("SOL*");
+      sol = getByLabelText("Day from landing");
       date = getByLabelText(/earth date/i);
     });
 
     const { landing_date, max_sol, max_date } = mockManifest.photo_manifest;
     expect(
-      queryByPlaceholderText(`SOL from 0 to ${max_sol}`)
+      queryByPlaceholderText(`Day from landing from 0 to ${max_sol}`)
     ).toBeInTheDocument();
     expect(
       queryByPlaceholderText(`Date from ${landing_date} to ${max_date}`)
@@ -112,14 +114,14 @@ describe("Search form component on start", () => {
 
     fireEvent.click(date);
     expect(
-      queryByPlaceholderText(`SOL from 0 to ${max_sol}`)
+      queryByPlaceholderText(`Day from landing from 0 to ${max_sol}`)
     ).not.toBeInTheDocument();
     expect(
       queryByPlaceholderText(`Date from ${landing_date} to ${max_date}`)
     ).toBeInTheDocument();
     fireEvent.click(sol);
     expect(
-      queryByPlaceholderText(`SOL from 0 to ${max_sol}`)
+      queryByPlaceholderText(`Day from landing from 0 to ${max_sol}`)
     ).toBeInTheDocument();
     expect(
       queryByPlaceholderText(`Date from ${landing_date} to ${max_date}`)
@@ -131,19 +133,19 @@ describe("Search form component on start", () => {
     chooseRover(getByLabelText);
     let sol;
     await waitFor(() => {
-      sol = getByLabelText(/SOL from 0/i);
+      sol = getByLabelText(/Day from landing from 0/i);
     });
     fireEvent.change(sol, { target: { value: "234" } });
     const searchBtn = getByText(/search/i);
-    expect(queryByText(/SOL should be/i)).not.toBeInTheDocument();
+    expect(queryByText(/day from landing should be/i)).not.toBeInTheDocument();
     expect(searchBtn).toBeEnabled();
 
     fireEvent.change(sol, { target: { value: "4545454544544" } });
-    expect(queryByText(/SOL should be/i)).toBeInTheDocument();
+    expect(queryByText(/day from landing should be/i)).toBeInTheDocument();
     expect(searchBtn).toBeDisabled();
 
     fireEvent.change(sol, { target: { value: "" } });
-    expect(queryByText(/SOL should be/i)).not.toBeInTheDocument();
+    expect(queryByText(/day from landing should be/i)).not.toBeInTheDocument();
     expect(searchBtn).toBeDisabled();
   });
 

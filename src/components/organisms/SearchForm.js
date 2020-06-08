@@ -14,6 +14,21 @@ import ErrorTooltip from "../atoms/ErrorTooltip";
 import MarsSmall from "../atoms/MarsSmall";
 
 import * as actions from "../../store/actionCreators";
+import styled from "styled-components";
+
+const RestWrapper = styled.section`
+  width: 100%;
+  display: grid;
+  svg {
+    max-width: 80%;
+  }
+`;
+
+const RestForm = styled.div`
+  width: 100%;
+  grid-area: 1 / -1 / 1 / -1;
+  padding-bottom: 3rem;
+`;
 
 const SearchFrom = ({
   rover,
@@ -34,7 +49,7 @@ const SearchFrom = ({
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
   const [show, setShow] = useState(true);
-  const [showAnimation, setShowAnimation] = useState(true);
+  const [showAnimation, setShowAnimation] = useState(false);
   const history = useHistory();
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
@@ -48,8 +63,17 @@ const SearchFrom = ({
   }, [sol, date, allowSearch, error]);
 
   useEffect(() => {
-    if(!rover) {}
-  }, [rover])
+    let timeout;
+    if (rover) {
+      timeout = setTimeout(() => setShowAnimation(false), 1000);
+    }
+    return () => clearTimeout(timeout);
+  }, [rover]);
+
+  const changeRover = ({ target: { value } }) => {
+    setShowAnimation(true);
+    fetchManifest(value);
+  };
 
   const radioChangeHandler = ({ target: { value } }) => {
     const newSolSwitch = value === "sol*" ? "sol" : "date";
@@ -90,51 +114,63 @@ const SearchFrom = ({
           name="rovers"
           value={rover}
           defaultValue="Choose rover"
-          changeHandler={fetchManifest}
+          changeHandler={changeRover}
         />
-        {!rover && (
+        <RestWrapper>
           <Transition
-          unmountOnExit
-          timeout={3000}
-          in={!rover}
-          onEnter={(node) => gsap.set(node, {autoAlpha: 0})}
-          addEndListener={(node, done) => {
-            gsap.to(node, {
-              duration: !rover ? 0.5 : 1,
-              autoAlpha: !rover ? 1 : 0,
-              onComplete: done,
-            });
-          }}
-        >
-          <MarsSmall />
-        </Transition>
-        )}
-        {rover && (
-          <>
-            <RadioGroup
-              options={["SOL*", "Earth date"]}
-              changeHandler={radioChangeHandler}
-              checkedIndex={solSwitcher === "sol" ? 0 : 1}
-            />
-            <p>
-              <i>* day from landing</i>
-            </p>
-            <Input
-              type="text"
-              name={solSwitcher === "sol" ? "sol" : "Earth days"}
-              placeholder={
-                solSwitcher === "sol"
-                  ? `SOL from 0 to ${maxSol}`
-                  : `Date from ${startDate} to ${endDate}`
-              }
-              changeHandler={({ target: { value } }) =>
-                handlePeriod(value, solSwitcher)
-              }
-              value={solSwitcher === "sol" ? sol : date}
-            />
-            <ErrorTooltip message={error} />
-          </>
-        )}
+            unmountOnExit
+            timeout={3000}
+            in={showAnimation && !displayLeft}
+            onEnter={(node) => gsap.set(node, { autoAlpha: 0 })}
+            addEndListener={(node, done) => {
+              gsap.to(node, {
+                duration: 0.3,
+                autoAlpha: !rover ? 1 : 0,
+                onComplete: done,
+              });
+            }}
+          >
+            <MarsSmall />
+          </Transition>
+          <Transition
+            unmountOnExit
+            timeout={3000}
+            in={(!showAnimation && rover !== "") || displayLeft}
+            appear={true}
+            onEnter={(node) => {
+              gsap.set(node, { autoAlpha: 0 });
+            }}
+            addEndListener={(node, done) => {
+              gsap.to(node, {
+                duration: 1,
+                autoAlpha: !showAnimation ? 1 : 0,
+                onComplete: done,
+              });
+            }}
+          >
+            <RestForm>
+              <RadioGroup
+                options={["Day from landing", "Earth date"]}
+                changeHandler={radioChangeHandler}
+                checkedIndex={solSwitcher === "sol" ? 0 : 1}
+              />
+              <Input
+                type="text"
+                name={solSwitcher === "sol" ? "sol" : "Earth days"}
+                placeholder={
+                  solSwitcher === "sol"
+                    ? `Day from landing from 0 to ${maxSol}`
+                    : `Date from ${startDate} to ${endDate}`
+                }
+                changeHandler={({ target: { value } }) =>
+                  handlePeriod(value, solSwitcher)
+                }
+                value={solSwitcher === "sol" ? sol : date}
+              />
+              <ErrorTooltip message={error} />
+            </RestForm>
+          </Transition>
+        </RestWrapper>
         <Button
           marginTop
           isDisabled={!isSearchAllowed}
@@ -142,7 +178,7 @@ const SearchFrom = ({
           clickHandler={submitHandler}
           isFormBtn
         >
-          SEARCH
+          SEARCH BY DAY
         </Button>
         <Button
           type="submit"
@@ -179,7 +215,7 @@ const mapStateToProps = ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchManifest: ({ target: { value } }) => {
+  fetchManifest: (value) => {
     dispatch(actions.setAllowDataFromUrl(false));
     dispatch(actions.fetchManifest(value));
   },

@@ -107,9 +107,9 @@ describe("App component main block", () => {
     chooseRover(getByLabelText);
 
     await waitFor(() => {
-      const solInput = getByLabelText(/SOL from 0/i);
+      const solInput = getByLabelText(/day from landing from 0/i);
       expect(solInput).toBeInTheDocument();
-      fireEvent.change(getByLabelText(/SOL from 0/i), {
+      fireEvent.change(getByLabelText(/day from landing from 0/i), {
         target: { value: 54 },
       });
     });
@@ -128,7 +128,7 @@ describe("App component main block", () => {
       const location = global.window.location.pathname;
       expect(location).toBe("/results");
       expect(getByLabelText(/choose rover/i)).toHaveValue("Curiosity");
-      expect(getByLabelText(/SOL from 0/i)).toHaveValue("54");
+      expect(getByLabelText(/day from landing from 0/i)).toHaveValue("54");
       expect(
         getAllByAltText(/Mars by rover Curiosity/i)[0]
       ).toBeInTheDocument();

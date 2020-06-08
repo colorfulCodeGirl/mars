@@ -1,17 +1,16 @@
-/*eslint object-property-newline: ["error", { "allowAllPropertiesOnSameLine": true }]*/
-/*eslint function-call-argument-newline: ["error", "never"]*/
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import gsap from "gsap";
 import { ReactComponent as Scene } from "../../assets/mars-and-rover-mobile.svg";
 
 const Wrapper = styled.div`
+  grid-area: 1 / -1 / 1 / -1;
   width: 100%;
   display: flex;
   justify-content: center;
   padding-bottom: 1rem;
   svg {
-  align-self: flex-end;
+    align-self: flex-end;
     width: 100%;
   }
 `;
@@ -39,35 +38,53 @@ const MarsSmall = () => {
 
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
 
-    tl.to(current, { duration: 0.7, autoAlpha: 1 })
+    tl.to(current, { duration: 0.3, autoAlpha: 1 })
       .addLabel("appear")
-      .to(rover, { duration: 0.5, autoAlpha: 1 }, "appear")
+      .to(rover, { duration: 0.3, autoAlpha: 1 }, "appear")
       .fromTo(
-        rover, { y: "-=300" }, { duration: 1, y: "+=300", ease: "bounce.out" }, "appear"
+        rover,
+        { y: "-=300" },
+        { duration: 1, y: "+=300", ease: "bounce.out" },
+        "appear"
       )
       .to(stars, { duration: 1, autoAlpha: 1, stagger: 0.1 }, "appear")
       .to(asteroids, { duration: 1, autoAlpha: 1, stagger: 0.1 }, "appear")
       .addLabel("animate")
       .to(
-        stars, { duration: 0.3, scale: 1.3, repeat: -1, repeatDelay: 0, yoyo: true }, "animate"
+        stars,
+        { duration: 0.3, scale: 1.3, repeat: -1, repeatDelay: 0, yoyo: true },
+        "animate"
       )
       .to(
-        asteroids, { duration: 1.5, rotation: 360, repeat: -1, ease: "linear" }, "animate"
+        asteroids,
+        { duration: 1.5, rotation: 360, repeat: -1, ease: "linear" },
+        "animate"
       )
       .to(
-        [auras, mars], { duration: 0.5, scale: 1.01, repeat: -1, yoyo: true }, "animate"
+        [auras, mars],
+        { duration: 0.5, scale: 1.01, repeat: -1, yoyo: true },
+        "animate"
       )
       .to(
-        [mars, skyObjects], { duration: 10, rotation: 360, ease: "linear", repeat: -1 }, "animate"
+        [mars, skyObjects],
+        { duration: 10, rotation: 360, ease: "linear", repeat: -1 },
+        "animate"
       )
       .to(
-        rover, { duration: 0.2, scale: 1.01, y: "-=10", repeat: -1 }, "animate"
+        rover,
+        { duration: 0.2, scale: 1.01, y: "-=10", repeat: -1 },
+        "animate"
       )
       .fromTo(
-        head, { rotation: 10 }, { duration: 0.3, rotation: -10, repeat: -1, yoyo: true }, "animate"
+        head,
+        { rotation: 10 },
+        { duration: 0.3, rotation: -10, repeat: -1, yoyo: true },
+        "animate"
       )
       .to(
-        flash, { duration: 0.05, scale: 5, repeat: -1, repeatDelay: 0.25, yoyo: true }, "animate"
+        flash,
+        { duration: 0.05, scale: 5, repeat: -1, repeatDelay: 0.25, yoyo: true },
+        "animate"
       );
   }, []);
 

@@ -60,7 +60,7 @@ describe("Results component", () => {
     );
     await waitFor(() => {
       expect(getByLabelText(/choose rover/i)).toHaveValue("Spirit");
-      expect(getByLabelText(/SOL from 0/i)).toHaveValue("35");
+      expect(getByLabelText(/day from landing from 0/i)).toHaveValue("35");
       expect(getByText(/see latest/i)).toBeEnabled();
       expect(getByText(/search/i)).toBeEnabled();
     });
@@ -84,7 +84,7 @@ describe("Results component", () => {
     );
     await waitFor(() => {
       expect(getByLabelText(/choose rover/i)).toHaveValue("Opportunity");
-      expect(getByLabelText(/SOL from 0/i)).toHaveValue("");
+      expect(getByLabelText(/day from landing from 0/i)).toHaveValue("");
       expect(getByText(/see latest/i)).toBeEnabled();
       expect(getByText(/search/i)).toBeDisabled();
     });
@@ -120,7 +120,7 @@ describe("Results component", () => {
     const roverSelect = getByLabelText(/choose rover/i);
     await waitFor(() => {
       expect(roverSelect).toHaveValue("Spirit");
-      expect(getByLabelText(/SOL from 0/i)).toHaveValue("35");
+      expect(getByLabelText(/day from landing from 0/i)).toHaveValue("35");
       expect(queryAllByAltText(/mars by rover/i)[0]).toBeInTheDocument();
     });
 
@@ -130,7 +130,7 @@ describe("Results component", () => {
     fireEvent.change(roverSelect, { target: { value: "Curiosity" } });
     await waitFor(() => {
       expect(roverSelect).toHaveValue("Curiosity");
-      expect(getByLabelText(/SOL from 0/i)).not.toHaveValue("35");
+      expect(getByLabelText(/day from landing from 0/i)).not.toHaveValue("35");
       expect(queryByAltText(/mars by rover/i)).not.toBeInTheDocument();
     });
   });

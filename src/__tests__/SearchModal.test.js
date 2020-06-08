@@ -9,6 +9,9 @@ import MarsSmall from "../components/atoms/MarsSmall";
 
 jest.mock("../components/atoms/MarsSmall");
 MarsSmall.mockImplementation(() => <p>animation</p>);
+jest.mock("react-transition-group", () => ({
+  Transition: (props) => (props.in ? props.children : null),
+}));
 
 const renderSearchModal = () => {
   const store = configureStore();
@@ -69,7 +72,7 @@ describe("SearchModal", () => {
 
     chooseRover(getByLabelText);
     await waitFor(() => {
-      const solInput = getByLabelText(/sol from 0/i);
+      const solInput = getByLabelText(/day from landing from 0/i);
       expect(solInput).toBeInTheDocument();
       fireEvent.change(solInput, { target: { value: "54" } });
     });

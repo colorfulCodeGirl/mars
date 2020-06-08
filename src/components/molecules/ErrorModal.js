@@ -10,9 +10,12 @@ const Wrapper = styled.div`
   padding: 5rem 2rem 2rem 2rem;
   min-width: 80vw;
   @media (min-width: 1000px) {
+    padding: 5rem;
+    min-width: 50vw;
     max-width: 55vw;
   }
   @media (orientation: landscape) and (min-aspect-ratio: 21/9) {
+    min-width: auto;
     width: 30vw;
   }
   p {

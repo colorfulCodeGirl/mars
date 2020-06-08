@@ -50,6 +50,7 @@ const SearchFrom = ({
   const [isSearchAllowed, allowSearch] = useState(false);
   const [show, setShow] = useState(true);
   const [showAnimation, setShowAnimation] = useState(false);
+  const [showRestFrom, setShowRestForm] = useState(false);
   const history = useHistory();
 
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
@@ -65,7 +66,10 @@ const SearchFrom = ({
   useEffect(() => {
     let timeout;
     if (rover) {
-      timeout = setTimeout(() => setShowAnimation(false), 1000);
+      timeout = setTimeout(() => {
+        setShowAnimation(false);
+        setShowRestForm(true);
+      }, 1000);
     }
     return () => clearTimeout(timeout);
   }, [rover]);
@@ -135,7 +139,7 @@ const SearchFrom = ({
           <Transition
             unmountOnExit
             timeout={3000}
-            in={(!showAnimation && rover !== "") || displayLeft}
+            in={(showRestFrom) || displayLeft}
             appear={true}
             onEnter={(node) => {
               gsap.set(node, { autoAlpha: 0 });

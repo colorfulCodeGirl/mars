@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const StyledButton = styled.button`
   border: none;
   padding: 0.9rem 2.7rem;
-  background-color: #fe6c3d;
+  background-color: #e73d34;
   color: #ffffff;
   border-radius: 0.4rem;
   text-transform: uppercase;

@@ -11,7 +11,7 @@ const StyledSelect = styled.select`
   appearance: none;
   border: none;
   text-transform: uppercase;
-  border-bottom: 0.1rem solid #fe6c3d;
+  border-bottom: 0.1rem solid #e73d34;
   background-image: url(${arrow});
   background-repeat: no-repeat;
   background-color: transparent;

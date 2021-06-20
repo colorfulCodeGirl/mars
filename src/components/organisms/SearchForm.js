@@ -12,6 +12,7 @@ import Select from "../atoms/Select";
 import Input from "../atoms/Input";
 import ErrorTooltip from "../atoms/ErrorTooltip";
 import MarsSmall from "../atoms/MarsSmall";
+import { useGetManifest } from "../../hooks/network/useGetManifest";
 
 import * as actions from "../../store/actionCreators";
 import styled from "styled-components";
@@ -31,16 +32,12 @@ const RestForm = styled.div`
 `;
 
 const SearchFrom = ({
-  rover,
   sol,
   date,
   error,
-  maxSol,
-  startDate,
-  endDate,
+  allowDataFromUrl,
   solSwitcher,
   displayLeft = false,
-  fetchManifest,
   handlePeriod,
   cleanUpPeriod,
   fetchPhotos,
@@ -49,11 +46,17 @@ const SearchFrom = ({
 }) => {
   const [isSearchAllowed, allowSearch] = useState(false);
   const [show, setShow] = useState(true);
-  const [showAnimation, setShowAnimation] = useState(false);
-  const [showRestFrom, setShowRestForm] = useState(false);
   const history = useHistory();
-
   const rovers = ["Curiosity", "Opportunity", "Spirit"];
+  const {
+    rover,
+    setRover,
+    maxSol,
+    startDate,
+    endDate,
+    isLoading,
+    manifestFetched,
+  } = useGetManifest();
 
   useEffect(() => {
     if ((sol || date) && error === "") {
@@ -63,19 +66,9 @@ const SearchFrom = ({
     }
   }, [sol, date, allowSearch, error]);
 
-  useEffect(() => {
-      if(rover !== '') {
-        setShowAnimation(false);
-        setShowRestForm(true);
-      } else {
-        setShowRestForm(false);
-      }
-  }, [rover]);
-
   const changeRover = ({ target: { value } }) => {
-    setShowAnimation(true);
-    setShowRestForm(false);
-    fetchManifest(value);
+    setRover(value);
+    allowDataFromUrl();
   };
 
   const radioChangeHandler = ({ target: { value } }) => {
@@ -123,12 +116,12 @@ const SearchFrom = ({
           <Transition
             unmountOnExit
             timeout={3000}
-            in={showAnimation}
+            in={isLoading}
             onEnter={(node) => gsap.set(node, { autoAlpha: 0 })}
             addEndListener={(node, done) => {
               gsap.to(node, {
                 duration: 0.3,
-                delay: showRestFrom ? 1 : 0,
+                delay: manifestFetched ? 1 : 0,
                 autoAlpha: !rover ? 1 : 0,
                 onComplete: done,
               });
@@ -139,16 +132,16 @@ const SearchFrom = ({
           <Transition
             unmountOnExit
             timeout={3000}
-            in={showRestFrom}
+            in={manifestFetched}
             appear={true}
             onEnter={(node) => {
               gsap.set(node, { autoAlpha: 0 });
             }}
             addEndListener={(node, done) => {
               gsap.to(node, {
-                duration: showRestFrom ? 1 : 0,
-                delay: showRestFrom ? 1 : 0,
-                autoAlpha: showRestFrom ? 1 : 0,
+                duration: manifestFetched ? 1 : 0,
+                delay: manifestFetched ? 1 : 0,
+                autoAlpha: manifestFetched ? 1 : 0,
                 onComplete: done,
               });
             }}
@@ -199,30 +192,17 @@ const SearchFrom = ({
   );
 };
 
-const mapStateToProps = ({
+const mapStateToProps = ({ rover, sol, date, error, solSwitcher }) => ({
   rover,
   sol,
   date,
   error,
-  maxSol,
-  startDate,
-  endDate,
-  solSwitcher,
-}) => ({
-  rover,
-  sol,
-  date,
-  error,
-  maxSol,
-  startDate,
-  endDate,
   solSwitcher,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchManifest: (value) => {
+  allowDataFromUrl: () => {
     dispatch(actions.setAllowDataFromUrl(false));
-    dispatch(actions.fetchManifest(value));
   },
   handlePeriod: (value, solSwitcher) => {
     dispatch(actions.validatePeriod(value, solSwitcher));
@@ -235,15 +215,11 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFrom);
 
 SearchFrom.propTypes = {
-  rover: PropTypes.string,
   sol: PropTypes.string,
   date: PropTypes.string,
   error: PropTypes.string,
-  maxSol: PropTypes.number,
-  startDate: PropTypes.string,
-  endDate: PropTypes.string,
+  allowDataFromUrl: PropTypes.func,
   displayLeft: PropTypes.bool,
-  fetchManifest: PropTypes.func.isRequired,
   handlePeriod: PropTypes.func.isRequired,
   cleanUpPeriod: PropTypes.func.isRequired,
   fetchPhotos: PropTypes.func.isRequired,

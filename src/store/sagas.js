@@ -37,7 +37,9 @@ function* validatePeriod({ payload: { value, solSwitcher } }) {
     const numVal = +value;
     const isValid =
       (numVal >= 0 && numVal <= maxSol && value.length !== 0) || value === "";
-    const massage = isValid ? "" : `Day from landing should be a number from 0 to ${maxSol}`;
+    const massage = isValid
+      ? ""
+      : `Day from landing should be a number from 0 to ${maxSol}`;
     yield put(actions.setSOL({ sol: value, massage }));
   } else {
     const startDate = yield select(getStartDate);
@@ -66,7 +68,7 @@ function* fetchPhotos({ latest = null }) {
   try {
     const response = yield fetchData(urlParams);
     const newPhotos = response.latest_photos || response.photos;
-    if(newPhotos.length === 0) {
+    if (newPhotos.length === 0) {
       yield put(actions.setNoPhotosError());
     } else {
       yield put(actions.setPhotos(newPhotos));

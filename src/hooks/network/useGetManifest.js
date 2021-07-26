@@ -6,9 +6,10 @@ export function useGetManifest() {
   const [rover, setRover] = useState();
   const { data, isLoading, isSuccess } = useQuery(
     ["manifests", rover],
-    () => rover && fetchData(`manifests/${rover}?`),
+    () => fetchData(`manifests/${rover}?`),
     {
       retry: 2,
+      enabled: !!rover,
     }
   );
   const manifest = data ? data.photo_manifest : undefined;

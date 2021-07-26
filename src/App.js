@@ -1,9 +1,7 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { Helmet } from "react-helmet";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { ReactQueryDevtools } from "react-query/devtools";
 
 import Home from "./views/Home";
 import Results from "./views/Results";
@@ -51,11 +49,9 @@ const AppWrapper = styled.main`
   display: grid;
 `;
 
-const queryClient = new QueryClient();
-
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Helmet>
         <link
           href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&display=swap"
@@ -75,8 +71,7 @@ function App() {
           </Switch>
         </AppWrapper>
       </Router>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    </>
   );
 }
 

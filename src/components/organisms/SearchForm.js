@@ -122,7 +122,7 @@ const SearchFrom = ({
               gsap.to(node, {
                 duration: 0.3,
                 delay: manifestFetched ? 1 : 0,
-                autoAlpha: !rover ? 1 : 0,
+                autoAlpha: rover ? 1 : 0,
                 onComplete: done,
               });
             }}
@@ -132,7 +132,7 @@ const SearchFrom = ({
           <Transition
             unmountOnExit
             timeout={3000}
-            in={manifestFetched}
+            in={manifestFetched && !isLoading}
             appear={true}
             onEnter={(node) => {
               gsap.set(node, { autoAlpha: 0 });

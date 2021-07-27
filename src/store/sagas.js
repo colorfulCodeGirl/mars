@@ -13,24 +13,6 @@ import {
 
 import { fetchData, validateDate, formateDate } from "../helpers";
 
-function* fetchManifest({ payload: rover }) {
-  yield put(actions.cleanUpForm());
-  const urlParams = `manifests/${rover}?`;
-  try {
-    const response = yield fetchData(urlParams);
-    const {
-      photo_manifest: {
-        max_sol: maxSol,
-        landing_date: startDate,
-        max_date: endDate,
-      },
-    } = response;
-    yield put(actions.setManifest({ rover, maxSol, startDate, endDate }));
-  } catch (error) {
-    yield put(actions.fetchManifestFailed(error));
-  }
-}
-
 function* validatePeriod({ payload: { value, solSwitcher } }) {
   if (solSwitcher === "sol") {
     const maxSol = yield select(getMaxSol);
@@ -80,9 +62,9 @@ function* fetchPhotos({ latest = null }) {
 
 function* setFromUrl({ payload: params }) {
   const rover = params.get("rover");
-  yield put(actions.fetchManifest(rover));
+  // yield put(actions.fetchManifest(rover));
   const latest = params.get("latest");
-  yield take(actionTypes.SET_MANIFEST);
+  // yield take(actionTypes.SET_MANIFEST);
   if (latest === "true") {
     yield put(actions.fetchPhotos(latest));
   } else {
@@ -98,7 +80,6 @@ function* setFromUrl({ payload: params }) {
 }
 
 function* rootSaga() {
-  yield takeEvery(actionTypes.FETCH_MANIFEST, fetchManifest);
   yield takeEvery(actionTypes.VALIDATE_PERIOD, validatePeriod);
   yield takeEvery(actionTypes.FETCH_PHOTOS, fetchPhotos);
   yield takeEvery(actionTypes.SET_FROM_URL, setFromUrl);

@@ -1,4 +1,4 @@
-import { put, select, takeEvery, take } from "redux-saga/effects";
+import { put, select, takeEvery } from "redux-saga/effects";
 
 import * as actions from "./actionCreators";
 import * as actionTypes from "./actionTypes";
@@ -61,7 +61,7 @@ function* fetchPhotos({ latest = null }) {
 }
 
 function* setFromUrl({ payload: params }) {
-  const rover = params.get("rover");
+  // const rover = params.get("rover");
   // yield put(actions.fetchManifest(rover));
   const latest = params.get("latest");
   // yield take(actionTypes.SET_MANIFEST);

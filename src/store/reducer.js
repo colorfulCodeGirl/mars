@@ -19,18 +19,6 @@ const reducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case actionTypes.SET_MANIFEST:
-      return {
-        ...state,
-        fetchError: false,
-        noPhotosError: false,
-        ...payload,
-      };
-    case actionTypes.FETCH_MANIFEST_FAILED:
-      return {
-        ...state,
-        fetchError: true,
-      };
     case actionTypes.SET_SOL:
       return {
         ...state,
@@ -54,7 +42,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         photos: [],
-        noPhotosError: false
+        noPhotosError: false,
       };
     case actionTypes.CLEAN_UP_FORM:
       return {

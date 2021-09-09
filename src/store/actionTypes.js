@@ -1,6 +1,3 @@
-export const FETCH_MANIFEST = "FETCH_MANIFEST";
-export const SET_MANIFEST = "SET_MANIFEST";
-export const FETCH_MANIFEST_FAILED = "FETCH_MANIFEST_FAILED";
 export const VALIDATE_PERIOD = "VALIDATE_PERIOD";
 export const SET_SOL = "SET_SOL";
 export const SET_DATE = "SET_DATE";

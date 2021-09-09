@@ -1,20 +1,5 @@
 import * as actionTypes from "./actionTypes";
 
-export const fetchManifest = (value) => ({
-  type: actionTypes.FETCH_MANIFEST,
-  payload: value,
-});
-
-export const setManifest = (manifest) => ({
-  type: actionTypes.SET_MANIFEST,
-  payload: manifest,
-});
-
-export const fetchManifestFailed = (error) => ({
-  type: actionTypes.FETCH_MANIFEST_FAILED,
-  payload: error,
-});
-
 export const validatePeriod = (value, solSwitcher) => ({
   type: actionTypes.VALIDATE_PERIOD,
   payload: { value, solSwitcher },

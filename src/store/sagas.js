@@ -1,4 +1,4 @@
-import { put, select, takeEvery, take } from "redux-saga/effects";
+import { put, select, takeEvery } from "redux-saga/effects";
 
 import * as actions from "./actionCreators";
 import * as actionTypes from "./actionTypes";
@@ -13,31 +13,15 @@ import {
 
 import { fetchData, validateDate, formateDate } from "../helpers";
 
-function* fetchManifest({ payload: rover }) {
-  yield put(actions.cleanUpForm());
-  const urlParams = `manifests/${rover}?`;
-  try {
-    const response = yield fetchData(urlParams);
-    const {
-      photo_manifest: {
-        max_sol: maxSol,
-        landing_date: startDate,
-        max_date: endDate,
-      },
-    } = response;
-    yield put(actions.setManifest({ rover, maxSol, startDate, endDate }));
-  } catch (error) {
-    yield put(actions.fetchManifestFailed(error));
-  }
-}
-
 function* validatePeriod({ payload: { value, solSwitcher } }) {
   if (solSwitcher === "sol") {
     const maxSol = yield select(getMaxSol);
     const numVal = +value;
     const isValid =
       (numVal >= 0 && numVal <= maxSol && value.length !== 0) || value === "";
-    const massage = isValid ? "" : `Day from landing should be a number from 0 to ${maxSol}`;
+    const massage = isValid
+      ? ""
+      : `Day from landing should be a number from 0 to ${maxSol}`;
     yield put(actions.setSOL({ sol: value, massage }));
   } else {
     const startDate = yield select(getStartDate);
@@ -66,7 +50,7 @@ function* fetchPhotos({ latest = null }) {
   try {
     const response = yield fetchData(urlParams);
     const newPhotos = response.latest_photos || response.photos;
-    if(newPhotos.length === 0) {
+    if (newPhotos.length === 0) {
       yield put(actions.setNoPhotosError());
     } else {
       yield put(actions.setPhotos(newPhotos));
@@ -77,10 +61,10 @@ function* fetchPhotos({ latest = null }) {
 }
 
 function* setFromUrl({ payload: params }) {
-  const rover = params.get("rover");
-  yield put(actions.fetchManifest(rover));
+  // const rover = params.get("rover");
+  // yield put(actions.fetchManifest(rover));
   const latest = params.get("latest");
-  yield take(actionTypes.SET_MANIFEST);
+  // yield take(actionTypes.SET_MANIFEST);
   if (latest === "true") {
     yield put(actions.fetchPhotos(latest));
   } else {
@@ -96,7 +80,6 @@ function* setFromUrl({ payload: params }) {
 }
 
 function* rootSaga() {
-  yield takeEvery(actionTypes.FETCH_MANIFEST, fetchManifest);
   yield takeEvery(actionTypes.VALIDATE_PERIOD, validatePeriod);
   yield takeEvery(actionTypes.FETCH_PHOTOS, fetchPhotos);
   yield takeEvery(actionTypes.SET_FROM_URL, setFromUrl);
